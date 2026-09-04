@@ -1,5 +1,3 @@
-import Navbar from '../../components/common/Navbar';
-import Footer from '../../components/common/Footer';
 import Cta from './cta';
 import ExploreTrail from './ExploreTrail';
 import Gallery from './Gallery';
@@ -10,7 +8,6 @@ import News from './News';
 export default function Home() {
     return (
         <div className="flex min-h-screen flex-col bg-surface">
-            <Navbar />
             <main className="-mt-13 flex-1 lg:-mt-14">
                 <Cta />
                 <ExploreTrail />
@@ -19,7 +16,6 @@ export default function Home() {
                 <Awards />
                 <News />
             </main>
-            <Footer />
         </div>
     );
 }
