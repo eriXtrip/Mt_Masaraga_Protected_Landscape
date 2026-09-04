@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import HERO_IMAGE from '../../../../public/build/assets/MtMasaraga.jpg';
+import HERO_IMAGE from '../../../../public/images/home/MtMasaraga.jpg';
 
 export default function Cta() {
     return (

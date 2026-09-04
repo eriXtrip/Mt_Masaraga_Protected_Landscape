@@ -1,5 +1,6 @@
 import Overview from "./Overview";
 import TrailShowcase from "./TrailShowcase";
+import PreperationResource from "./PreperationResource";
 
 export default function About() {
     return (
@@ -7,6 +8,7 @@ export default function About() {
             <main className="-mt-13 flex-1 lg:-mt-14">
                 <Overview />
                 <TrailShowcase />
+                <PreperationResource />
             </main>
         </div>
     );
