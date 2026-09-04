@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 
 import Home from './pages/home/home';
+import About from './pages/about/about';
 
 import '../css/app.css';
 
@@ -12,7 +13,10 @@ ReactDOM.createRoot(document.getElementById('app')).render(
     <React.StrictMode>
         <BrowserRouter>
             <Navbar />
-            <Home />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+            </Routes>
             <Footer />
         </BrowserRouter>
     </React.StrictMode>
