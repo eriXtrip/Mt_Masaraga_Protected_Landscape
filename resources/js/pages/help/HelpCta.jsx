@@ -39,7 +39,7 @@ export default function HelpSearchbar() {
                                     href="#"
                                     className="inline-flex items-center rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-1 text-xs font-medium text-primary transition-colors hover:bg-surface-container"
                                 >
-                                    <Icon className="mr-1 h-[14px] w-[14px] text-on-surface-variant" />
+                                    <Icon className="mr-1 h-4.5 w-4.5 text-on-surface-variant" />
                                     {label}
                                 </a>
                             ))}

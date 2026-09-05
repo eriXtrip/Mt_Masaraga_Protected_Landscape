@@ -3,11 +3,11 @@ import { Search } from 'lucide-react';
 export default function HelpSearchBar() {
     return (
         <form className="relative mx-auto w-full max-w-2xl">
-            <Search className="pointer-events-none absolute left-[18px] top-1/2 h-[22px] w-[22px] -translate-y-1/2 text-on-surface-variant" />
+            <Search className="pointer-events-none absolute left-4.5 top-1/2 h-5.5 w-5.5 -translate-y-1/2 text-on-surface-variant" />
             <input
                 type="text"
                 placeholder="Search for topics (e.g., 'Rescheduling', 'Health Certificate')"
-                className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest py-4 pl-[50px] pr-24 text-sm text-on-surface shadow-sm transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 sm:text-base"
+                className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest py-4 pl-12.5 pr-24 text-sm text-on-surface shadow-sm transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 sm:text-base"
             />
             <button
                 type="submit"
