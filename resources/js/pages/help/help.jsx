@@ -1,5 +1,6 @@
 
 
+import FAQ from './FAQ';
 import HelpSearchbar from './HelpCta';
 
 export default function Help() {
@@ -7,6 +8,7 @@ export default function Help() {
         <div className="flex min-h-screen flex-col bg-surface">
             <main className="-mt-13 flex-1 lg:-mt-14">
                 <HelpSearchbar />
+                <FAQ />
             </main>
         </div>
     );

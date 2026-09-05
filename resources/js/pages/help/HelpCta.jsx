@@ -10,14 +10,10 @@ const POPULAR_TOPICS = [
 
 export default function HelpSearchbar() {
     return (
-        <section className="relative px-6 pt-24 pb-12 md:px-12 lg:px-16 min-h-auto lg:min-h-screen w-full items-start justify-start overflow-hidden">
+        <section className="relative w-full overflow-hidden px-6 pt-16 pb-6 md:px-5 lg:px-10">
             <div className="mx-auto max-w-6xl">
-                <div className="flex flex-col items-center justify-center  px-6 py-14 text-center sm:px-10 md:px-14">
+                <div className="flex flex-col items-center justify-center px-1 py-14 text-center sm:px-10 md:px-14">
                     <div className="mx-auto w-full max-w-3xl">
-                        <div className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-outline-variant bg-surface-container-lowest px-3 py-1 text-xs font-semibold text-primary">
-                            <Headset className="h-4 w-4 shrink-0" />
-                            <span>Support &amp; Assistance</span>
-                        </div>
 
                         <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-on-surface sm:text-4xl md:text-5xl">
                             How can we help you prepare?
