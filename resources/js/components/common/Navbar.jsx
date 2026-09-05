@@ -49,7 +49,7 @@ export default function Navbar() {
                             <NavLink
                                 to={link.to}
                                 className={({ isActive }) =>
-                                    `pb-1 text-xs font-semibold uppercase tracking-[0.05em] transition-colors ${isActive
+                                    `pb-1 text-xs font-semibold tracking-wider uppercase transition-colors ${isActive
                                         ? 'border-b-2 border-primary text-primary'
                                         : 'text-on-surface-variant hover:text-primary'
                                     }`
@@ -65,13 +65,13 @@ export default function Navbar() {
                 <div className="hidden items-center gap-4 md:flex">
                     <Link
                         to="/login"
-                        className="rounded px-4 py-2 text-xs font-semibold uppercase tracking-[0.05em] text-primary transition-colors hover:bg-surface-variant"
+                        className="rounded px-4 py-2 text-xs font-semibold uppercase tracking-wider text-primary transition-colors hover:bg-surface-variant"
                     >
                         Login
                     </Link>
                     <Link
                         to="/signup"
-                        className="rounded bg-primary px-6 py-2 text-xs font-semibold uppercase tracking-[0.05em] text-white hover:text-on-primary shadow-sm transition-colors hover:bg-primary-fixed-dim"
+                        className="rounded bg-primary px-6 py-2 text-xs font-semibold uppercase tracking-wider text-white hover:text-on-primary shadow-sm transition-colors hover:bg-primary-fixed-dim"
                     >
                         Sign Up
                     </Link>

@@ -7,6 +7,7 @@ import Footer from './components/common/Footer';
 import Home from './pages/home/home';
 import About from './pages/about/about';
 import Help from './pages/help/help';
+import Contact from './pages/contact/contact';
 
 import '../css/app.css';
 
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('app')).render(
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/help" element={<Help />} />
+                <Route path="/contact" element={<Contact />} />
             </Routes>
             <Footer />
         </BrowserRouter>
