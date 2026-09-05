@@ -133,8 +133,8 @@ export default function TrailShowcase() {
                                 aria-selected={activeTrail === key}
                                 onClick={() => setActiveTrail(key)}
                                 className={`rounded-lg px-4 py-2 text-xs font-semibold transition-colors focus:outline-none md:text-sm ${activeTrail === key
-                                        ? 'bg-primary text-white shadow-sm'
-                                        : 'text-on-surface hover:text-on-surface'
+                                    ? 'bg-primary text-white shadow-sm'
+                                    : 'text-on-surface hover:text-on-surface'
                                     }`}
                             >
                                 {t.name}
@@ -160,7 +160,7 @@ export default function TrailShowcase() {
                         </div>
 
                         {/* Elevation Chart SVG */}
-                        <div className="relative mt-6 min-h-[300px] flex-col items-end border-t border-outline-variant pt-4">
+                        <div className="relative mt-6 min-h-75 flex-col items-end border-t border-outline-variant pt-4">
                             <svg
                                 className="h-72 w-full overflow-visible"
                                 viewBox="0 0 760 300"
