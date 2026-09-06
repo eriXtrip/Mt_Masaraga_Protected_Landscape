@@ -78,7 +78,7 @@ export default function Navbar() {
                     aria-label="Toggle menu"
                     aria-expanded={open}
                     onClick={() => setOpen((v) => !v)}
-                    className="flex h-10 w-10 items-center justify-center rounded-md text-on-surface-variant transition-colors hover:bg-surface-container md:hidden"
+                    className="flex h-10 w-10 items-center justify-center rounded-md text-on-secondary transition-colors hover:bg-surface-container md:hidden"
                 >
                     {open ? (
                         <svg
@@ -116,7 +116,7 @@ export default function Navbar() {
 
             {/* Mobile menu */}
             <div
-                className={`overflow-hidden bg-surface border-t border-outline-variant transition-[max-height] duration-300 md:hidden ${open ? 'max-h-96' : 'max-h-0'
+                className={`overflow-hidden bg-surface transition-[max-height] duration-300 md:hidden ${open ? 'max-h-96' : 'max-h-0'
                     }`}
             >
                 <ul className="flex flex-col gap-1 px-4 py-4">
