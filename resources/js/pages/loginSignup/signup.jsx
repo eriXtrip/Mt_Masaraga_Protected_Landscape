@@ -2,8 +2,8 @@ import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ProgressNode from '../../components/features/ProgressNode';
 import Hiking from '../../components/icons/Hiking';
+import Mountain from '../../components/icons/Mountain';
 import {
-    Mountain,
     ArrowRight,
     ArrowLeft,
     Send,
@@ -123,7 +123,7 @@ export default function Signup() {
                 <div className="absolute inset-0 bg-linear-to-t from-inverse-surface/90 via-inverse-surface/40 to-transparent" />
                 <div className="relative z-10 mb-12 flex max-w-lg flex-col gap-4">
                     <div className="mb-2 flex items-center gap-2 text-white">
-                        <Mountain className="h-10 w-10" />
+                        <Mountain className="h-15 w-15" />
                         <span className="text-headline-md font-bold tracking-tight">
                             Mt. Masaraga PL
                         </span>
@@ -152,7 +152,7 @@ export default function Signup() {
                 <div className="mx-auto flex w-full max-w-135 flex-col gap-6">
                     {/* Mobile Logo */}
                     <div className="flex items-center gap-2 text-primary lg:hidden">
-                        <Mountain className="h-8 w-8" />
+                        <Mountain className="h-13 w-13" />
                         <span className="text-headline-md font-bold">Mt. Masaraga PL</span>
                     </div>
 
@@ -714,7 +714,7 @@ export default function Signup() {
                                         href="#"
                                         className="flex items-center justify-center gap-2 rounded-lg bg-primary py-4 text-sm font-semibold text-on-secondary shadow-md transition-all hover:bg-surface-tint"
                                     >
-                                        <Mountain className="h-5 w-5" />
+                                        <Mountain className="h-5 w-10" />
                                         Go to Hiker Dashboard / Start Booking
                                     </a>
                                     <button

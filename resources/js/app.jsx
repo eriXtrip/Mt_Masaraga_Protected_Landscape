@@ -9,6 +9,7 @@ import About from './pages/about/about';
 import Help from './pages/help/help';
 import Contact from './pages/contact/contact';
 import Signup from './pages/loginSignup/signup';
+import Login from './pages/loginSignup/login';
 
 import '../css/app.css';
 
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById('app')).render(
                 <Route path="/help" element={<Help />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
             </Routes>
             <Footer />
         </BrowserRouter>
