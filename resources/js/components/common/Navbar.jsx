@@ -22,17 +22,12 @@ export default function Navbar() {
     const close = () => setOpen(false);
 
     return (
-        <header
-            className={`sticky top-0 z-50 w-full transition-all duration-300 ${isScrolled
-                ? 'bg-white/20 shadow-xs backdrop-blur-xl'
-                : 'bg-white/2'
-                }`}
-        >
-            <nav className="mx-auto flex h-13 w-full items-center justify-between gap-6 pr-5 lg:h-14">
+        <header className="sticky top-0 z-50 w-full bg-on-background">
+            <nav className="mx-auto flex h-14 w-full max-w-380 items-center justify-between gap-6 px-6">
                 {/* Logo / Brand */}
                 <Link
                     to="/"
-                    className="flex h-full shrink-0 items-center pl-3 pr-5 md:pl-6 md:pr-8"
+                    className="flex h-full shrink-0 items-center"
                     onClick={close}
                 >
                     <img
@@ -43,15 +38,15 @@ export default function Navbar() {
                 </Link>
 
                 {/* Desktop navigation */}
-                <ul className="hidden items-center gap-8 pt-1 md:flex">
+                <ul className="hidden items-center gap-6 md:flex">
                     {NAV_LINKS.map((link) => (
-                        <li key={link.to}>
+                        <li key={link.to} className="relative">
                             <NavLink
                                 to={link.to}
                                 className={({ isActive }) =>
-                                    `pb-1 text-xs font-semibold tracking-wider uppercase transition-colors ${isActive
-                                        ? 'border-b-2 border-primary text-primary'
-                                        : 'text-on-surface-variant hover:text-primary'
+                                    `relative py-2 text-sm font-medium transition-colors ${isActive
+                                        ? 'text-on-secondary before:absolute before:bottom-0 before:left-0 before:h-0.5 before:w-full before:bg-on-secondary'
+                                        : 'text-on-primary hover:text-on-secondary'
                                     }`
                                 }
                             >
@@ -61,17 +56,17 @@ export default function Navbar() {
                     ))}
                 </ul>
 
-                {/* Auth actions */}
-                <div className="hidden items-center gap-4 md:flex">
+                {/* Auth actions - using design system button variants */}
+                <div className="hidden items-center gap-3 md:flex">
                     <Link
                         to="/login"
-                        className="rounded px-4 py-2 text-xs font-semibold uppercase tracking-wider text-primary transition-colors hover:bg-surface-variant"
+                        className="rounded-md px-4 py-2 text-sm font-semibold text-on-primary transition-colors hover:bg-surface-container hover:text-primary border border-on-primary"
                     >
                         Login
                     </Link>
                     <Link
                         to="/signup"
-                        className="rounded bg-primary px-6 py-2 text-xs font-semibold uppercase tracking-wider text-white hover:text-on-primary shadow-sm transition-colors hover:bg-primary-fixed-dim"
+                        className="rounded-md bg-primary px-5 py-2 text-sm font-semibold text-on-secondary transition-colors hover:bg-primary-container"
                     >
                         Sign Up
                     </Link>
@@ -81,13 +76,14 @@ export default function Navbar() {
                 <button
                     type="button"
                     aria-label="Toggle menu"
+                    aria-expanded={open}
                     onClick={() => setOpen((v) => !v)}
-                    className="flex h-10 w-10 items-center justify-center rounded p-2 text-on-surface-variant transition-colors hover:bg-surface-variant md:hidden"
+                    className="flex h-10 w-10 items-center justify-center rounded-md text-on-surface-variant transition-colors hover:bg-surface-container md:hidden"
                 >
                     {open ? (
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
+                            className="h-5 w-5"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -102,7 +98,7 @@ export default function Navbar() {
                     ) : (
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6"
+                            className="h-5 w-5"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -120,7 +116,7 @@ export default function Navbar() {
 
             {/* Mobile menu */}
             <div
-                className={`overflow-hidden bg-surface transition-[max-height] duration-300 md:hidden ${open ? 'max-h-96' : 'max-h-0'
+                className={`overflow-hidden bg-surface border-t border-outline-variant transition-[max-height] duration-300 md:hidden ${open ? 'max-h-96' : 'max-h-0'
                     }`}
             >
                 <ul className="flex flex-col gap-1 px-4 py-4">
@@ -130,7 +126,7 @@ export default function Navbar() {
                                 to={link.to}
                                 onClick={close}
                                 className={({ isActive }) =>
-                                    `block rounded-lg px-4 py-2 text-sm font-medium ${isActive
+                                    `block rounded-lg px-4 py-3 text-base font-medium ${isActive
                                         ? 'bg-primary-container text-on-primary-container'
                                         : 'text-on-surface hover:bg-surface-container'
                                     }`
@@ -140,18 +136,18 @@ export default function Navbar() {
                             </NavLink>
                         </li>
                     ))}
-                    <li className="mt-2 flex flex-col gap-3 border-t border-outline-variant pt-4">
+                    <li className="mt-3 flex flex-col gap-3 border-t border-outline-variant pt-4">
                         <Link
                             to="/login"
                             onClick={close}
-                            className="rounded border border-primary px-4 py-2 text-center text-sm font-semibold text-primary"
+                            className="rounded-md border border-primary px-4 py-3 text-center text-base font-semibold text-primary"
                         >
                             Login
                         </Link>
                         <Link
                             to="/signup"
                             onClick={close}
-                            className="rounded bg-primary px-4 py-2 text-center text-sm font-semibold text-on-primary"
+                            className="rounded-md bg-primary px-4 py-3 text-center text-base font-semibold text-on-primary"
                         >
                             Sign Up
                         </Link>

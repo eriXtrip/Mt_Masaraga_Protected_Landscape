@@ -23,7 +23,7 @@
     --color-outline-variant: #c2c9b7;
     --color-surface-tint: #3b6a10;
     --color-primary: #39670d;
-    --color-on-primary: #101B17;
+    --color-on-primary: #98BBA7;
     --color-primary-container: #518127;
     --color-on-primary-container: #f9ffec;
     --color-inverse-primary: #a0d671;
@@ -52,6 +52,6 @@
     --color-on-tertiary-fixed: #001e2c;
     --color-on-tertiary-fixed-variant: #004c69;
     --color-background: #f1fcf2;
-    --color-on-background: #141e18;
+    --color-on-background: #142918;
     --color-surface-variant: #dae5dc;
 }
