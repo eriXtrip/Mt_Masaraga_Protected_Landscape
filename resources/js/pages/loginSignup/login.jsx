@@ -121,10 +121,10 @@ export default function Login() {
 
                         <button
                             type="submit"
-                            className="w-full h-12 bg-primary hover:bg-surface-tint text-on-primary font-label-md text-label-md rounded-lg shadow-[0_4px_12px_rgba(69,101,83,0.1)] transition-all flex items-center justify-center gap-2"
+                            className="w-full h-12 bg-primary hover:bg-surface-tint text-white rounded-lg shadow-[0_4px_12px_rgba(69,101,83,0.1)] transition-all flex items-center justify-center gap-2"
                         >
                             Login
-                            <ArrowRight className="h-[18px] w-[18px]" />
+                            <ArrowRight className="h-4.5 w-4.5" />
                         </button>
                     </form>
 
