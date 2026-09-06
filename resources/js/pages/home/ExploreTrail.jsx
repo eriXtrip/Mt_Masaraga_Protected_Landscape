@@ -1,27 +1,27 @@
 import TrailCard from '../../components/features/TrailCard';
+import SabluyonRoute from '../../../../public/images/trail/SabluyonTrail.jpg'
+import BalogoRoute from '../../../../public/images/trail/BalogoTrail.jpg'
 
 const TRAILS = [
     {
-        name: 'Standard Summit',
-        difficulty: 'Challenging',
+        name: 'Amtic Trail (or Sabluyon Trail)',
+        difficulty: 'Major Climb',
         difficultyClass: 'bg-primary-container text-on-primary-container',
         description:
-            'A demanding but rewarding ascent to the peak of Mt. Masaraga, offering panoramic views of the surrounding Bicol region.',
+            'This is the most popular, standard route. It begins in Sitio Sabluyon, Barangay Amtic, Ligao City. This trail is home to the famous Mt. Masaraga Campsite and features a grueling, pure uphill assault to the summit.',
         statIcon: 'height',
-        stats: ['6-8 Hours', '8km'],
-        image:
-            'https://lh3.googleusercontent.com/aida/AEtjO1Wpnp7mJSLpQTg06WeVS6Q3LZxOPj5BajErYN7Vvt3odT5WiIfdIgAmcZJ5G6UHjsGSWPgJv0Vfw94wFlLsKKixyrWJ318FjLBRLBqNBc1yzsvm9pc7N5qkvbZQ0kxG8BZBP8Se3sBfS9aXT80njFAq0U1GW1QZGXROKs4lGSshKMaPHWVVOIoWVg_evwR8rRq9junay1-1bgPD007QH48vKkBLilKL2RtAt98o6h3Vi41JzQ5B9jBaEH8',
+        stats: ['3-4 Hours', '12.4km'],
+        image: SabluyonRoute,
     },
     {
-        name: 'Eco-Trail Loop',
-        difficulty: 'Beginner',
+        name: 'Balogo Trail',
+        difficulty: 'Major Climb',
         difficultyClass: 'bg-primary text-white',
         description:
-            'A guided, immersive loop focusing on the unique biodiversity and conservation efforts within the lower slopes of the landscape.',
+            'This is the alternative route that starts near Balogo East Elementary School. Depending on the path mapped out by local guides, it can cross the boundary areas near Oas or Ligao, passing through open fields and residential areas before hitting the steep mountain slopes.',
         statIcon: 'nature',
-        stats: ['2-3 Hours', '6.5km'],
-        image:
-            'https://lh3.googleusercontent.com/aida/AEtjO1Xzb6yyJ4VlO_ZqsSS-qhh4zVyXms7hqKxPsm8ATb3l4X_T3aCokk6XkJmR9DSVnG9hY4kkO7i43edpYTvVIycw__yXA4CMPdEh3kWbPnn4AMr_3X7kHf8LLo9vUWscWLdDUq1eBZE9bms19K3Swf_bPEZYhhIrjW9eL8uuPF0nwlINrFm1qNuYDY9MLlmvbQew9dTheRhHErwPHVjfzC50w0n_zJpPNTzwzu37ZJjKWtXk4JCyOzFAeIWI',
+        stats: ['4-5 Hours', '14km'],
+        image: BalogoRoute,
     },
 ];
 

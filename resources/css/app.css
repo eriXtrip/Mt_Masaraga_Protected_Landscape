@@ -26,7 +26,7 @@
     --color-on-primary: #98BBA7;
     --color-primary-container: #518127;
     --color-on-primary-container: #f9ffec;
-    --color-inverse-primary: #a0d671;
+    --color-inverse-primary: #0F1B18;
     --color-secondary: #456553;
     --color-on-secondary: #ffffff;
     --color-secondary-container: #c7ebd4;
@@ -52,6 +52,6 @@
     --color-on-tertiary-fixed: #001e2c;
     --color-on-tertiary-fixed-variant: #004c69;
     --color-background: #f1fcf2;
-    --color-on-background: #142918;
+    --color-on-background: #1F362B;
     --color-surface-variant: #dae5dc;
 }
