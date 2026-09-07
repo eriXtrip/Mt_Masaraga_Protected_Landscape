@@ -17,7 +17,7 @@ export default function StillHaveQuestionCTA() {
                         <div className="flex justify-center pt-4">
                             <a
                                 href="#"
-                                className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white hover:text-on-primary shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary hover:bg-primary-fixed-dim"
+                                className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white hover:text-on-secondary shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary hover:bg-primary-container"
                             >
                                 <Mail className="h-5 w-5" />
                                 Contact Support
