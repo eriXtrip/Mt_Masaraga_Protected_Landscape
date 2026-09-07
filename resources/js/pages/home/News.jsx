@@ -65,7 +65,7 @@ export default function News() {
                             <div className="mt-6 border-t border-outline-variant pt-4">
                                 <a
                                     href="#"
-                                    className="group inline-flex items-center text-sm font-bold text-primary transition-colors hover:text-primary-fixed-dim"
+                                    className="group inline-flex items-center text-sm font-bold text-primary transition-colors hover:text-primary-container"
                                 >
                                     <span>Read More</span>
                                     <svg

@@ -40,7 +40,7 @@ export default function TrailCard({ trail }) {
 
                 <button
                     type="button"
-                    className="block w-full rounded-xl border border-primary py-3 px-4 text-center text-sm font-semibold text-primary transition duration-150 hover:bg-primary hover:text-on-primary"
+                    className="block w-full rounded-xl border border-primary py-3 px-4 text-center text-sm font-semibold text-primary transition duration-150 hover:bg-primary hover:text-on-secondary"
                 >
                     View Details
                 </button>

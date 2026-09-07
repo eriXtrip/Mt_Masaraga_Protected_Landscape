@@ -21,7 +21,7 @@ export default function Cta() {
                 </h1>
                 <Link
                     to="/help"
-                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-sm font-semibold uppercase tracking-wide text-white hover:text-on-primary shadow-lg transition-colors hover:bg-primary-fixed-dim"
+                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-sm font-semibold uppercase tracking-wide text-on-secondary transition-colors hover:bg-primary-container"
                 >
                     Book your trek
                 </Link>
