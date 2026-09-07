@@ -163,8 +163,12 @@ The shape language reflects a balance between organic nature and geometric preci
 
 ### Buttons
 - **Solid:** `Primary` background with white text. High-emphasis for "Book Now" or "Submit Application."
+  - Classes: `rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint`
 - **Outlined:** `Primary` border with `Primary` text. For secondary actions like "Download Map."
+  - Classes: `rounded-lg border border-outline-variant px-5 py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container`
 - **Ghost:** No background or border. Used for "Cancel" or "Back" actions within the booking flow.
+- **Secondary:** Used for supplementary actions like "Send Code."
+  - Classes: `rounded-lg border border-secondary/20 bg-secondary-container px-5 py-2.5 text-xs font-semibold text-on-secondary-fixed transition-colors hover:bg-secondary-fixed`
 
 ### Cards & Badges
 - **Booking Cards:** Feature 12px/16px rounded corners, 24px internal padding, and a `Level 1` elevation.
@@ -177,3 +181,26 @@ The shape language reflects a balance between organic nature and geometric preci
 - **Drawer:** Slides from the right; used for real-time hiker chat. It features a clean header in `Secondary` (Deep Forest) for visual weight.
 - **Sidebar:** Used in the admin dashboard with a `Secondary` background and white text. Active menu items are indicated by a 4px `Primary` vertical bar on the left edge.
 - **Input Fields:** 8px rounded corners with a 1px `Dark Charcoal` (20% opacity) border. Focused state switches the border to `Primary`.
+
+### Input Fields
+- **Standard Text Input:**
+  - Classes: `rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-body-sm text-on-surface placeholder:text-outline transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none`
+- **Input with Left Icon (e.g., Mail, Phone):**
+  - Icon: `h-4 w-4` positioned `absolute left-3 top-1/2 -translate-y-1/2 text-outline`
+  - Input classes: `rounded-lg border border-outline-variant bg-surface-container-lowest py-2 pl-9 pr-3 text-body-sm text-on-surface placeholder:text-outline transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none`
+- **Password Input (with toggle):**
+  - Input classes: `rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 pr-10 text-body-sm text-on-surface placeholder:text-outline transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none`
+  - Toggle button: `absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors hover:text-on-surface focus:outline-none` with `h-4 w-4` Eye/EyeOff icon
+- **OTP Code Input:**
+  - Classes: `h-11 w-9 rounded-lg border-2 bg-surface-container-lowest text-center text-lg font-bold text-on-surface transition-all focus:ring-2 focus:ring-primary focus:outline-none sm:h-12 sm:w-10`
+  - Active state adds `border-primary`, inactive uses `border-outline-variant`
+- **Checkbox:**
+  - Classes: `h-4 w-4 cursor-pointer rounded border-outline-variant bg-surface-container-lowest text-primary transition-colors focus:ring-primary focus:ring-offset-surface`
+
+### Radio Cards (Selection Groups)
+- **Gender / Option Cards:**
+  - Container: `rounded-xl border-2 px-3 py-1.5 transition-all` with `border-primary bg-surface-container-lowest ring-1 ring-primary/20` when selected, `border-outline-variant bg-surface-container-lowest hover:border-primary` when unselected
+  - Icon circle: `h-8 w-8 rounded-full flex items-center justify-center text-primary` with `bg-secondary-container` when selected, `bg-surface-container-low` when unselected
+  - Radio dot: `h-5 w-5 rounded-full border-2 flex items-center justify-center` with inner `h-2.5 w-2.5 rounded-full bg-primary` when selected
+  - Label: `text-base font-semibold text-on-surface`
+  - Description: `text-xs text-on-surface-variant`

@@ -1,60 +1,47 @@
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import ProgressNode from '../../components/features/ProgressNode';
-import Hiking from '../../components/icons/Hiking';
 import Mountain from '../../components/icons/Mountain';
-import MtmasaragaVanishingfalls from '../../../../public/images/loginSignup/mtmasaragaVanishingfalls.jpg'
+import Hiking from '../../components/icons/Hiking';
+import ProgressNode from '../../components/features/ProgressNode';
+import MtMasaragaCampsite from '../../../../public/images/loginSignup/MtmasaragaCampsite.jpg'
 import {
     ArrowRight,
     ArrowLeft,
-    Send,
     Mail,
-    Phone,
     CheckCircle2,
     Check,
     ShieldCheck,
     Eye,
     EyeOff,
-    Info,
     RefreshCw,
     MailCheck,
-    CircleSmall,
-    Mars,
-    Venus
+    KeyRound,
+    Info,
 } from 'lucide-react';
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 3;
 const STEP_TITLES = [
-    'Personal Name',
-    'Select Gender',
-    'Contact Email',
-    'Verify Code',
-    'Create Password',
-    'Trek Ready',
+    'Find Account',
+    'Reset Code',
+    'New Password',
 ];
 
-export default function Signup() {
+export default function ForgotPassword() {
     const [currentStep, setCurrentStep] = useState(1);
     const [direction, setDirection] = useState('forward');
 
     const [form, setForm] = useState({
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        suffix: '',
-        gender: '',
         email: '',
-        phone: '',
         otp: ['', '', '', '', '', ''],
         password: '',
         confirmPassword: '',
-        agreeTerms: false,
     });
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [codeSent, setCodeSent] = useState(false);
     const [codeCountdown, setCodeCountdown] = useState(0);
+    const [resetSuccess, setResetSuccess] = useState(false);
 
     const otpRefs = useRef([]);
 
@@ -68,7 +55,7 @@ export default function Signup() {
 
     const handleSendCode = () => {
         setCodeSent(true);
-        setCodeCountdown(54);
+        setCodeCountdown(60);
         const timer = setInterval(() => {
             setCodeCountdown((prev) => {
                 if (prev <= 1) {
@@ -116,8 +103,8 @@ export default function Signup() {
             {/* Left Side: Hero Image Background */}
             <div className="hidden w-full shrink-0 bg-cover bg-center bg-surface-variant lg:flex lg:w-[42%] xl:w-[40%] relative flex-col justify-end p-12">
                 <img
-                    src={MtmasaragaVanishingfalls}
-                    alt="Mt. Masaraga Vanishingfalls"
+                    src={MtMasaragaCampsite}
+                    alt="Mt. Masaraga Campsite"
                     className="absolute inset-0 w-full h-full object-cover object-top"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-inverse-surface/90 via-inverse-surface/40 to-transparent" />
@@ -129,9 +116,9 @@ export default function Signup() {
                         </span>
                     </div>
                     <p className="leading-relaxed text-body-lg text-white/90">
-                        Join our community of responsible hikers. Register for an account to effortlessly
-                        book mandatory permits, receive live trail updates, and stay informed on local
-                        conservation efforts.
+                        Secure your verified hiker profile to seamlessly access your registered trail
+                        permits, coordinate with accredited guides, and safeguard protected wildlife
+                        habitat.
                     </p>
                     <div className="mt-2 flex items-center gap-4 border-t border-white/20 pt-4 text-xs text-white/80">
                         <div className="flex items-center gap-1.5">
@@ -146,7 +133,7 @@ export default function Signup() {
                 </div>
             </div>
 
-            {/* Right Side: Multi-Step Registration Wizard */}
+            {/* Right Side: Multi-Step Forgot Password Form */}
             <div className="flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%]">
                 <div className="max-w-md w-full mx-auto pt-5 pb-12">
                     {/* Header + Mobile Logo */}
@@ -156,30 +143,30 @@ export default function Signup() {
                     </div>
                     <div className="mb-12 text-center md:text-left">
                         <h2 className="text-headline-lg-mobile font-bold text-on-surface md:text-headline-lg">
-                            Join the Community
+                            Reset Your Password
                         </h2>
                         <p className="font-body-md text-body-md text-on-surface-variant">
-                            Register for an account to start your eco-hiking journey.
+                            Recover your account and continue enjoying the trails.
                         </p>
                     </div>
 
                     {/* Stepper Progress Tracker */}
-                    <div className="w-full pb-4 px-1">
+                    <div className="w-full pb-4">
                         <div className="relative mb-6 flex w-full items-center">
-                            {[1, 2, 3, 4, 5, 6].map((step, index) => {
+                            {[1, 2, 3].map((step, index) => {
                                 const isCompleted = step < currentStep;
                                 const isActive = step === currentStep;
                                 return (
-                                    <div key={step} className={`flex items-center ${index < 5 ? 'flex-1' : ''}`}>
+                                    <div key={step} className={`flex items-center ${index < 2 ? 'flex-1' : ''}`}>
                                         <ProgressNode
                                             step={step}
-                                            name={['Name', 'Gender', 'Email', 'Verify', 'Password', 'Complete'][step - 1]}
+                                            name={STEP_TITLES[step - 1]}
                                             isActive={isActive}
                                             isCompleted={isCompleted}
                                             onClick={() => goToStep(step)}
                                             color="primary"
                                         />
-                                        {index < 5 && (
+                                        {index < 2 && (
                                             <div className="mx-2 h-0.75 flex-1 rounded-full bg-surface-container-highest">
                                                 <div
                                                     className="h-full rounded-full bg-primary transition-all duration-300"
@@ -202,253 +189,67 @@ export default function Signup() {
 
                     {/* STEP CONTAINERS */}
                     <div className="flex h-150 flex-col justify-start overflow-y-auto px-1">
-                        {/* STEP 1: Name */}
+                        {/* STEP 1: Find Account */}
                         {currentStep === 1 && (
                             <div className="flex flex-col gap-1.5">
                                 <span className="text-xs font-semibold uppercase tracking-wider text-primary">
                                     Step 1 &bull; Identification
                                 </span>
                                 <h1 className="text-headline-lg-mobile font-bold text-on-surface md:text-headline-lg">
-                                    What&apos;s your name?
+                                    Find your account
                                 </h1>
                                 <p className="text-body-md text-on-surface-variant">
-                                    Enter the name you use in real life for trail permit verification.
-                                </p>
-                                <div className="mt-6 grid grid-cols-2 gap-4">
-                                    <div className="flex flex-col gap-1.5">
-                                        <label className="text-label-md font-semibold text-on-surface">
-                                            First Name <span className="text-error">*</span>
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={form.firstName}
-                                            onChange={(e) => update('firstName', e.target.value)}
-                                            placeholder="Juan"
-                                            className="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-body-sm text-on-surface placeholder:text-outline transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col gap-1.5">
-                                        <label className="text-label-md font-semibold text-on-surface">
-                                            Middle Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={form.middleName}
-                                            onChange={(e) => update('middleName', e.target.value)}
-                                            placeholder="Santos"
-                                            className="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-body-sm text-on-surface placeholder:text-outline transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col gap-1.5">
-                                        <label className="text-label-md font-semibold text-on-surface">
-                                            Last Name <span className="text-error">*</span>
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={form.lastName}
-                                            onChange={(e) => update('lastName', e.target.value)}
-                                            placeholder="Dela Cruz"
-                                            className="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-body-sm text-on-surface placeholder:text-outline transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col gap-1.5">
-                                        <label className="text-label-md font-semibold text-on-surface">
-                                            Suffix
-                                        </label>
-                                        <input
-                                            type="text"
-                                            value={form.suffix}
-                                            onChange={(e) => update('suffix', e.target.value)}
-                                            placeholder="Jr., III (optional)"
-                                            className="rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2 text-body-sm text-on-surface placeholder:text-outline transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mt-8 flex justify-end">
-                                    <button
-                                        type="button"
-                                        onClick={() => goToStep(2)}
-                                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint sm:w-auto"
-                                    >
-                                        Continue
-                                        <ArrowRight className="h-4.5 w-4.5" />
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* STEP 2: Gender */}
-                        {currentStep === 2 && (
-                            <div className="flex flex-col gap-1.5">
-                                <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-                                    Step 2 &bull; Profile Info
-                                </span>
-                                <h1 className="text-headline-lg-mobile font-bold text-on-surface md:text-headline-lg">
-                                    What&apos;s your gender?
-                                </h1>
-                                <p className="text-body-md text-on-surface-variant">
-                                    Select your gender to assist park rangers with visitor demographics and safety
-                                    facilities.
-                                </p>
-                                <div className="mt-6 flex flex-col gap-3">
-                                    {[
-                                        { value: 'female', label: 'Female', desc: 'Identify as woman / female', icon: Venus },
-                                        { value: 'male', label: 'Male', desc: 'Identify as man / male', icon: Mars },
-                                        { value: 'other', label: 'Prefer not to say', desc: 'Opt out of providing gender information', icon: CircleSmall },
-                                    ].map((opt) => {
-                                        const selected = form.gender === opt.value;
-                                        return (
-                                            <label
-                                                key={opt.value}
-                                                className={`relative flex cursor-pointer items-center rounded-xl border-2 px-3 py-1.5 transition-all ${selected
-                                                    ? 'border-primary bg-surface-container-lowest ring-1 ring-primary/20'
-                                                    : 'border-outline-variant bg-surface-container-lowest hover:border-primary'
-                                                    }`}
-                                            >
-                                                <input
-                                                    type="radio"
-                                                    name="gender"
-                                                    value={opt.value}
-                                                    checked={selected}
-                                                    onChange={() => update('gender', opt.value)}
-                                                    className="sr-only peer"
-                                                />
-                                                <div
-                                                    className={`mr-3 flex h-8 w-8 items-center justify-center rounded-full text-primary transition-colors ${selected ? 'bg-secondary-container' : 'bg-surface-container-low'
-                                                        }`}
-                                                >
-                                                    <span className="text-lg"><opt.icon /></span>
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="text-base font-semibold text-on-surface">{opt.label}</div>
-                                                    <div className="text-xs text-on-surface-variant">{opt.desc}</div>
-                                                </div>
-                                                <div
-                                                    className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${selected
-                                                        ? 'border-primary'
-                                                        : 'border-outline-variant'
-                                                        }`}
-                                                >
-                                                    {selected && (
-                                                        <div className="h-2.5 w-2.5 rounded-full bg-primary" />
-                                                    )}
-                                                </div>
-                                            </label>
-                                        );
-                                    })}
-                                </div>
-                                <div className="mt-8 flex items-center justify-between gap-3">
-                                    <button
-                                        type="button"
-                                        onClick={() => goToStep(1)}
-                                        className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-5 py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container"
-                                    >
-                                        <ArrowLeft className="h-4.5 w-4.5" />
-                                        Back
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => goToStep(3)}
-                                        className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
-                                    >
-                                        Continue
-                                        <ArrowRight className="h-4.5 w-4.5" />
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* STEP 3: Email */}
-                        {currentStep === 3 && (
-                            <div className="flex flex-col gap-1.5">
-                                <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-                                    Step 3 &bull; Contact Information
-                                </span>
-                                <h1 className="text-headline-lg-mobile font-bold text-on-surface md:text-headline-lg">
-                                    What&apos;s your email?
-                                </h1>
-                                <p className="text-body-md text-on-surface-variant">
-                                    Enter your active email where you can be contacted and receive trail permits.
+                                    Enter your email associated with your account and we&apos;ll send instructions to
+                                    reset your password.
                                 </p>
                                 <div className="mt-6 flex flex-col gap-4">
                                     <div className="flex flex-col gap-1.5">
                                         <label className="text-label-md font-semibold text-on-surface">
                                             Email Address <span className="text-error">*</span>
                                         </label>
-                                        <div className="flex flex-col gap-2.5 sm:flex-row">
-                                            <div className="relative flex-1">
-                                                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-outline" />
-                                                <input
-                                                    type="email"
-                                                    value={form.email}
-                                                    onChange={(e) => update('email', e.target.value)}
-                                                    placeholder="juandelacruz@example.com"
-                                                    className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest py-2 pl-9 pr-3 text-body-sm text-on-surface placeholder:text-outline transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
-                                                />
-                                            </div>
-                                            <button
-                                                type="button"
-                                                onClick={handleSendCode}
-                                                className="flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-secondary/20 bg-secondary-container px-5 py-2.5 text-xs font-semibold text-on-secondary-fixed transition-colors hover:bg-secondary-fixed"
-                                            >
-                                                <Send className="h-4 w-4" />
-                                                {codeSent ? 'Code Sent!' : 'Send Code'}
-                                            </button>
-                                        </div>
-                                        <p className="mt-1 flex items-center gap-1 text-xs text-on-surface-variant">
-                                            <Info className="h-3.75 w-3.75 text-primary" />
-                                            A 6-digit confirmation code will be dispatched to this address.
-                                        </p>
-                                    </div>
-                                    <div className="flex flex-col gap-1.5 pt-2">
-                                        <label className="text-label-md font-semibold text-on-surface">
-                                            Phone Number{' '}
-                                            <span className="text-xs font-normal text-outline">(Optional for SMS alerts)</span>
-                                        </label>
                                         <div className="relative">
-                                            <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-outline" />
+                                            <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-outline" />
                                             <input
-                                                type="tel"
-                                                value={form.phone}
-                                                onChange={(e) => update('phone', e.target.value)}
-                                                placeholder="+63 912 345 6789"
+                                                type="email"
+                                                value={form.email}
+                                                onChange={(e) => update('email', e.target.value)}
+                                                placeholder="juan.delacruz@gmail.com"
                                                 className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest py-2 pl-9 pr-3 text-body-sm text-on-surface placeholder:text-outline transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
                                             />
                                         </div>
+                                        <p className="mt-1 flex items-center gap-1 text-xs text-on-surface-variant">
+                                            <Info className="h-3.75 w-3.75 text-primary" />
+                                            Must match the email registered with your DENR trail permit profile.
+                                        </p>
                                     </div>
                                 </div>
-                                <div className="mt-8 flex items-center justify-between gap-3">
+                                <div className="mt-8 flex justify-end">
                                     <button
                                         type="button"
-                                        onClick={() => goToStep(2)}
-                                        className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-5 py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container"
-                                    >
-                                        <ArrowLeft className="h-4.5 w-4.5" />
-                                        Back
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => goToStep(4)}
+                                        onClick={() => {
+                                            handleSendCode();
+                                            goToStep(2);
+                                        }}
                                         className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
                                     >
-                                        Continue
+                                        Send Reset Code
                                         <ArrowRight className="h-4.5 w-4.5" />
                                     </button>
                                 </div>
                             </div>
                         )}
 
-                        {/* STEP 4: Verification */}
-                        {currentStep === 4 && (
+                        {/* STEP 2: Reset Code */}
+                        {currentStep === 2 && (
                             <div className="flex flex-col gap-1.5">
                                 <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-                                    Step 4 &bull; Security Verification
+                                    Step 2 &bull; Verification
                                 </span>
                                 <h1 className="text-headline-lg-mobile font-bold text-on-surface md:text-headline-lg">
-                                    Email Verification
+                                    Enter Reset Code
                                 </h1>
                                 <p className="text-body-md text-on-surface-variant">
-                                    Enter the verification code we sent to{' '}
+                                    Enter the 6-digit verification code we sent to{' '}
                                     <span className="font-semibold text-on-surface">
                                         {form.email || 'your email'}
                                     </span>.
@@ -495,7 +296,7 @@ export default function Signup() {
                                 <div className="mt-8 flex items-center justify-between gap-3">
                                     <button
                                         type="button"
-                                        onClick={() => goToStep(3)}
+                                        onClick={() => goToStep(1)}
                                         className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-5 py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container"
                                     >
                                         <ArrowLeft className="h-4.5 w-4.5" />
@@ -503,34 +304,34 @@ export default function Signup() {
                                     </button>
                                     <button
                                         type="button"
-                                        onClick={() => goToStep(5)}
+                                        onClick={() => goToStep(3)}
                                         className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
                                     >
-                                        Verify &amp; Continue
+                                        Verify Code
                                         <CheckCircle2 className="h-4.5 w-4.5" />
                                     </button>
                                 </div>
                             </div>
                         )}
 
-                        {/* STEP 5: Password */}
-                        {currentStep === 5 && (
+                        {/* STEP 3: New Password */}
+                        {currentStep === 3 && !resetSuccess && (
                             <div className="flex flex-col gap-1.5">
                                 <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-                                    Step 5 &bull; Account Security
+                                    Step 3 &bull; Account Security
                                 </span>
                                 <h1 className="text-headline-lg-mobile font-bold text-on-surface md:text-headline-lg">
-                                    Password creation
+                                    Create New Password
                                 </h1>
                                 <p className="text-body-md text-on-surface-variant">
-                                    Create your password with uppercase and lowercase alphanumerical characters,
-                                    and special symbols.
+                                    Your identity is verified. Create a new secure password for your hiker
+                                    account.
                                 </p>
                                 <div className="mt-5 flex flex-col gap-4">
                                     {/* Password */}
                                     <div className="flex flex-col gap-1.5">
                                         <label className="text-label-md font-semibold text-on-surface">
-                                            Password <span className="text-error">*</span>
+                                            New Password <span className="text-error">*</span>
                                         </label>
                                         <div className="relative">
                                             <input
@@ -616,36 +417,11 @@ export default function Signup() {
                                             ))}
                                         </div>
                                     </div>
-
-                                    {/* Terms Checkbox */}
-                                    <div className="mt-1 flex items-start gap-3">
-                                        <div className="mt-0.5 flex h-5 items-center">
-                                            <input
-                                                type="checkbox"
-                                                checked={form.agreeTerms}
-                                                onChange={(e) => update('agreeTerms', e.target.checked)}
-                                                className="h-4 w-4 cursor-pointer rounded border-outline-variant bg-surface-container-lowest text-primary transition-colors focus:ring-primary focus:ring-offset-surface"
-                                            />
-                                        </div>
-                                        <label
-                                            className="cursor-pointer select-none text-body-sm text-on-surface-variant"
-                                            htmlFor="terms"
-                                        >
-                                            I agree to the mandatory{' '}
-                                            <a href="#" className="font-medium text-primary hover:underline">
-                                                Terms &amp; Policies
-                                            </a>{' '}
-                                            and Mt. Masaraga{' '}
-                                            <a href="#" className="font-medium text-primary hover:underline">
-                                                Permit &amp; Conservation Guidelines
-                                            </a>.
-                                        </label>
-                                    </div>
                                 </div>
-                                <div className="mt-7 flex items-center justify-between gap-3">
+                                <div className="mt-8 flex items-center justify-between gap-3">
                                     <button
                                         type="button"
-                                        onClick={() => goToStep(4)}
+                                        onClick={() => goToStep(2)}
                                         className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-5 py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container"
                                     >
                                         <ArrowLeft className="h-4.5 w-4.5" />
@@ -653,22 +429,22 @@ export default function Signup() {
                                     </button>
                                     <button
                                         type="button"
-                                        onClick={() => goToStep(6)}
+                                        onClick={() => setResetSuccess(true)}
                                         className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
                                     >
-                                        Create Account
+                                        Reset Password
                                         <Check className="h-4.5 w-4.5" />
                                     </button>
                                 </div>
                             </div>
                         )}
 
-                        {/* STEP 6: Success */}
-                        {currentStep === 6 && (
+                        {/* STEP 3: Success */}
+                        {currentStep === 3 && resetSuccess && (
                             <div className="flex flex-col items-center gap-3 py-2 text-center">
                                 <div className="relative">
                                     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-secondary-container text-primary shadow-inner">
-                                        <Hiking className="h-12 w-12" />
+                                        <KeyRound className="h-10 w-10" />
                                     </div>
                                     <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white shadow-md">
                                         <Check className="h-4.5 w-4.5" />
@@ -676,59 +452,48 @@ export default function Signup() {
                                 </div>
                                 <div className="flex max-w-md flex-col gap-1.5">
                                     <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-                                        Registration Complete
+                                        Password Reset Complete
                                     </span>
                                     <h1 className="text-headline-lg font-bold text-on-surface">
-                                        You are now ready for trek!
+                                        Your password has been updated!
                                     </h1>
                                     <p className="text-body-md text-on-surface-variant">
-                                        Welcome to the Mt. Masaraga Protected Landscape eco-portal,{' '}
-                                        <span className="font-semibold text-on-surface">
-                                            {form.firstName} {form.lastName}
-                                        </span>
-                                        ! Your hiker credentials have been successfully registered.
+                                        Your hiker account password has been securely changed. You can now sign in
+                                        with your new credentials.
                                     </p>
                                 </div>
 
-                                {/* Registration Summary Card */}
+                                {/* Info Card */}
                                 <div className="my-2 w-full max-w-md rounded-xl border border-outline-variant/60 bg-surface-container-low p-4 text-left">
-                                    <div className="flex items-center justify-between border-b border-outline-variant/40 pb-2 text-xs">
-                                        <span className="text-on-surface-variant">Hiker ID:</span>
-                                        <span className="font-mono font-bold text-on-surface">MMPL-2025-0842</span>
+                                    <div className="flex items-center gap-2 pb-2 text-xs">
+                                        <ShieldCheck className="h-4 w-4 text-primary" />
+                                        <span className="font-semibold text-on-surface">Security Tip</span>
                                     </div>
-                                    <div className="flex items-center justify-between py-1 text-xs">
-                                        <span className="text-on-surface-variant">Account Name:</span>
-                                        <span className="font-semibold text-on-surface">
-                                            {form.firstName} {form.middleName} {form.lastName}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center justify-between py-1 text-xs">
-                                        <span className="text-on-surface-variant">Verified Email:</span>
-                                        <span className="font-semibold text-on-surface">{form.email}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between py-1 text-xs">
-                                        <span className="text-on-surface-variant">Status:</span>
-                                        <span className="flex items-center gap-1 px-2 py-0.5 text-[11px] font-semibold text-primary">
-                                            Ready to Book Permits
-                                        </span>
-                                    </div>
+                                    <p className="text-xs leading-relaxed text-on-surface-variant">
+                                        Keep your new password secure and avoid reusing it across other platforms. For
+                                        account safety, consider updating your password periodically.
+                                    </p>
                                 </div>
 
                                 {/* CTA */}
                                 <div className="mt-2 flex w-full max-w-md flex-col gap-2.5">
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="/login"
                                         className="flex items-center justify-center gap-2 rounded-lg bg-primary py-4 text-sm font-semibold text-on-secondary shadow-md transition-all hover:bg-surface-tint"
                                     >
                                         <Mountain className="h-5 w-10" />
-                                        Go to Hiker Dashboard / Start Booking
-                                    </a>
+                                        Return to Login
+                                    </Link>
                                     <button
                                         type="button"
-                                        onClick={() => goToStep(1)}
+                                        onClick={() => {
+                                            setResetSuccess(false);
+                                            setForm({ email: '', otp: ['', '', '', '', '', ''], password: '', confirmPassword: '' });
+                                            goToStep(1);
+                                        }}
                                         className="py-1 text-xs text-on-surface-variant transition-colors hover:text-primary"
                                     >
-                                        Need to adjust profile details? Edit registration info
+                                        Need to reset another account?
                                     </button>
                                 </div>
                             </div>
@@ -738,7 +503,7 @@ export default function Signup() {
                     {/* Login Redirect */}
                     <div className="border-t border-outline-variant/40 pt-4 text-center">
                         <p className="text-body-md text-on-surface-variant">
-                            Already have an account?{' '}
+                            Remembered your credentials?{' '}
                             <Link to="/login" className="font-semibold text-primary hover:underline">
                                 Log in
                             </Link>
