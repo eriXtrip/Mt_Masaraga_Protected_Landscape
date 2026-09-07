@@ -1,6 +1,8 @@
 import { Clock5, Mountain } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function TrailCard({ trail }) {
+    const navigate = useNavigate();
     return (
         <div className="mx-auto flex h-full w-full flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container shadow-sm transition duration-200 hover:shadow-md">
             <div className="relative h-52 w-full overflow-hidden bg-surface-container-high lg:h-48">
@@ -40,6 +42,7 @@ export default function TrailCard({ trail }) {
 
                 <button
                     type="button"
+                    onClick={() => navigate('/trail')}
                     className="block w-full rounded-xl border border-primary py-3 px-4 text-center text-sm font-semibold text-primary transition duration-150 hover:bg-primary hover:text-on-secondary"
                 >
                     View Details

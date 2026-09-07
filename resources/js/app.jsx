@@ -11,6 +11,7 @@ import Contact from './pages/contact/contact';
 import Signup from './pages/loginSignup/signup';
 import Login from './pages/loginSignup/login';
 import ForgotPassword from './pages/loginSignup/forgotpassword';
+import Trail from './pages/trail/trail';
 
 import '../css/app.css';
 
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById('app')).render(
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/trail" element={<Trail />} />
                 <Route path="/help" element={<Help />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/signup" element={<Signup />} />
