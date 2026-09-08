@@ -5,7 +5,7 @@ import SabluyonRoute from '../../../../public/images/trail/SabluyonTrail.jpg'
 
 export default function TrailHero() {
     return (
-        <section className="relative flex h-150 w-full items-start justify-start overflow-hidden bg-secondary">
+        <section className="relative flex h-150 w-full items-start justify-start overflow-hidden bg-secondary rounded-2xl">
             <img
                 src={SabluyonRoute}
                 alt="Sabluyon - Mt. Masaraga"
