@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
 
 const NAV_LINKS = [
     { label: 'Home', to: '/' },
@@ -20,6 +21,7 @@ export default function Navbar() {
     }, []);
 
     const close = () => setOpen(false);
+    const navigate = useNavigate();
 
     return (
         <header className="sticky top-0 z-50 w-full bg-on-background">
@@ -58,27 +60,31 @@ export default function Navbar() {
 
                 {/* Auth actions - using design system button variants */}
                 <div className="hidden items-center gap-3 md:flex">
-                    <Link
-                        to="/login"
-                        className="rounded-md px-4 py-2 text-sm font-semibold text-on-primary transition-colors hover:bg-surface-container hover:text-primary border border-on-primary"
+                    <Button
+                        variant="outline"
+                        size="lg"
+                        onClick={() => navigate('/login')}
+                        className={"capitalize bg-transparent text-on-primary border-on-primary hover:border-muted"}
                     >
                         Login
-                    </Link>
-                    <Link
-                        to="/signup"
-                        className="rounded-md bg-primary px-5 py-2 text-sm font-semibold text-on-secondary transition-colors hover:bg-primary-container"
+                    </Button>
+                    <Button
+                        variant="default"
+                        size="lg"
+                        onClick={() => navigate('/signup')}
+                        className={"capitalize"}
                     >
                         Sign Up
-                    </Link>
+                    </Button>
                 </div>
 
                 {/* Mobile hamburger */}
-                <button
+                <Button
                     type="button"
                     aria-label="Toggle menu"
                     aria-expanded={open}
                     onClick={() => setOpen((v) => !v)}
-                    className="flex h-10 w-10 items-center justify-center rounded-md text-on-secondary transition-colors hover:bg-surface-container md:hidden"
+                    className="flex1 h-10 w-10 items-center justify-center rounded-md text-on-secondary transition-colors hover:bg-surface-container md:hidden"
                 >
                     {open ? (
                         <svg
@@ -111,7 +117,7 @@ export default function Navbar() {
                             />
                         </svg>
                     )}
-                </button>
+                </Button>
             </nav>
 
             {/* Mobile menu */}

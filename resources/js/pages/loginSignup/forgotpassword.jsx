@@ -1,10 +1,12 @@
 import { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Mountain from '../../components/icons/Mountain';
 import Hiking from '../../components/icons/Hiking';
 import ProgressNode from '../../components/features/ProgressNode';
 import MtMasaragaCampsite from '../../../../public/images/loginSignup/MtmasaragaCampsite.jpg'
+import { Button } from "@/components/ui/button";
 import {
+
     ArrowRight,
     ArrowLeft,
     Mail,
@@ -27,6 +29,7 @@ const STEP_TITLES = [
 ];
 
 export default function ForgotPassword() {
+    const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(1);
     const [direction, setDirection] = useState('forward');
 
@@ -224,17 +227,18 @@ export default function ForgotPassword() {
                                     </div>
                                 </div>
                                 <div className="mt-8 flex justify-end">
-                                    <button
+                                    <Button
                                         type="button"
+                                        variant='default'
+                                        size='lg'
                                         onClick={() => {
                                             handleSendCode();
                                             goToStep(2);
                                         }}
-                                        className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
                                     >
-                                        Send Reset Code
+                                        <span>Send Reset Code</span>
                                         <ArrowRight className="h-4.5 w-4.5" />
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -294,22 +298,24 @@ export default function ForgotPassword() {
                                     </div>
                                 </div>
                                 <div className="mt-8 flex items-center justify-between gap-3">
-                                    <button
+                                    <Button
                                         type="button"
+                                        variant='outline'
+                                        size='lg'
                                         onClick={() => goToStep(1)}
-                                        className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-5 py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container"
                                     >
                                         <ArrowLeft className="h-4.5 w-4.5" />
-                                        Back
-                                    </button>
-                                    <button
+                                        <span>Back</span>
+                                    </Button>
+                                    <Button
                                         type="button"
+                                        variant='default'
+                                        size='lg'
                                         onClick={() => goToStep(3)}
-                                        className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
                                     >
-                                        Verify Code
+                                        <span>Verify Code</span>
                                         <CheckCircle2 className="h-4.5 w-4.5" />
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -419,22 +425,24 @@ export default function ForgotPassword() {
                                     </div>
                                 </div>
                                 <div className="mt-8 flex items-center justify-between gap-3">
-                                    <button
+                                    <Button
                                         type="button"
+                                        variant='outline'
+                                        size='lg'
                                         onClick={() => goToStep(2)}
-                                        className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-5 py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container"
                                     >
-                                        <ArrowLeft className="h-4.5 w-4.5" />
-                                        Back
-                                    </button>
-                                    <button
+                                        <ArrowLeft />
+                                        <span>Back</span>
+                                    </Button>
+                                    <Button
                                         type="button"
+                                        variant='default'
+                                        size='lg'
                                         onClick={() => setResetSuccess(true)}
-                                        className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
                                     >
-                                        Reset Password
-                                        <Check className="h-4.5 w-4.5" />
-                                    </button>
+                                        <span>Reset Password</span>
+                                        <Check />
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -477,24 +485,14 @@ export default function ForgotPassword() {
 
                                 {/* CTA */}
                                 <div className="mt-2 flex w-full max-w-md flex-col gap-2.5">
-                                    <Link
-                                        to="/login"
-                                        className="flex items-center justify-center gap-2 rounded-lg bg-primary py-4 text-sm font-semibold text-on-secondary shadow-md transition-all hover:bg-surface-tint"
+                                    <Button
+                                        type='button'
+                                        variant='default'
+                                        size='xl2'
+                                        onClick={() => navigate('/login')}
                                     >
-                                        <Mountain className="h-5 w-10" />
-                                        Return to Login
-                                    </Link>
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            setResetSuccess(false);
-                                            setForm({ email: '', otp: ['', '', '', '', '', ''], password: '', confirmPassword: '' });
-                                            goToStep(1);
-                                        }}
-                                        className="py-1 text-xs text-on-surface-variant transition-colors hover:text-primary"
-                                    >
-                                        Need to reset another account?
-                                    </button>
+                                        <span>Login</span>
+                                    </Button>
                                 </div>
                             </div>
                         )}

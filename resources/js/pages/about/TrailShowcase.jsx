@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Map, Flag, Tent, Mountain, TreePine, GripVertical } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 const trails = {
     amtic: {
@@ -126,20 +127,21 @@ export default function TrailShowcase() {
                         aria-label="Available climbing trails"
                         className="inline-flex items-center self-start rounded-xl bg-surface-container-high p-1 md:self-auto"
                     >
-                        {Object.entries(trails).map(([key, t]) => (
-                            <button
-                                key={key}
-                                role="tab"
-                                aria-selected={activeTrail === key}
-                                onClick={() => setActiveTrail(key)}
-                                className={`rounded-lg px-4 py-2 text-xs font-semibold transition-colors focus:outline-none md:text-sm ${activeTrail === key
-                                    ? 'bg-primary text-white shadow-sm'
-                                    : 'text-on-surface hover:text-on-surface'
-                                    }`}
-                            >
-                                {t.name}
-                            </button>
-                        ))}
+                        {Object.entries(trails).map(([key, t]) => {
+                            const isActive = activeTrail === key;
+                            return (
+                                <Button
+                                    key={key}
+                                    role="tab"
+                                    variant={isActive ? "default" : "ghost"}
+                                    aria-selected={isActive}
+                                    onClick={() => setActiveTrail(key)}
+                                    className="rounded-lg px-4 py-2 text-xs font-semibold md:text-sm"
+                                >
+                                    {t.name}
+                                </Button>
+                            );
+                        })}
                     </div>
                 </div>
 

@@ -5,6 +5,7 @@ import mtMasaragaSummit from '../../../../public/images/about/mt-masaraga-summit
 import mtMasaragaCampsite from '../../../../public/images/about/mt-masaraga-campsite-3.jpg';
 import mtMasaragaVanishingFalls from '../../../../public/images/about/mt-masaraga-vanishing-falls.jpg';
 import mtMasaragaNaturalSpring from '../../../../public/images/about/mt-masaraga-natural-springs-trail.jpg';
+import { Button } from "@/components/ui/button";
 
 const zones = [
     {
@@ -140,20 +141,20 @@ export default function Overview() {
 
                                     {/* Left / Right Chevron Navigation Controls */}
                                     <div className="flex items-center gap-1.5">
-                                        <button
+                                        <Button
                                             aria-label="Previous zone"
                                             className="w-8 h-8 rounded-lg bg-white/15 hover:bg-[#5b8c31] hover:text-white transition-colors flex items-center justify-center text-white/90 active:scale-95 border border-white/10"
                                             onClick={() => cycleZone(-1)}
                                         >
                                             <ChevronLeft className="w-4 h-4" />
-                                        </button>
-                                        <button
+                                        </Button>
+                                        <Button
                                             aria-label="Next zone"
                                             className="w-8 h-8 rounded-lg bg-white/15 hover:bg-[#5b8c31] hover:text-white transition-colors flex items-center justify-center text-white/90 active:scale-95 border border-white/10"
                                             onClick={() => cycleZone(1)}
                                         >
                                             <ChevronRight className="w-4 h-4" />
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
 

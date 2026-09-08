@@ -1,4 +1,5 @@
 import { ChevronDown } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 export default function SendMsgForm() {
     return (
@@ -84,12 +85,13 @@ export default function SendMsgForm() {
                 </div>
 
                 <div className="pt-2">
-                    <button
+                    <Button
                         type="button"
-                        className="inline-flex items-center justify-center rounded-xl bg-primary px-8 py-3 text-sm font-semibold tracking-wide text-white hover:text-on-primary hover:bg-primary-fixed-dim shadow-sm transition-all hover:shadow active:scale-[0.99]"
+                        variant="default"
+                        size="lg"
                     >
                         Submit Inquiry
-                    </button>
+                    </Button>
                 </div>
             </form>
         </div>

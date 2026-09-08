@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import HERO_IMAGE from '../../../../public/images/home/MtMasaraga.jpg';
+import { Button } from "@/components/ui/button";
+import { useNavigate } from 'react-router-dom';
 
 export default function Cta() {
+    const navigate = useNavigate();
     return (
         <section className="relative flex h-screen w-full items-start justify-start overflow-hidden bg-secondary">
             <div className="absolute inset-0 z-0 opacity-90">
@@ -19,12 +22,14 @@ export default function Cta() {
                     <br />
                     YOUR TREK BEGINS
                 </h1>
-                <Link
-                    to="/help"
-                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-sm font-semibold uppercase tracking-wide text-on-secondary transition-colors hover:bg-primary-container"
+                <Button
+                    type="button"
+                    size="xl2"
+                    variant='default'
+                    onClick={() => navigate('/help')}
                 >
                     Book your trek
-                </Link>
+                </Button>
             </div>
         </section>
     );

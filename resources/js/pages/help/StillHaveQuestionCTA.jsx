@@ -1,4 +1,5 @@
 import { Clock, Mail, MapPin } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function StillHaveQuestionCTA() {
     return (
@@ -15,13 +16,14 @@ export default function StillHaveQuestionCTA() {
                         </p>
 
                         <div className="flex justify-center pt-4">
-                            <a
-                                href="#"
-                                className="inline-flex items-center justify-center gap-2.5 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white hover:text-on-secondary shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary hover:bg-primary-container"
+                            <Button
+                                variant="default"
+                                size="xl"
                             >
-                                <Mail className="h-5 w-5" />
-                                Contact Support
-                            </a>
+                                <Mail />
+                                <span>Contact Support</span>
+
+                            </Button>
                         </div>
 
                         <div className="flex flex-wrap items-center justify-center gap-6 pt-6 text-xs text-on-surface-variant">

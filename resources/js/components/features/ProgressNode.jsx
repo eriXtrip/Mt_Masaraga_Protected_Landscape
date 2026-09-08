@@ -1,4 +1,5 @@
 import { Check } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 export default function ProgressNode({
     step,
@@ -37,7 +38,7 @@ export default function ProgressNode({
 
     return (
         <div className="relative z-10 flex flex-col items-center">
-            <button
+            <Button
                 type="button"
                 onClick={onClick}
                 className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold transition-colors ${isCompleted
@@ -48,7 +49,7 @@ export default function ProgressNode({
                     }`}
             >
                 {isCompleted ? <Check className="h-4 w-4" /> : step}
-            </button>
+            </Button>
             <span
                 className={`absolute top-10 left-1/2 -translate-x-1/2 hidden whitespace-nowrap text-[11px] sm:block ${isActive || isCompleted ? colors.textActive : textInactiveClasses
                     }`}

@@ -1,10 +1,12 @@
 import { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ProgressNode from '../../components/features/ProgressNode';
 import Hiking from '../../components/icons/Hiking';
 import Mountain from '../../components/icons/Mountain';
 import MtmasaragaVanishingfalls from '../../../../public/images/loginSignup/mtmasaragaVanishingfalls.jpg'
+import { Button } from "@/components/ui/button";
 import {
+
     ArrowRight,
     ArrowLeft,
     Send,
@@ -34,6 +36,7 @@ const STEP_TITLES = [
 ];
 
 export default function Signup() {
+    const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(1);
     const [direction, setDirection] = useState('forward');
 
@@ -265,14 +268,16 @@ export default function Signup() {
                                     </div>
                                 </div>
                                 <div className="mt-8 flex justify-end">
-                                    <button
+                                    <Button
                                         type="button"
+                                        variant='default'
+                                        size='lg'
                                         onClick={() => goToStep(2)}
                                         className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint sm:w-auto"
                                     >
-                                        Continue
-                                        <ArrowRight className="h-4.5 w-4.5" />
-                                    </button>
+                                        <span>Continue</span>
+                                        <ArrowRight />
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -338,22 +343,24 @@ export default function Signup() {
                                     })}
                                 </div>
                                 <div className="mt-8 flex items-center justify-between gap-3">
-                                    <button
+                                    <Button
                                         type="button"
+                                        variant='outline'
+                                        size='lg'
                                         onClick={() => goToStep(1)}
-                                        className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-5 py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container"
                                     >
-                                        <ArrowLeft className="h-4.5 w-4.5" />
-                                        Back
-                                    </button>
-                                    <button
+                                        <ArrowLeft />
+                                        <span>Back</span>
+                                    </Button>
+                                    <Button
                                         type="button"
+                                        variant='default'
+                                        size='lg'
                                         onClick={() => goToStep(3)}
-                                        className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
                                     >
-                                        Continue
-                                        <ArrowRight className="h-4.5 w-4.5" />
-                                    </button>
+                                        <span>Continue</span>
+                                        <ArrowRight />
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -386,14 +393,15 @@ export default function Signup() {
                                                     className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest py-2 pl-9 pr-3 text-body-sm text-on-surface placeholder:text-outline transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
                                                 />
                                             </div>
-                                            <button
+                                            <Button
                                                 type="button"
+                                                variant='outline'
+                                                size='lg'
                                                 onClick={handleSendCode}
-                                                className="flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-secondary/20 bg-secondary-container px-5 py-2.5 text-xs font-semibold text-on-secondary-fixed transition-colors hover:bg-secondary-fixed"
                                             >
-                                                <Send className="h-4 w-4" />
                                                 {codeSent ? 'Code Sent!' : 'Send Code'}
-                                            </button>
+                                                <Send />
+                                            </Button>
                                         </div>
                                         <p className="mt-1 flex items-center gap-1 text-xs text-on-surface-variant">
                                             <Info className="h-3.75 w-3.75 text-primary" />
@@ -418,22 +426,24 @@ export default function Signup() {
                                     </div>
                                 </div>
                                 <div className="mt-8 flex items-center justify-between gap-3">
-                                    <button
+                                    <Button
                                         type="button"
+                                        variant='outline'
+                                        size='lg'
                                         onClick={() => goToStep(2)}
-                                        className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-5 py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container"
                                     >
-                                        <ArrowLeft className="h-4.5 w-4.5" />
-                                        Back
-                                    </button>
-                                    <button
+                                        <ArrowLeft />
+                                        <span>Back</span>
+                                    </Button>
+                                    <Button
                                         type="button"
+                                        variant='default'
+                                        size='lg'
                                         onClick={() => goToStep(4)}
-                                        className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
                                     >
-                                        Continue
-                                        <ArrowRight className="h-4.5 w-4.5" />
-                                    </button>
+                                        <span>Continue</span>
+                                        <ArrowRight />
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -493,22 +503,24 @@ export default function Signup() {
                                     </div>
                                 </div>
                                 <div className="mt-8 flex items-center justify-between gap-3">
-                                    <button
+                                    <Button
                                         type="button"
+                                        variant='outline'
+                                        size='lg'
                                         onClick={() => goToStep(3)}
-                                        className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-5 py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container"
                                     >
-                                        <ArrowLeft className="h-4.5 w-4.5" />
-                                        Back
-                                    </button>
-                                    <button
+                                        <ArrowLeft />
+                                        <span>Back</span>
+                                    </Button>
+                                    <Button
                                         type="button"
+                                        variant='default'
+                                        size='lg'
                                         onClick={() => goToStep(5)}
-                                        className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
                                     >
-                                        Verify &amp; Continue
-                                        <CheckCircle2 className="h-4.5 w-4.5" />
-                                    </button>
+                                        <span>Verify</span>
+                                        <CheckCircle2 />
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -643,22 +655,24 @@ export default function Signup() {
                                     </div>
                                 </div>
                                 <div className="mt-7 flex items-center justify-between gap-3">
-                                    <button
+                                    <Button
                                         type="button"
+                                        variant='outline'
+                                        size='lg'
                                         onClick={() => goToStep(4)}
-                                        className="flex items-center gap-1.5 rounded-lg border border-outline-variant px-5 py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container"
                                     >
-                                        <ArrowLeft className="h-4.5 w-4.5" />
-                                        Back
-                                    </button>
-                                    <button
+                                        <ArrowLeft />
+                                        <span>Back</span>
+                                    </Button>
+                                    <Button
                                         type="button"
+                                        variant='default'
+                                        size='lg'
                                         onClick={() => goToStep(6)}
-                                        className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
                                     >
-                                        Create Account
-                                        <Check className="h-4.5 w-4.5" />
-                                    </button>
+                                        <span>Create Account</span>
+                                        <Check />
+                                    </Button>
                                 </div>
                             </div>
                         )}
@@ -716,20 +730,14 @@ export default function Signup() {
 
                                 {/* CTA */}
                                 <div className="mt-2 flex w-full max-w-md flex-col gap-2.5">
-                                    <a
-                                        href="#"
-                                        className="flex items-center justify-center gap-2 rounded-lg bg-primary py-4 text-sm font-semibold text-on-secondary shadow-md transition-all hover:bg-surface-tint"
+                                    <Button
+                                        variant='default'
+                                        size='xl2'
+                                        onClick={() => navigate('/')}
                                     >
-                                        <Mountain className="h-5 w-10" />
-                                        Go to Hiker Dashboard / Start Booking
-                                    </a>
-                                    <button
-                                        type="button"
-                                        onClick={() => goToStep(1)}
-                                        className="py-1 text-xs text-on-surface-variant transition-colors hover:text-primary"
-                                    >
-                                        Need to adjust profile details? Edit registration info
-                                    </button>
+                                        <Mountain />
+                                        <span>Go to Hiker Dashboard / Start Booking</span>
+                                    </Button>
                                 </div>
                             </div>
                         )}

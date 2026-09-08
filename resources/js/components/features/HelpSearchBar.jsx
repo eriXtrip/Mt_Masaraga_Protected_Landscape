@@ -1,4 +1,5 @@
 import { Search } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 export default function HelpSearchBar() {
     return (
@@ -9,12 +10,12 @@ export default function HelpSearchBar() {
                 placeholder="Search for topics (e.g., 'Rescheduling', 'Health Certificate')"
                 className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest py-4 pl-12.5 pr-24 text-sm text-on-surface shadow-sm transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 sm:text-base"
             />
-            <button
+            <Button
                 type="submit"
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-primary-container sm:text-sm"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg bg-primary px-3 py-4 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-primary-container sm:text-sm"
             >
                 Search
-            </button>
+            </Button>
         </form>
     );
 }

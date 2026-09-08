@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 export default function FAQAccordion({ categories = [] }) {
     const [openItems, setOpenItems] = useState({ '0-0': true, '1-0': true });
@@ -29,7 +30,7 @@ export default function FAQAccordion({ categories = [] }) {
                                     key={question}
                                     className="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm transition-all"
                                 >
-                                    <button
+                                    <Button
                                         type="button"
                                         onClick={() => toggleItem(key)}
                                         aria-expanded={isOpen}
@@ -40,7 +41,7 @@ export default function FAQAccordion({ categories = [] }) {
                                             className={`h-5 w-5 shrink-0 text-primary transition-transform duration-200 ${isOpen ? 'rotate-180' : ''
                                                 }`}
                                         />
-                                    </button>
+                                    </Button>
 
                                     {isOpen && (
                                         <div className="border-t border-outline-variant/40 px-4 pb-4 pt-3 text-sm leading-relaxed text-on-surface-variant sm:px-5 sm:pb-5">

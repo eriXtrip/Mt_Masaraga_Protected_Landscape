@@ -45,7 +45,7 @@ export default function Awards() {
                             <img
                                 src="/images/awards/trophy.jpg"
                                 alt="DENR-PAMB Environmental Excellence Award Trophy in tropical rainforest"
-                                className="h-80 w-full object-cover transition-transform duration-500 ease-out hover:scale-105 md:h-[420px]"
+                                className="h-80 w-full object-cover transition-transform duration-500 ease-out hover:scale-105 md:h-150"
                             />
                         </div>
 

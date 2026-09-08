@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown, Cloud, Receipt, RotateCcw, ShieldCheck } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 const FAQ_CATEGORIES = [
     {
@@ -103,8 +104,9 @@ export default function FAQ() {
                                         key={question}
                                         className="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm transition-all"
                                     >
-                                        <button
+                                        <Button
                                             type="button"
+                                            variant='ghost'
                                             onClick={() => toggleItem(key)}
                                             aria-expanded={isOpen}
                                             className="flex w-full items-center justify-between gap-3 p-4 text-left text-sm font-semibold text-on-surface transition-colors hover:text-primary sm:p-5 sm:text-base"
@@ -114,7 +116,7 @@ export default function FAQ() {
                                                 className={`h-5 w-5 shrink-0 text-primary transition-transform duration-200 ${isOpen ? 'rotate-180' : ''
                                                     }`}
                                             />
-                                        </button>
+                                        </Button>
 
                                         {isOpen && (
                                             <div className="border-t border-outline-variant/40 px-4 pb-4 pt-3 text-sm leading-relaxed text-on-surface-variant sm:px-5 sm:pb-5">

@@ -69,7 +69,7 @@ export default function ContactMap() {
                     href={MAP_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="pointer-events-auto ml-2 inline-flex items-center gap-1 rounded-md bg-primary px-2.5 py-1.5 text-xs font-semibold text-white hover:text-on-primary transition-colors hover:bg-primary-fixed-dim"
+                    className="pointer-events-auto ml-2 inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-semibold bg-primary text-on-secondary transition-colors hover:bg-primary-container"
                 >
                     Open
                     <ExternalLink className="h-3.5 w-3.5" />

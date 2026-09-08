@@ -4,6 +4,7 @@ import Mountain from '../../components/icons/Mountain';
 import Hiking from '../../components/icons/Hiking';
 import { ArrowRight, Eye, EyeOff, ShieldCheck, Mail } from 'lucide-react';
 import MtMasaraga from '../../../../public/images/loginSignup/mt-masaraga-hero.jpg'
+import { Button } from "@/components/ui/button";
 
 
 export default function Login() {
@@ -137,13 +138,15 @@ export default function Login() {
                                 </label>
                             </div>
 
-                            <button
+                            <Button
                                 type="submit"
+                                variant="default"
+                                size="lg"
                                 className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
                             >
-                                Login
-                                <ArrowRight className="h-4.5 w-4.5" />
-                            </button>
+                                <span>Login</span>
+                                <ArrowRight />
+                            </Button>
                         </form>
 
                         {/* Sign Up Redirect */}
