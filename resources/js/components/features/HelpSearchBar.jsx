@@ -11,7 +11,7 @@ export default function HelpSearchBar() {
             />
             <button
                 type="submit"
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-primary-fixed-dim sm:text-sm"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-primary-container sm:text-sm"
             >
                 Search
             </button>
