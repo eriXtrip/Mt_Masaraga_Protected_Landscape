@@ -2,8 +2,14 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import { resolve } from 'path';
 
 export default defineConfig({
+    resolve: {
+        alias: {
+            '@': resolve(__dirname, 'resources/js'),
+        },
+    },
     plugins: [
         laravel(['resources/js/app.jsx']),
         react({ include: /\.(js|jsx|ts|tsx)$/ }),

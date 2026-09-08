@@ -26,7 +26,7 @@ export default function TrailHero() {
                     </div>
                 </div>
                 <div className="flex items-center shrink-0">
-                    <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-primary hover:bg-primary-dark text-white font-semibold px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl shadow-lg hover:shadow-primary/30 active:scale-[0.98] transition-all duration-200 border border-white/20 backdrop-blur-sm group/btn">
+                    <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-primary hover:bg-primary text-white font-semibold px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl shadow-lg hover:shadow-primary/30 active:scale-[0.98] transition-all duration-200 border border-white/20 backdrop-blur-sm group/btn">
                         <Calendar className='w-5 h-5' />
                         <span>Check Availability</span>
                     </button>
