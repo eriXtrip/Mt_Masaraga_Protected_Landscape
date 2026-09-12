@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Calendar } from 'lucide-react';
 import Stars from '../../components/common/Stars';
 import SabluyonRoute from '../../../../public/images/trail/SabluyonTrail.jpg'
 import { Button } from "@/components/ui/button";
 
 export default function TrailHero() {
+    const navigate = useNavigate();
     return (
         <section className="relative flex h-150 w-full items-start justify-start overflow-hidden bg-secondary rounded-2xl">
             <img
@@ -31,6 +32,7 @@ export default function TrailHero() {
                         type='button'
                         variant='default'
                         size='xl'
+                        onClick={() => navigate('/booking')}
                     >
                         <Calendar />
                         <span>Check Availability</span>

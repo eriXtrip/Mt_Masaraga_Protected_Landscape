@@ -40,12 +40,11 @@ export default function ProgressNode({
         <div className="relative z-10 flex flex-col items-center">
             <Button
                 type="button"
-                onClick={onClick}
                 className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold transition-colors ${isCompleted
-                        ? colors.completed
-                        : isActive
-                            ? colors.active
-                            : inactiveClasses
+                    ? colors.completed
+                    : isActive
+                        ? colors.active
+                        : inactiveClasses
                     }`}
             >
                 {isCompleted ? <Check className="h-4 w-4" /> : step}
