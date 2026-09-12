@@ -1,3 +1,5 @@
+import { ArrowRight } from 'lucide-react';
+
 const NEWS = [
     {
         badge: 'ADVISORY',
@@ -68,13 +70,9 @@ export default function News() {
                                     className="group inline-flex items-center text-sm font-bold text-primary transition-colors hover:text-primary-container"
                                 >
                                     <span>Read More</span>
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        className="ml-1 h-4 w-4 fill-current transition-transform group-hover:translate-x-1"
-                                        aria-hidden="true"
-                                    >
-                                        <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
-                                    </svg>
+                                    <ArrowRight
+                                        className=" h-5 w-5 transition-transform group-hover:translate-x-1 ml-1"
+                                    />
                                 </a>
                             </div>
                         </div>

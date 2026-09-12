@@ -20,9 +20,9 @@ export default function TrailHero() {
                     </h2>
                     <div className="flex flex-wrap items-center gap-2 drop-shadow text-primary">
                         <div className="flex items-center text-sm md:text-base">
-                            <Stars />
+                            <Stars rating={4.5} />
                         </div>
-                        <span className="text-white/90 text-sm md:text-base font-semibold ml-1">4.8</span>
+                        <span className="text-white/90 text-sm md:text-base font-semibold ml-1">4.5</span>
                         <span className="text-white/70 text-xs md:text-sm font-normal">(124 reviews)</span>
                     </div>
                 </div>

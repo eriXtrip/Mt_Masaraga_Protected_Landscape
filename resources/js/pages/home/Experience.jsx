@@ -1,4 +1,5 @@
 import Stars from "../../components/common/Stars";
+import { ExperienceCard } from "@/components/features/ExperienceCard";
 
 const EXPERIENCES = [
     {
@@ -6,21 +7,21 @@ const EXPERIENCES = [
         name: 'Elena Santos',
         quote:
             'The summit view was breathtaking! A challenging climb but the panoramic views of Bicol are worth every step.',
-        date: 'Oct 2024',
+        rating: 4.5,
     },
     {
         initials: 'MC',
         name: 'Marcus Chen',
         quote:
             'Well-maintained trails and friendly guides. The permit process was smooth and the safety briefing was very thorough.',
-        date: 'Sep 2024',
+        rating: 5,
     },
     {
         initials: 'SJ',
         name: 'Sarah Johnson',
         quote:
             'The Eco-Trail Loop was perfect for my family. My kids loved seeing the rare birds and learning about local plants.',
-        date: 'Sep 2024',
+        rating: 4,
     },
 ];
 
@@ -40,41 +41,16 @@ export default function Experience() {
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {EXPERIENCES.map((review) => (
-                        <div
+                        <ExperienceCard
                             key={review.name}
-                            className="flex flex-col rounded-xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm"
-                        >
-                            <div className="mb-4 flex flex-row items-center">
-                                <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary-container text-sm font-bold text-on-primary-container">
-                                    {review.initials}
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-semibold text-on-surface">
-                                        {review.name}
-                                    </h3>
-                                    <Stars />
-                                </div>
-                            </div>
-
-
-
-                            <blockquote className="mt-4 flex-1 text-base text-on-surface-variant">
-                                &ldquo;{review.quote}&rdquo;
-                            </blockquote>
-
-                            <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-on-surface-variant">
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    className="h-3.5 w-3.5 fill-primary"
-                                    aria-hidden="true"
-                                >
-                                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                                </svg>
-                                <span>Verified Hiker</span>
-                                <span className="text-outline">•</span>
-                                <span>{review.date}</span>
-                            </div>
-                        </div>
+                            initials={review.initials}
+                            name={review.name}
+                            quote={review.quote}
+                            date={review.date}
+                            rating={review.rating}
+                            isLast={review.isLast}
+                            variant="default"
+                        />
                     ))}
                 </div>
             </div>

@@ -143,20 +143,22 @@ export default function Navbar() {
                         </li>
                     ))}
                     <li className="mt-3 flex flex-col gap-3 border-t border-outline-variant pt-4">
-                        <Link
-                            to="/login"
-                            onClick={close}
-                            className="rounded-md border border-primary px-4 py-3 text-center text-base font-semibold text-primary"
+                        <Button
+                            variant="outline"
+                            size="lg"
+                            onClick={() => navigate('/login')}
+                            className={"capitalize bg-transparent text-primary border-primary hover:border-muted"}
                         >
                             Login
-                        </Link>
-                        <Link
-                            to="/signup"
-                            onClick={close}
-                            className="rounded-md bg-primary px-4 py-3 text-center text-base font-semibold text-on-primary"
+                        </Button>
+                        <Button
+                            variant="default"
+                            size="lg"
+                            onClick={() => navigate('/signup')}
+                            className={"capitalize"}
                         >
                             Sign Up
-                        </Link>
+                        </Button>
                     </li>
                 </ul>
             </div>
