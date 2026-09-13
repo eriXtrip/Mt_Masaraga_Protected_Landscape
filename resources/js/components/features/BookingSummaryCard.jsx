@@ -1,16 +1,17 @@
 import React from 'react';
-import { Mountain, Calendar, ArrowRight } from 'lucide-react';
+import { Mountain, Calendar, ArrowRight, Users, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const BOOKING_DETAILS = {
     selectedTrail: 'Masaraga Summit Trail',
     baseFeePerPax: 500.0,
-    totalEstimated: 0.0,
     note: '*Total calculated on next step based on pax count.',
 };
 
 export default function BookingSummaryCard({
     selectedDate = 'No Date Selected',
+    participantCount = 1,
+    setParticipantCount,
     onContinue,
     onCancel,
     className = '',
@@ -75,14 +76,41 @@ export default function BookingSummaryCard({
                 })}
             </div>
 
+            {/* Pax Selector */}
+            <div className="border-t border-outline-variant/60 pt-5 space-y-4 mb-6">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <span className="text-sm font-bold text-on-surface block">Participants</span>
+                        <span className="text-xs text-on-surface-variant font-medium">How many hikers?</span>
+                    </div>
+                    <div className="flex items-center gap-3 bg-surface-container border border-outline-variant/50 rounded-lg p-1">
+                        <button
+                            type="button"
+                            onClick={() => setParticipantCount(Math.max(1, participantCount - 1))}
+                            className="p-2 rounded hover:bg-surface-variant/50 text-on-surface-variant transition-colors"
+                        >
+                            <Minus className="h-4 w-4" />
+                        </button>
+                        <span className="font-bold text-on-surface w-4 text-center">{participantCount}</span>
+                        <button
+                            type="button"
+                            onClick={() => setParticipantCount(Math.min(10, participantCount + 1))}
+                            className="p-2 rounded hover:bg-surface-variant/50 text-on-surface-variant transition-colors"
+                        >
+                            <Plus className="h-4 w-4" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             {/* Price Calculation & Estimated Breakdown */}
             <div className="border-t border-outline-variant/60 pt-5 space-y-3 mb-6">
                 <div className="flex justify-between items-center text-sm">
                     <span className="text-on-surface-variant font-medium">
-                        Base Fee per Pax
+                        Base Fee ({participantCount} x {formatCurrency(BOOKING_DETAILS.baseFeePerPax)})
                     </span>
                     <span className="font-bold text-on-surface">
-                        {formatCurrency(BOOKING_DETAILS.baseFeePerPax)}
+                        {formatCurrency(BOOKING_DETAILS.baseFeePerPax * participantCount)}
                     </span>
                 </div>
 
@@ -96,7 +124,7 @@ export default function BookingSummaryCard({
                         </span>
                     </div>
                     <span className="text-2xl font-black text-primary ml-2 shrink-0">
-                        {formatCurrency(BOOKING_DETAILS.totalEstimated)}
+                        {formatCurrency(BOOKING_DETAILS.baseFeePerPax * participantCount)}
                     </span>
                 </div>
             </div>
