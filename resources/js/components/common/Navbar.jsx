@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { ChevronDown, Receipt, MessageSquare } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const NAV_LINKS = [
@@ -9,9 +10,18 @@ const NAV_LINKS = [
     { label: 'Contact Us', to: '/contact' },
 ];
 
+const HIKER_DROPDOWN = [
+    { label: 'Transactions', to: '/hiker/transactions', icon: Receipt },
+    { label: 'Messages', to: '/hiker/messages', icon: MessageSquare },
+];
+
 export default function Navbar() {
     const [open, setOpen] = useState(false);
+    const [hikerDropdownOpen, setHikerDropdownOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+
+    const dropdownRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const onScroll = () => setIsScrolled(window.scrollY > 8);
@@ -20,8 +30,21 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    const close = () => setOpen(false);
-    const navigate = useNavigate();
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setHikerDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const closeAll = () => {
+        setOpen(false);
+        setHikerDropdownOpen(false);
+    };
 
     return (
         <header className="sticky top-0 z-50 w-full bg-on-background">
@@ -30,7 +53,7 @@ export default function Navbar() {
                 <Link
                     to="/"
                     className="flex h-full shrink-0 items-center"
-                    onClick={close}
+                    onClick={closeAll}
                 >
                     <img
                         src="/assets/logo/MT. MASARAGA LOGO.svg"
@@ -56,9 +79,41 @@ export default function Navbar() {
                             </NavLink>
                         </li>
                     ))}
+
+                    {/* Hiker Dropdown Menu */}
+                    <li className="relative" ref={dropdownRef}>
+                        <button
+                            type="button"
+                            onClick={() => setHikerDropdownOpen((prev) => !prev)}
+                            className="flex items-center gap-1 py-2 text-sm font-medium text-on-primary hover:text-on-secondary transition-colors cursor-pointer"
+                        >
+                            <span>Hiker</span>
+                            <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${hikerDropdownOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* Dropdown Menu Popup */}
+                        {hikerDropdownOpen && (
+                            <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                                {HIKER_DROPDOWN.map((item) => {
+                                    const IconComponent = item.icon;
+                                    return (
+                                        <Link
+                                            key={item.to}
+                                            to={item.to}
+                                            onClick={closeAll}
+                                            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
+                                        >
+                                            <IconComponent className="h-4 w-4 text-primary shrink-0" />
+                                            <span>{item.label}</span>
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </li>
                 </ul>
 
-                {/* Auth actions - using design system button variants */}
+                {/* Auth actions */}
                 <div className="hidden items-center gap-3 md:flex">
                     <Button
                         variant="outline"
@@ -122,7 +177,7 @@ export default function Navbar() {
 
             {/* Mobile menu */}
             <div
-                className={`overflow-hidden bg-surface transition-[max-height] duration-300 md:hidden ${open ? 'max-h-96' : 'max-h-0'
+                className={`overflow-hidden bg-surface transition-[max-height] duration-300 md:hidden ${open ? 'max-h-[500px]' : 'max-h-0'
                     }`}
             >
                 <ul className="flex flex-col gap-1 px-4 py-4">
@@ -130,7 +185,7 @@ export default function Navbar() {
                         <li key={link.to}>
                             <NavLink
                                 to={link.to}
-                                onClick={close}
+                                onClick={closeAll}
                                 className={({ isActive }) =>
                                     `block rounded-lg px-4 py-3 text-base font-medium ${isActive
                                         ? 'bg-primary-container text-on-primary-container'
@@ -142,11 +197,41 @@ export default function Navbar() {
                             </NavLink>
                         </li>
                     ))}
+
+                    {/* Hiker Mobile Submenu Section */}
+                    <li className="border-t border-outline-variant/30 pt-2 mt-1">
+                        <span className="px-4 text-xs font-bold text-outline uppercase tracking-wider block mb-1">
+                            Hiker Navigation
+                        </span>
+                        {HIKER_DROPDOWN.map((item) => {
+                            const IconComponent = item.icon;
+                            return (
+                                <NavLink
+                                    key={item.to}
+                                    to={item.to}
+                                    onClick={closeAll}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-semibold ${isActive
+                                            ? 'bg-primary-container text-on-primary-container'
+                                            : 'text-on-surface hover:bg-surface-container'
+                                        }`
+                                    }
+                                >
+                                    <IconComponent className="h-4 w-4 text-primary shrink-0" />
+                                    <span>{item.label}</span>
+                                </NavLink>
+                            );
+                        })}
+                    </li>
+
                     <li className="mt-3 flex flex-col gap-3 border-t border-outline-variant pt-4">
                         <Button
                             variant="outline"
                             size="lg"
-                            onClick={() => navigate('/login')}
+                            onClick={() => {
+                                closeAll();
+                                navigate('/login');
+                            }}
                             className={"capitalize bg-transparent text-primary border-primary hover:border-muted"}
                         >
                             Login
@@ -154,7 +239,10 @@ export default function Navbar() {
                         <Button
                             variant="default"
                             size="lg"
-                            onClick={() => navigate('/signup')}
+                            onClick={() => {
+                                closeAll();
+                                navigate('/signup');
+                            }}
                             className={"capitalize"}
                         >
                             Sign Up

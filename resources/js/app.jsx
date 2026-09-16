@@ -31,7 +31,7 @@ ReactDOM.createRoot(document.getElementById('app')).render(
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />1
                 <Route path="/booking" element={<Booking />} />
-                <Route path="/groupchat" element={<GroupChat />} />
+                <Route path="/hiker/messages" element={<GroupChat />} />
             </Routes>
             <Footer />
         </BrowserRouter>

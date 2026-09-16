@@ -211,7 +211,7 @@ export default function Booking() {
                             console.log('Sending pass to email...');
                         }}
                         onJoinGroupChat={() => {
-                            navigate('/groupchat');
+                            navigate('/hiker/messages');
                         }}
                         onGoToChecklist={() => {
                             goToStep(3);
