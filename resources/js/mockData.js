@@ -144,29 +144,169 @@ export const GALLERY_ITEMS = [
 
 export const NEWS = [
     {
-        badge: 'ADVISORY',
+        id: 'scheduled-trail-maintenance',
+        category: 'Advisory',
         badgeClass: 'bg-red-50 text-red-700 border-red-200',
         date: 'Oct 24, 2024',
         title: 'Scheduled Trail Maintenance',
-        description:
-            'The Eco-Trail Loop will be partially closed for boardwalk repairs from Oct 28-30.',
+        leadParagraph: 'The Eco-Trail Loop will be partially closed for boardwalk repairs from Oct 28-30. Please review the impacted sections and safety guidelines.',
+        leadImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBx58jMKv8xlkDEyNHDKNiXJjYn0NidutYK_dDbexJKelvXUpFsVpmDwTt8Q5tP5wXx6Rn76iZxLCxnVqGAq2XKx53JtHvz3CHpRc3Q3P9jw4RhB9nbG3a9hBSv-aI19vhUl7mDuP1EXDzPpQ1G0w-hH8a--Iczrmi2tszKoSJovleF2bGjWQDxmOp0mywUZVyPEuLW3L_aGmSY_oCikOS1GbFHYfdnM4ayp917gqttM2U9k3AkxKG7Pw',
+        leadImageAlt: 'Trail maintenance team replacing wooden boardwalk footings in green forest',
+        sections: [
+            {
+                type: 'paragraph',
+                text: 'The Mt. Masaraga Park Maintenance Team will conduct scheduled repairs on the Eco-Trail Loop to replace weathered wooden planks and reinforce trail safety barriers.'
+            },
+            {
+                type: 'heading',
+                text: 'Closure Details & Schedule'
+            },
+            {
+                type: 'paragraph',
+                text: 'Work will begin promptly on October 28 and is scheduled to wrap up on October 30. During this window, specific trail zones will be restricted:'
+            },
+            {
+                type: 'list',
+                items: [
+                    { label: 'Oct 28 - Oct 29', text: 'Eco-Trail Lower Loop & Wooden Boardwalk Section' },
+                    { label: 'Oct 30', text: 'Final Inspection & Reopening of Lower Junction' }
+                ]
+            },
+            {
+                type: 'heading',
+                text: 'Recommended Detours'
+            },
+            {
+                type: 'paragraph',
+                text: 'Hikers planning trips during these dates should use the Ridge Trail connection as an alternative route to access the upper summit paths.'
+            },
+            {
+                type: 'callout',
+                title: 'Safety Notice',
+                text: 'Please observe all posted barrier tape and do not attempt to enter closed construction zones while repairs are underway.'
+            }
+        ],
+        contact: {
+            phone: '+63 (052) 555-0198',
+            email: 'ranger.station@masaraga.gov'
+        }
     },
     {
-        badge: 'WEATHER',
+        id: 'favorable-climbing-conditions',
+        category: 'Weather',
         badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
         date: 'Oct 23, 2024',
         title: 'Favorable Climbing Conditions',
-        description:
-            'Clear skies expected for the weekend. Perfect conditions for the Standard Summit trail.',
+        leadParagraph: 'Clear skies expected for the weekend. Perfect conditions for the Standard Summit trail with low humidity and high visibility.',
+        leadImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDJs6fNWag19aRj8sSThWOMTqvKHld5c3vP9m0JAIkbonWysDMux17Zyhz5NMxkPCLo-qmLST2YTWOo2V77vbcJdsLJGJ4cm47esAqBjlUu2VmIrNHF-ZPkTEPv1HZIi2PgQlPTF72NFmwiM2ggKEJ-bFbxh2TDcvk_JFlbYqjDmjlVDn7N6ei9yBoslECA0K65EapHSgcTMl-elU89nmF-TFJoBcHOjK7p3doeIwes8ptV4X99S80cZA',
+        leadImageAlt: 'Sunlit mountain peak under clear blue sky with crisp trail visibility',
+        sections: [
+            {
+                type: 'paragraph',
+                text: 'The local meteorological station reports stable high-pressure systems moving across the region, bringing ideal hiking weather for Mt. Masaraga throughout the upcoming weekend.'
+            },
+            {
+                type: 'heading',
+                text: 'Weekend Forecast Overview'
+            },
+            {
+                type: 'paragraph',
+                text: 'Hikers can expect optimal trail conditions across all main ascent routes:'
+            },
+            {
+                type: 'list',
+                items: [
+                    { label: 'Temperature', text: 'Comfortable 22°C - 27°C during peak daytime hours' },
+                    { label: 'Wind & Visibility', text: 'Light breezes under 10 km/h with clear cloudless views at the peak' }
+                ]
+            },
+            {
+                type: 'heading',
+                text: 'Preparation Checklist'
+            },
+            {
+                type: 'paragraph',
+                text: 'While conditions are clear, temperatures remain cool near the summit during early morning hours. Pack adequate hydration, sun protection, and a light jacket.'
+            },
+            {
+                type: 'callout',
+                title: 'Guide Reminder',
+                text: 'Early morning slots (4:00 AM - 6:00 AM) are filling up quickly. Ensure your guide assignment is confirmed before arrival.'
+            }
+        ],
+        contact: {
+            phone: '+63 (052) 555-0198',
+            email: 'ranger.station@masaraga.gov'
+        }
     },
     {
-        badge: 'UPDATE',
+        id: 'new-online-permit-system',
+        category: 'Update',
         badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
         date: 'Oct 20, 2024',
         title: 'New Online Permit System',
-        description:
-            'We have upgraded our booking portal for faster processing of climbing permits.',
+        leadParagraph: 'We have upgraded our booking portal for faster processing of climbing permits, digital QR pass issuance, and instant guide allocations.',
+        leadImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBO915Ka3cjQMZlDZw0OEVZwbJpI-YctaQy8GlwTDNw0NdRjMpB9XNKqnVGuCw8fZnNG6osqoV8Y7iKbSCd9bDTg_-qY0gnOOQPpJt64yB3l_XB18b6WtaUm44AkWAOp1n9NQIge83u-zMcQ3vbSWjumtiS4JkAQc2jh50VEPIXUM0giQGq-pimE4eacDuLJD0mDDgqpUZnG4jNPtmXRNhpImJr3fuXHiNxk5THrVtbLySptu2TZ_pJRA',
+        leadImageAlt: 'Digital permit verification screen displayed on a mobile tablet at ranger station',
+        sections: [
+            {
+                type: 'paragraph',
+                text: 'In our commitment to digital modernization and seamless visitor management, the Mt. Masaraga Protected Landscape Management Office has launched an upgraded Online Permit Portal.'
+            },
+            {
+                type: 'heading',
+                text: 'Key Enhancements'
+            },
+            {
+                type: 'paragraph',
+                text: 'The new system streamlined several core registration steps:'
+            },
+            {
+                type: 'list',
+                items: [
+                    { label: 'Instant Approval', text: 'Automated document verification for standard permits' },
+                    { label: 'Digital E-Passes', text: 'Downloadable QR-coded tickets sent directly to mobile' },
+                    { label: 'Online Payments', text: 'Integrated e-wallet payment methods including GCash and Maya' }
+                ]
+            },
+            {
+                type: 'heading',
+                text: 'How to Book'
+            },
+            {
+                type: 'paragraph',
+                text: 'Hikers can visit the main navigation menu, select "Book New Hike", choose an available calendar slot, and complete payment within minutes.'
+            },
+            {
+                type: 'callout',
+                title: 'System Support',
+                text: 'Having trouble with an existing booking? Contact our online support desk or present your booking reference at the base ranger station.'
+            }
+        ],
+        contact: {
+            phone: '+63 (052) 555-0198',
+            email: 'ranger.station@masaraga.gov'
+        }
+    }
+];
+
+export const RELATED_UPDATES = [
+    {
+        id: 'news-1',
+        category: 'News',
+        date: 'Oct 05',
+        title: 'New Rest Stations Completed at Camp 1',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDJs6fNWag19aRj8sSThWOMTqvKHld5c3vP9m0JAIkbonWysDMux17Zyhz5NMxkPCLo-qmLST2YTWOo2V77vbcJdsLJGJ4cm47esAqBjlUu2VmIrNHF-ZPkTEPv1HZIi2PgQlPTF72NFmwiM2ggKEJ-bFbxh2TDcvk_JFlbYqjDmjlVDn7N6ei9yBoslECA0K65EapHSgcTMl-elU89nmF-TFJoBcHOjK7p3doeIwes8ptV4X99S80cZA',
+        alt: 'Close-up view of freshly cleared hiking trail section with wooden steps'
     },
+    {
+        id: 'news-2',
+        category: 'Advisory',
+        date: 'Sep 28',
+        title: 'Mandatory Guide Policy Update for Q4',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBO915Ka3cjQMZlDZw0OEVZwbJpI-YctaQy8GlwTDNw0NdRjMpB9XNKqnVGuCw8fZnNG6osqoV8Y7iKbSCd9bDTg_-qY0gnOOQPpJt64yB3l_XB18b6WtaUm44AkWAOp1n9NQIge83u-zMcQ3vbSWjumtiS4JkAQc2jh50VEPIXUM0giQGq-pimE4eacDuLJD0mDDgqpUZnG4jNPtmXRNhpImJr3fuXHiNxk5THrVtbLySptu2TZ_pJRA',
+        alt: 'Park rangers gathered around a topographical map inside ranger station'
+    }
 ];
 
 export const TRAIL_EXPERIENCES = [

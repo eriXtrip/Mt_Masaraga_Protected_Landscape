@@ -3,7 +3,7 @@ import { TRAILS } from '../../mockData';
 
 export default function ExploreTrail() {
     return (
-        <section className="bg-surface px-6 py-6 md:px-12 md:py-8">
+        <section id='trails' className="bg-surface px-6 py-6 md:px-12 md:py-12 ">
             <div className="mx-auto max-w-6xl">
                 <div className="mb-10 text-left">
                     <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-on-surface md:text-4xl">

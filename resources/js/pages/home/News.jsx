@@ -18,7 +18,7 @@ export default function News() {
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                     {NEWS.map((item) => (
                         <div
-                            key={item.title}
+                            key={item.id}
                             className="flex flex-col justify-between rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm transition-shadow hover:shadow-md"
                         >
                             <div>
@@ -26,7 +26,7 @@ export default function News() {
                                     <span
                                         className={`rounded border px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ${item.badgeClass}`}
                                     >
-                                        {item.badge}
+                                        {item.category}
                                     </span>
                                     <span className="text-xs font-medium text-on-surface-variant">
                                         {item.date}
@@ -35,13 +35,13 @@ export default function News() {
                                 <h3 className="mb-2 text-lg font-bold leading-snug text-on-surface">
                                     {item.title}
                                 </h3>
-                                <p className="text-sm leading-relaxed text-on-surface-variant">
-                                    {item.description}
+                                <p className="text-sm leading-relaxed text-on-surface-variant line-clamp-2">
+                                    {item.leadParagraph}
                                 </p>
                             </div>
                             <div className="mt-6 border-t border-outline-variant pt-4">
                                 <a
-                                    href="#"
+                                    href={`/news/${item.id}`}
                                     className="group inline-flex items-center text-sm font-bold text-primary transition-colors hover:text-primary-container"
                                 >
                                     <span>Read More</span>

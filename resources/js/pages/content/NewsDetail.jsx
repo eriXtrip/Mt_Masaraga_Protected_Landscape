@@ -1,0 +1,246 @@
+import React from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import {
+    AlertTriangle,
+    Phone,
+    Mail,
+    Info,
+    ArrowLeft,
+    Share2,
+    Calendar,
+    ArrowUpRight
+} from 'lucide-react';
+import { Button } from "@/components/ui/button";
+
+import { NEWS } from '../../mockData';
+
+export default function NewsDetail() {
+    const navigate = useNavigate();
+    const { id } = useParams();
+
+    // Match article by URL parameter ID, fallback to first article if not found
+    const currentArticle = NEWS.find((item) => item.id === id) || NEWS[0];
+
+    // Filter out current article from Related Updates list
+    const relatedUpdates = NEWS.filter((item) => item.id !== currentArticle.id);
+
+    return (
+        <div className="min-h-screen bg-surface font-sans">
+
+            {/* Top Bar Navigation - Minimal & Functional */}
+            <header className=" bg-surface">
+                <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+                    <Button
+                        variant="ghost"
+                        size="lg"
+                        onClick={() => navigate(-1)}
+                        className="gap-2 text-on-surface-variant hover:text-on-surface cursor-pointer rounded-lg font-medium"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        <span>Back to News & Updates</span>
+                    </Button>
+
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                            if (navigator.share) {
+                                navigator.share({
+                                    title: currentArticle.title,
+                                    url: window.location.href,
+                                });
+                            }
+                        }}
+                        className="gap-2 cursor-pointer rounded-lg border-outline-variant/40 hover:bg-surface-container-low font-medium"
+                    >
+                        <Share2 className="h-4 w-4" />
+                        <span>Share</span>
+                    </Button>
+                </div>
+            </header>
+
+            {/* Main Article Layout */}
+            <main className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 py-5 md:px-15 md:py-10 lg:flex-row lg:gap-16">
+
+                {/* Left Column: Article Narrative Body */}
+                <article className="grow lg:w-2/3 flex flex-col gap-8">
+
+                    {/* Meta & Editorial Header */}
+                    <header className="space-y-4">
+                        <div className="flex items-center gap-3">
+                            <span className={`rounded-md px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${currentArticle.badgeClass || 'bg-surface-container-high text-on-surface'}`}>
+                                {currentArticle.badge || currentArticle.category || 'Announcement'}
+                            </span>
+                            <span className="flex items-center gap-1.5 text-xs font-medium text-on-surface-variant">
+                                <Calendar className="h-3.5 w-3.5 text-outline" />
+                                {currentArticle.date}
+                            </span>
+                        </div>
+
+                        <h1 className="text-3xl font-extrabold tracking-tight text-on-surface sm:text-4xl md:text-5xl md:leading-tight">
+                            {currentArticle.title}
+                        </h1>
+
+                        <p className="text-lg leading-relaxed text-on-surface-variant font-normal md:text-xl">
+                            {currentArticle.leadParagraph || currentArticle.description}
+                        </p>
+                    </header>
+
+                    {/* Editorial Lead Image Frame */}
+                    {currentArticle.leadImage && (
+                        <div className="relative h-64 w-full overflow-hidden rounded-2xl bg-surface-container-high md:h-110">
+                            <img
+                                src={currentArticle.leadImage}
+                                alt={currentArticle.leadImageAlt || currentArticle.title}
+                                className="h-full w-full object-cover"
+                            />
+                        </div>
+                    )}
+
+                    {/* Content Section Renderer */}
+                    <div className="space-y-6 text-base leading-relaxed text-on-surface md:text-lg">
+                        {currentArticle.sections ? (
+                            currentArticle.sections.map((section, idx) => {
+                                if (section.type === 'paragraph') {
+                                    return (
+                                        <p key={idx} className="text-on-surface-variant leading-relaxed">
+                                            {section.text}
+                                        </p>
+                                    );
+                                }
+
+                                if (section.type === 'heading') {
+                                    return (
+                                        <h2 key={idx} className="pt-6 text-2xl font-bold tracking-tight text-on-surface md:text-3xl">
+                                            {section.text}
+                                        </h2>
+                                    );
+                                }
+
+                                if (section.type === 'list') {
+                                    return (
+                                        <div key={idx} className="my-4 space-y-3 text-base font-medium">
+                                            {section.items.map((item, itemIdx) => (
+                                                <div key={itemIdx} className="text-on-surface">
+                                                    <strong className="font-bold text-on-surface">{item.label}:</strong> {item.text}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    );
+                                }
+
+                                if (section.type === 'callout') {
+                                    return (
+                                        <div key={idx} className="mt-8 rounded-xl border border-outline-variant/40 bg-surface-container-low/60 p-6">
+                                            <div className="flex items-start gap-4">
+                                                <div className="rounded-lg bg-primary/10 p-2 text-primary shrink-0">
+                                                    <Info className="h-5 w-5" />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <h3 className="text-base font-bold text-on-surface">
+                                                        {section.title}
+                                                    </h3>
+                                                    <p className="text-sm leading-relaxed text-on-surface-variant">
+                                                        {section.text}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                }
+
+                                return null;
+                            })
+                        ) : (
+                            <p className="text-on-surface-variant">
+                                {currentArticle.description}
+                            </p>
+                        )}
+                    </div>
+                </article>
+
+                {/* Right Column: Clean Sidebar */}
+                <aside className="lg:w-1/3 flex flex-col gap-10">
+
+                    {/* Emergency Contact Block */}
+                    <div className="rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-6 space-y-4">
+                        <div className="flex items-center gap-3 border-b border-outline-variant/20 pb-4">
+                            <div className="rounded-lg bg-red-500/10 p-2 text-red-600 dark:text-red-400">
+                                <AlertTriangle className="h-5 w-5" />
+                            </div>
+                            <h3 className="text-lg font-bold text-on-surface">
+                                Emergency Contact
+                            </h3>
+                        </div>
+
+                        <p className="text-xs leading-relaxed text-on-surface-variant">
+                            For immediate assistance regarding trail conditions or emergencies during the maintenance period.
+                        </p>
+
+                        <div className="space-y-2 pt-1">
+                            <a
+                                href={`tel:${(currentArticle.contact?.phone || '+63 (052) 555-0198').replace(/[^0-9+]/g, '')}`}
+                                className="flex items-center gap-3 rounded-lg bg-surface-container-low/60 p-3 text-xs font-semibold text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
+                            >
+                                <Phone className="h-4 w-4 text-primary shrink-0" />
+                                <span>{currentArticle.contact?.phone || '+63 (052) 555-0198'}</span>
+                            </a>
+
+                            <a
+                                href={`mailto:${currentArticle.contact?.email || 'ranger.station@masaraga.gov'}`}
+                                className="flex items-center gap-3 rounded-lg bg-surface-container-low/60 p-3 text-xs font-semibold text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
+                            >
+                                <Mail className="h-4 w-4 text-primary shrink-0" />
+                                <span className="truncate">{currentArticle.contact?.email || 'ranger.station@masaraga.gov'}</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Related Updates Section */}
+                    {relatedUpdates.length > 0 && (
+                        <div className="space-y-4">
+                            <h3 className="text-lg font-bold text-on-surface border-b border-outline-variant/20 pb-3">
+                                Related Updates
+                            </h3>
+
+                            <div className="space-y-4">
+                                {relatedUpdates.map((item) => (
+                                    <Link
+                                        key={item.id}
+                                        to={`/news/${item.id}`}
+                                        className="group flex gap-4 items-start border-b border-outline-variant/20 pb-4 last:border-0 last:pb-0"
+                                    >
+                                        <div className="w-24 h-20 shrink-0 overflow-hidden rounded-lg bg-surface-container-high">
+                                            {item.leadImage ? (
+                                                <img
+                                                    src={item.leadImage}
+                                                    alt={item.leadImageAlt || item.title}
+                                                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-102"
+                                                />
+                                            ) : (
+                                                <div className="h-full w-full flex items-center justify-center text-outline text-[10px]">
+                                                    No Image
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="flex-1 min-w-0 space-y-1">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider text-outline block">
+                                                {item.badge || item.category} • {item.date}
+                                            </span>
+                                            <h4 className="text-sm font-bold text-on-surface leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                                                {item.title}
+                                            </h4>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                </aside>
+
+            </main>
+        </div>
+    );
+}

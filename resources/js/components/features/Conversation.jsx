@@ -21,7 +21,7 @@ export default function Conversation({
     }, [messages]);
 
     return (
-        <div className="flex flex-col h-[70vh] min-h-[500px] md:h-[600px] bg-surface-container-lowest border border-outline-variant/40 rounded-3xl shadow-xl overflow-hidden">
+        <div className="flex flex-col h-[70vh] min-h-125 md:h-150 bg-surface-container-lowest border border-outline-variant/40 rounded-3xl shadow-xl overflow-hidden">
 
             {/* 1. Header: Trail Name & Hike Date */}
             <header className="bg-surface-container-low border-b border-outline-variant/30 px-4 md:px-6 py-4 flex items-center justify-between shrink-0 z-10">

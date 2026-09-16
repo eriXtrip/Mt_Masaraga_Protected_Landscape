@@ -19,7 +19,7 @@ export default function Gallery() {
                             key={item.caption}
                             className="group overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm transition-shadow hover:shadow-md"
                         >
-                            <div className="aspect-[4/3] overflow-hidden">
+                            <div className="aspect-4/3 overflow-hidden">
                                 <img
                                     src={item.src}
                                     alt={item.alt}
