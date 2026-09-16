@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wallet, CreditCard, QrCode, Building2, Lock } from 'lucide-react';
+import { Wallet, CreditCard, QrCode, Building2, HandCoins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const PAYMENT_METHODS = [
@@ -40,9 +40,10 @@ const DEFAULT_BOOKING_SUMMARY = {
 export default function PaymentStepForm({
     summary = DEFAULT_BOOKING_SUMMARY,
     onBack,
-    onPayNow, // <-- Added onPayNow prop destructured here just in case it was missing
+    onPayNow,
 }) {
-    const [selectedMethod, setSelectedMethod] = useState('GCash');
+    // Initialized to null so no method is selected by default
+    const [selectedMethod, setSelectedMethod] = useState(null);
 
     const formatCurrency = (amount) =>
         new Intl.NumberFormat('en-PH', {
@@ -52,7 +53,7 @@ export default function PaymentStepForm({
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (onPayNow) {
+        if (selectedMethod && onPayNow) {
             onPayNow({
                 paymentMethod: selectedMethod,
                 totalAmount: summary.totalAmount,
@@ -171,11 +172,12 @@ export default function PaymentStepForm({
 
                     <Button
                         type="submit"
-                        variant="default"
+                        variant={selectedMethod ? 'default' : 'ghost'}
                         size="lg"
+                        disabled={!selectedMethod}
                         className="w-full sm:w-auto gap-2 font-bold"
                     >
-                        <Lock className="h-4 w-4" />
+                        <HandCoins className="h-4 w-4" />
                         Pay Now
                     </Button>
                 </div>

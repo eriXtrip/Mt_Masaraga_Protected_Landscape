@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import QR from '../../../../public/images/QR_Code_Example.svg.webp'
+import QR from '../../../../public/images/QR_Code_Example.svg.webp';
 import HikerTicketPass from '../../components/features/HikerTicketPass';
+import { Input } from '@/components/ui/input';
 import {
     CheckCircle2,
     Info,
@@ -13,7 +14,11 @@ import {
     ChevronLeft,
     ChevronRight,
     FileText,
-    ShieldAlert
+    ShieldAlert,
+    Map,
+    X,
+    Loader2,
+    Send,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -66,6 +71,14 @@ const HIKER_RESOURCES = [
         downloadUrl: '/downloads/Mt-Masaraga-Gear-Checklist.pdf',
         icon: FileText,
     },
+    {
+        id: 'trail_map',
+        title: 'Mt. Masaraga Trail Map',
+        description: 'Know the trails and the mountain terrain.',
+        fileName: 'Mt-Masaraga-Trail-Map.pdf',
+        downloadUrl: '/downloads/Mt-Masaraga-Trail-Map.pdf',
+        icon: Map,
+    },
 ];
 
 export default function BookingConfirmation({
@@ -78,6 +91,12 @@ export default function BookingConfirmation({
     onGoToChecklist,
 }) {
     const [activeIndex, setActiveIndex] = useState(0);
+
+    // Modal State
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const [emailInput, setEmailInput] = useState('');
+    const [isSending, setIsSending] = useState(false);
+    const [isSentSuccess, setIsSentSuccess] = useState(false);
 
     // Apply the selected date to the passes if provided
     const displayPasses = selectedDate
@@ -92,11 +111,8 @@ export default function BookingConfirmation({
         setActiveIndex((prev) => (prev === displayPasses.length - 1 ? 0 : prev + 1));
     };
 
-    const currentPass = displayPasses[activeIndex] || displayPasses[0];
-
     const handleDownload = (e, url, fileName) => {
         e.preventDefault();
-        // Programmatic trigger for downloading local assets
         const link = document.createElement('a');
         link.href = url;
         link.download = fileName;
@@ -105,8 +121,29 @@ export default function BookingConfirmation({
         document.body.removeChild(link);
     };
 
+    // Open Modal
+    const handleOpenEmailModal = () => {
+        setIsSentSuccess(false);
+        setEmailInput('');
+        setIsEmailModalOpen(true);
+    };
+
+    // Handle Email Submit Simulation
+    const handleSendEmailSubmit = (e) => {
+        e.preventDefault();
+        if (!emailInput) return;
+
+        setIsSending(true);
+
+        setTimeout(() => {
+            setIsSending(false);
+            setIsSentSuccess(true);
+            if (onSendEmail) onSendEmail(emailInput);
+        }, 1500);
+    };
+
     return (
-        <main className="grow pb-32 px-1 sm:px-8 max-w-7xl mx-auto w-full">
+        <main className="grow pb-32 px-1 sm:px-8 max-w-7xl mx-auto w-full relative">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
                 {/* Left Column: Confirmation & Interactive Pass Carousel */}
@@ -161,7 +198,6 @@ export default function BookingConfirmation({
                                     className={`w-full flex justify-center transition-opacity duration-300 ${idx === activeIndex ? 'block opacity-100' : 'hidden opacity-0'
                                         }`}
                                 >
-                                    {/* Scaled wrapper with reduced zoom levels and negative margin compensation */}
                                     <div className="transform origin-top scale-[0.68] min-[380px]:scale-[0.72] min-[480px]:scale-[0.80] sm:scale-[0.90] lg:scale-100 transition-transform duration-200 -mb-27.5 min-[380px]:-mb-20 min-[480px]:-mb-12.5 sm:-mb-6.25 lg:mb-0">
                                         <HikerTicketPass currentPass={pass} />
                                     </div>
@@ -202,19 +238,19 @@ export default function BookingConfirmation({
                             variant="default"
                             size="lg"
                             onClick={onDownloadPdf}
-                            className="flex-1"
+                            className="flex-1 cursor-pointer"
                         >
                             <Download />
-                            <span className='text-sm'>Download PDF Passes</span>
+                            <span className="text-sm">Download PDF Passes</span>
                         </Button>
                         <Button
                             variant="outline"
                             size="lg"
-                            onClick={onSendEmail}
-                            className="flex-1"
+                            onClick={handleOpenEmailModal}
+                            className="flex-1 cursor-pointer"
                         >
                             <Mail />
-                            <span className='text-sm'>Send to Email</span>
+                            <span className="text-sm">Send to Email</span>
                         </Button>
                     </div>
                 </div>
@@ -235,10 +271,10 @@ export default function BookingConfirmation({
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-bold mb-0.5">
-                                        Join Hiker Group Chat
+                                        Join Group Announcement
                                     </h3>
                                     <p className="text-xs text-on-secondary/80">
-                                        Connect with your guide and group.
+                                        Announcement from the Park Staff.
                                     </p>
                                 </div>
                             </div>
@@ -283,13 +319,11 @@ export default function BookingConfirmation({
 
                     {/* Hiker Resources */}
                     <div className="bg-surface-container border border-outline-variant/10 rounded-2xl p-6 shadow-sm">
-                        {/* Header */}
                         <h3 className="text-xs font-bold text-primary uppercase tracking-wider mb-4 flex items-center gap-2">
                             <ListChecks className="h-4 w-4" />
-                            Hiker Resources & Next Steps
+                            Hiker Resources
                         </h3>
 
-                        {/* Downloadable Resource List */}
                         <div className="space-y-3 mb-5">
                             {HIKER_RESOURCES.map((resource) => {
                                 const IconComponent = resource.icon;
@@ -312,7 +346,6 @@ export default function BookingConfirmation({
                                             </div>
                                         </div>
 
-                                        {/* Download Action Button */}
                                         <button
                                             type="button"
                                             onClick={(e) =>
@@ -328,7 +361,6 @@ export default function BookingConfirmation({
                             })}
                         </div>
 
-                        {/* Footer Home Link */}
                         <a
                             href="/"
                             onClick={(e) => {
@@ -344,6 +376,99 @@ export default function BookingConfirmation({
 
                 </div>
             </div>
+
+            {/* Email Input Modal Overlay */}
+            {isEmailModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="relative w-full max-w-md bg-surface-container-lowest border border-outline-variant/40 rounded-2xl shadow-2xl p-6 overflow-hidden">
+
+                        {/* Close Button */}
+                        <button
+                            onClick={() => setIsEmailModalOpen(false)}
+                            className="absolute top-4 right-4 p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 rounded-full transition-colors cursor-pointer"
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
+
+                        {!isSentSuccess ? (
+                            <form onSubmit={handleSendEmailSubmit} className="space-y-5">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-3 rounded-xl bg-primary/10 text-primary shrink-0">
+                                        <Mail className="h-6 w-6" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-bold text-on-surface">Email E-Passes</h3>
+                                        <p className="text-xs text-on-surface-variant">
+                                            Send physical ticket copies directly to your inbox.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-semibold text-on-surface uppercase tracking-wider block">
+                                        Email Address
+                                    </label>
+                                    <Input
+                                        type="email"
+                                        required
+                                        placeholder="name@example.com"
+                                        value={emailInput}
+                                        onChange={(e) => setEmailInput(e.target.value)}
+                                        className="w-full"
+                                    />
+                                </div>
+
+                                <div className="flex gap-3 justify-end pt-2">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => setIsEmailModalOpen(false)}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        variant="default"
+                                        disabled={isSending || !emailInput}
+                                        className="gap-2"
+                                    >
+                                        {isSending ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                <span>Sending...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Send className="h-4 w-4" />
+                                                <span>Send Ticket Pass</span>
+                                            </>
+                                        )}
+                                    </Button>
+                                </div>
+                            </form>
+                        ) : (
+                            <div className="flex flex-col items-center text-center py-4 space-y-4 animate-in zoom-in-95 duration-200">
+                                <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center border border-emerald-500/20">
+                                    <CheckCircle2 className="h-10 w-10" />
+                                </div>
+                                <div className="space-y-1">
+                                    <h3 className="text-xl font-bold text-on-surface">Email Sent!</h3>
+                                    <p className="text-xs text-on-surface-variant max-w-xs">
+                                        Your booking passes have been successfully delivered to <strong className="text-on-surface">{emailInput}</strong>.
+                                    </p>
+                                </div>
+                                <Button
+                                    variant="default"
+                                    className="w-full mt-2"
+                                    onClick={() => setIsEmailModalOpen(false)}
+                                >
+                                    Done
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </main>
     );
 }

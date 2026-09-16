@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mountain, Calendar, ArrowRight, Users, Minus, Plus } from 'lucide-react';
+import { Mountain, Calendar, ArrowRight, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const BOOKING_DETAILS = {
@@ -7,6 +7,8 @@ const BOOKING_DETAILS = {
     baseFeePerPax: 500.0,
     note: '*Total calculated on next step based on pax count.',
 };
+
+const MAX_PARTICIPANTS = 5;
 
 export default function BookingSummaryCard({
     selectedDate = 'No Date Selected',
@@ -81,21 +83,25 @@ export default function BookingSummaryCard({
                 <div className="flex justify-between items-center">
                     <div>
                         <span className="text-sm font-bold text-on-surface block">Participants</span>
-                        <span className="text-xs text-on-surface-variant font-medium">How many hikers?</span>
+                        <span className="text-xs text-on-surface-variant font-medium">
+                            Max {MAX_PARTICIPANTS} hikers per booking
+                        </span>
                     </div>
                     <div className="flex items-center gap-3 bg-surface-container border border-outline-variant/50 rounded-lg p-1">
                         <button
                             type="button"
                             onClick={() => setParticipantCount(Math.max(1, participantCount - 1))}
-                            className="p-2 rounded hover:bg-surface-variant/50 text-on-surface-variant transition-colors"
+                            disabled={participantCount <= 1}
+                            className="p-2 rounded hover:bg-surface-variant/50 text-on-surface-variant transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                             <Minus className="h-4 w-4" />
                         </button>
                         <span className="font-bold text-on-surface w-4 text-center">{participantCount}</span>
                         <button
                             type="button"
-                            onClick={() => setParticipantCount(Math.min(10, participantCount + 1))}
-                            className="p-2 rounded hover:bg-surface-variant/50 text-on-surface-variant transition-colors"
+                            onClick={() => setParticipantCount(Math.min(MAX_PARTICIPANTS, participantCount + 1))}
+                            disabled={participantCount >= MAX_PARTICIPANTS}
+                            className="p-2 rounded hover:bg-surface-variant/50 text-on-surface-variant transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                             <Plus className="h-4 w-4" />
                         </button>

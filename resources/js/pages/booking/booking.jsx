@@ -95,7 +95,7 @@ export default function Booking() {
                 {/* Header / Progress Section (Only visible during steps 1 - 4) */}
                 {currentStep <= 4 && (
                     <div className="p-6 md:p-8 flex flex-col items-center justify-center">
-                        <h1 className="text-2xl font-bold text-on-surface mb-8">
+                        <h1 className="text-3xl font-bold text-on-surface mb-8">
                             Booking Application
                         </h1>
 
