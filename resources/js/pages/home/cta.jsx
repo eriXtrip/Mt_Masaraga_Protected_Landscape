@@ -16,8 +16,8 @@ export default function Cta() {
                     className="h-full w-full object-cover object-center scale-105 transition-transform duration-1000 ease-out"
                 />
                 {/* Gradient Scrim for Contrast & Atmosphere */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/50 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-black/20" />
             </div>
 
             {/* Main Hero Callout Content */}

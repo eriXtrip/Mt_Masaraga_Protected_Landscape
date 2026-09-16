@@ -1,45 +1,60 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Calendar } from 'lucide-react';
 import Stars from '../../components/common/Stars';
-import SabluyonRoute from '../../../../public/images/trail/SabluyonTrail.jpg'
+import SabluyonRoute from '../../../../public/images/trail/SabluyonTrail.jpg';
 import { Button } from "@/components/ui/button";
 
 export default function TrailHero() {
     const navigate = useNavigate();
+
     return (
-        <section className="relative flex h-150 w-full items-start justify-start overflow-hidden bg-secondary rounded-2xl">
-            <img
-                src={SabluyonRoute}
-                alt="Sabluyon - Mt. Masaraga"
-                className="w-full h-150 object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/15"></div>
-            <div className="absolute inset-0 p-4 sm:p-6 md:p-10 flex flex-col justify-end md:flex-row md:items-end md:justify-between gap-4 sm:gap-6 overflow-y-auto">
-                <div className="max-w-2xl">
-                    <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white tracking-tight drop-shadow-md mb-2 sm:mb-3 font-sans">
+        <section className="relative flex h-105 sm:h-108 md:h-110 w-full items-end overflow-hidden rounded-3xl bg-surface-container-high border border-outline-variant/30">
+            {/* Background Image Container */}
+            <div className="absolute inset-0 z-0">
+                <img
+                    src={SabluyonRoute}
+                    alt="Sabluyon Route - Mt. Masaraga"
+                    className="h-full w-full object-cover object-center"
+                />
+
+                {/* Legible Gradient Overlay (No artificial blurs or glow) */}
+                <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/40 to-transparent" />
+            </div>
+
+            {/* Content Container */}
+            <div className="relative z-10 flex w-full flex-col justify-end gap-6 p-6 sm:p-8 md:p-12 md:flex-row md:items-end md:justify-between">
+
+                {/* Title and Rating Info */}
+                <div className="max-w-2xl space-y-3">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-tight">
                         Standard Summit Trail
-                    </h2>
-                    <div className="flex flex-wrap items-center gap-2 drop-shadow text-primary">
-                        <div className="flex items-center text-sm md:text-base">
+                    </h1>
+
+                    <div className="flex flex-wrap items-center gap-2.5 text-sm md:text-base">
+                        <div className="flex items-center text-amber-400">
                             <Stars rating={4.5} />
                         </div>
-                        <span className="text-white/90 text-sm md:text-base font-semibold ml-1">4.5</span>
-                        <span className="text-white/70 text-xs md:text-sm font-normal">(124 reviews)</span>
+                        <span className="font-bold text-white">4.5</span>
+                        <span className="text-xs md:text-sm font-medium text-white/70">
+                            (124 verified reviews)
+                        </span>
                     </div>
                 </div>
-                <div className="flex items-center shrink-0">
+
+                {/* Direct Action CTA */}
+                <div className="shrink-0">
                     <Button
-                        type='button'
-                        variant='default'
-                        size='xl'
+                        type="button"
+                        variant="default"
+                        size="lg"
                         onClick={() => navigate('/booking')}
+                        className="w-full sm:w-auto font-bold gap-2 text-base px-6 py-6 rounded-2xl transition-transform active:scale-[0.98] cursor-pointer"
                     >
-                        <Calendar />
+                        <Calendar className="h-5 w-5" aria-hidden="true" />
                         <span>Check Availability</span>
                     </Button>
                 </div>
             </div>
         </section>
-
     );
 }

@@ -1,8 +1,33 @@
-
-
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { AWARDS, ICON_PATHS } from '../../mockData';
 
 export default function Awards() {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    // Auto-advance slide every 60,000 milliseconds (1 minute)
+    useEffect(() => {
+        if (!AWARDS || AWARDS.length === 0) return;
+
+        const interval = setInterval(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % AWARDS.length);
+        }, 60000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const handlePrev = () => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex === 0 ? AWARDS.length - 1 : prevIndex - 1
+        );
+    };
+
+    const handleNext = () => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % AWARDS.length);
+    };
+
+    const currentAward = AWARDS[currentIndex] || AWARDS[0];
+
     return (
         <section className="bg-surface px-6 py-12 md:px-12 md:py-20">
             <div className="mx-auto max-w-6xl">
@@ -19,13 +44,40 @@ export default function Awards() {
 
                 {/* Main Content Layout */}
                 <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-12 md:gap-16">
-                    {/* Editorial Image Frame */}
-                    <div className="overflow-hidden rounded-2xl bg-surface-container-high md:col-span-5">
+                    {/* Editorial Image Frame with Controls */}
+                    <div className="relative group overflow-hidden rounded-2xl bg-surface-container-high md:col-span-5">
                         <img
-                            src="/images/awards/trophy.jpg"
-                            alt="DENR-PAMB Environmental Excellence Award Trophy in tropical rainforest"
-                            className="h-80 w-full object-cover transition-transform duration-500 ease-out hover:scale-102 md:h-130"
+                            src={currentAward.image}
+                            alt={currentAward.imageAlt || currentAward.name}
+                            className="h-80 w-full object-cover transition-all duration-500 ease-out md:h-130"
                         />
+
+                        {/* Chevron Overlay Controls */}
+                        {AWARDS.length > 1 && (
+                            <div className="absolute inset-0 flex items-center justify-between p-3 opacity-90 transition-opacity group-hover:opacity-100">
+                                <button
+                                    type="button"
+                                    onClick={handlePrev}
+                                    aria-label="Previous image"
+                                    className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-surface/80 text-on-surface hover:bg-surface hover:scale-105 transition-all shadow-sm"
+                                >
+                                    <ChevronLeft className="h-5 w-5" />
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleNext}
+                                    aria-label="Next image"
+                                    className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-surface/80 text-on-surface hover:bg-surface hover:scale-105 transition-all shadow-sm"
+                                >
+                                    <ChevronRight className="h-5 w-5" />
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Slide Indicator Badge */}
+                        <div className="absolute bottom-4 left-4 rounded-md bg-surface/80 px-2.5 py-1 text-[11px] font-bold tracking-wider text-on-surface backdrop-blur-xs">
+                            {currentIndex + 1} / {AWARDS.length}
+                        </div>
                     </div>
 
                     {/* Structured Awards List */}
@@ -34,8 +86,8 @@ export default function Awards() {
                             <div
                                 key={award.name}
                                 className={`flex items-start gap-5 ${index !== AWARDS.length - 1
-                                    ? 'border-b border-outline-variant/30 pb-8'
-                                    : ''
+                                        ? 'border-b border-outline-variant/30 pb-8'
+                                        : ''
                                     }`}
                             >
                                 {/* Minimal Icon Badge */}
