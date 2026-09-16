@@ -49,12 +49,12 @@ export default function Conversation({
     }, [messages]);
 
     return (
-        <div className="flex flex-col h-[600px] bg-surface-container-lowest border border-outline-variant/40 rounded-3xl shadow-xl overflow-hidden">
+        <div className="flex flex-col h-[70vh] min-h-[500px] md:h-[600px] bg-surface-container-lowest border border-outline-variant/40 rounded-3xl shadow-xl overflow-hidden">
 
             {/* 1. Header: Trail Name & Hike Date */}
-            <header className="bg-surface-container-low border-b border-outline-variant/30 px-6 py-4 flex items-center justify-between shrink-0 z-10">
-                <div className="flex items-center gap-3.5">
-                    <div className="w-11 h-11 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+            <header className="bg-surface-container-low border-b border-outline-variant/30 px-4 md:px-6 py-4 flex items-center justify-between shrink-0 z-10">
+                <div className="flex items-center gap-2.5 md:gap-3.5">
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
                         <Mountain className="h-6 w-6" />
                     </div>
                     <div>

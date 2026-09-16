@@ -8,8 +8,8 @@ export default function GroupChat() {
     const [showMembers, setShowMembers] = useState(false);
 
     return (
-        <div className="max-w-7xl mx-auto my-6 px-4 relative">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="max-w-7xl mx-auto my-4 md:my-6 px-3 md:px-4 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 items-start">
 
                 {/* 1. Left Sidebar: Channel & Group Selector (Fixed 3 cols on desktop) */}
                 <div className="lg:col-span-3">
@@ -44,7 +44,7 @@ export default function GroupChat() {
 
                 {/* Drawer Container (Slide-over on Mobile, In-grid Column on Desktop) */}
                 <aside
-                    className={`fixed inset-y-0 right-0 mt-15 z-40 lg:z-auto w-80 lg:w-full lg:static transform transition-all duration-300 ease-in-out ${showMembers
+                    className={`fixed inset-y-0 right-0 top-20 z-40 lg:z-auto w-80 lg:w-full lg:static transform transition-all duration-300 ease-in-out ${showMembers
                         ? 'translate-x-0 lg:col-span-3 lg:block'
                         : 'translate-x-full lg:hidden'
                         }`}

@@ -35,12 +35,12 @@ export default function GCMember({
     onClose,
 }) {
     return (
-        <div className="flex flex-col h-[600px] w-full max-w-sm bg-surface-container-lowest border border-outline-variant/40 rounded-3xl shadow-xl overflow-hidden transition-all duration-300">
+        <div className="flex flex-col h-[70vh] min-h-[500px] md:h-[600px] w-full max-w-sm bg-surface-container-lowest border border-outline-variant/40 rounded-3xl shadow-xl overflow-hidden transition-all duration-300">
 
             {/* Header */}
-            <header className="bg-surface-container-low border-b border-outline-variant/30 px-6 py-4 flex items-center justify-between shrink-0 z-10">
-                <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-primary/10 text-primary shrink-0">
+            <header className="bg-surface-container-low border-b border-outline-variant/30 px-4 md:px-6 py-4 flex items-center justify-between shrink-0 z-10">
+                <div className="flex items-center gap-2.5 md:gap-3">
+                    <div className="p-2 md:p-2.5 rounded-xl bg-primary/10 text-primary shrink-0">
                         <Users className="h-5 w-5" />
                     </div>
                     <div>
