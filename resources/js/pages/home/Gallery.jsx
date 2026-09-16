@@ -1,35 +1,4 @@
-const GALLERY_ITEMS = [
-    {
-        src: '/images/gallery/morning-mist.jpg',
-        alt: "Mt. Masaraga's peak shrouded in soft morning mist",
-        caption: 'Morning Mist over Mt. Masaraga',
-    },
-    {
-        src: '/images/gallery/tropical-bird.jpg',
-        alt: 'Rare tropical bird in rainforest',
-        caption: 'Native Flora & Avian Wildlife',
-    },
-    {
-        src: '/images/gallery/boardwalk.jpg',
-        alt: 'Hikers on wooden boardwalk trail',
-        caption: 'Protected Canopy Boardwalk',
-    },
-    {
-        src: '/images/gallery/forest-stream.jpg',
-        alt: 'Mountain stream with crystal water',
-        caption: 'Pristine Forest Streams',
-    },
-    {
-        src: '/images/gallery/sunrise-deck.jpg',
-        alt: 'Wooden viewing deck overlooking sea of clouds at sunrise',
-        caption: 'Sunrise View Deck & Cloud Sea',
-    },
-    {
-        src: '/images/gallery/cloud-forest.jpg',
-        alt: 'Lush green ferns and moss-covered forest',
-        caption: 'Ancient Cloud Forest Canopy',
-    },
-];
+import { GALLERY_ITEMS } from '../../mockData';
 
 export default function Gallery() {
     return (

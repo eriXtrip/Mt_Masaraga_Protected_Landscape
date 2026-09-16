@@ -1,41 +1,7 @@
 import React, { useState } from 'react';
 import { Images, Fullscreen, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
-import mtMasaragaSummit from '../../../../public/images/about/mt-masaraga-summit.jpg';
-import mtMasaragaCampsite from '../../../../public/images/about/mt-masaraga-campsite-3.jpg';
-import mtMasaragaVanishingFalls from '../../../../public/images/about/mt-masaraga-vanishing-falls.jpg';
-import mtMasaragaNaturalSpring from '../../../../public/images/about/mt-masaraga-natural-springs-trail.jpg';
-
-const GALLERY_IMAGES = [
-  {
-    id: 1,
-    src: mtMasaragaSummit,
-    alt: "Hikers walking along wooden boardwalk through lush tropical canopy",
-    title: "Boardwalk Trek",
-    subtitle: "Sub-canopy trail section"
-  },
-  {
-    id: 2,
-    src: mtMasaragaCampsite,
-    alt: "Lush moss-covered tree trunks and fern details in cloud forest",
-    title: "Moss & Flora",
-    subtitle: "Primary cloud forest zone"
-  },
-  {
-    id: 3,
-    src: mtMasaragaVanishingFalls,
-    alt: "Summit view of volcanic ridges and sunrise clouds",
-    title: "Summit Caldera",
-    subtitle: "Observation ridge viewpoint"
-  },
-  {
-    id: 4,
-    src: mtMasaragaNaturalSpring,
-    alt: "Natural spring water source along the trail",
-    title: "Natural Spring",
-    subtitle: "Mid-trail water station"
-  }
-];
+import { TRAIL_GALLERY_IMAGES as GALLERY_IMAGES } from '../../mockData';
 
 const PREVIEW_COUNT = 3;
 

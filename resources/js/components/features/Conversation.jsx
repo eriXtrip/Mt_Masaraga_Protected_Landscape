@@ -2,35 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Mountain, Users, MoreVertical } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import SendGCMessage from "../../components/forms/SendGCMsgForm";
-
-const DEFAULT_MESSAGES = [
-    {
-        id: 1,
-        sender: 'Park Admin',
-        avatar: 'PA',
-        message: 'Welcome hikers! Please make sure to arrive at the jump-off point 30 minutes before your scheduled climb for the safety briefing.',
-        timestamp: '08:00 AM',
-        isAdmin: true,
-    },
-    {
-        id: 2,
-        sender: 'Jane Doe (Lead Hiker)',
-        avatar: 'JD',
-        message: 'Copy admin! Are we required to bring physical copies of our IDs?',
-        timestamp: '08:15 AM',
-        isAdmin: false,
-        isSelf: true,
-    },
-    {
-        id: 3,
-        sender: 'Park Admin',
-        avatar: 'PA',
-        message: 'Yes, Jane. Please present your digital or printed E-Pass along with physical IDs at the station.',
-        timestamp: '08:18 AM',
-        isAdmin: true,
-        isSelf: false,
-    },
-];
+import { DEFAULT_MESSAGES } from '../../mockData';
 
 export default function Conversation({
     trailName = 'Masaraga Summit Trail',

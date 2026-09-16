@@ -5,53 +5,7 @@ import { Button } from '@/components/ui/button';
 const INITIAL_VISIBLE_COUNT = 2;
 const PAGE_SIZE = 2;
 
-const TRAIL_EXPERIENCES = [
-    {
-        id: 1,
-        initials: 'ES',
-        name: 'Elena Santos',
-        quote:
-            'The summit view was breathtaking! A challenging climb but the panoramic views of Bicol are worth every step.',
-        date: 'Oct 12, 2024',
-        rating: 5,
-    },
-    {
-        id: 2,
-        initials: 'MC',
-        name: 'Marcus Chen',
-        quote:
-            'Well-maintained trails and friendly guides. The permit process was smooth and the safety briefing was very thorough.',
-        date: 'Sep 28, 2024',
-        rating: 4,
-    },
-    {
-        id: 3,
-        initials: 'SJ',
-        name: 'Sarah Johnson',
-        quote:
-            'The Eco-Trail Loop was perfect for my family. My kids loved seeing the rare birds and learning about local plants.',
-        date: 'Sep 15, 2024',
-        rating: 5,
-    },
-    {
-        id: 4,
-        initials: 'RV',
-        name: 'Ramon Valdez',
-        quote:
-            'Great trail condition overall. Prepare for steep inclines toward the summit. Hydration is key!',
-        date: 'Aug 30, 2024',
-        rating: 4.5,
-    },
-    {
-        id: 5,
-        initials: 'AL',
-        name: 'Anna Lopez',
-        quote:
-            'Highly recommend hiring a guide. Very knowledgeable about local flora and kept our group safe throughout.',
-        date: 'Aug 14, 2024',
-        rating: 5,
-    },
-];
+import { TRAIL_EXPERIENCES } from '../../mockData';
 
 export default function TrailExperience() {
     const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);

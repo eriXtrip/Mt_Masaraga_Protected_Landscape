@@ -1,26 +1,7 @@
 import { Map, Phone, Leaf } from 'lucide-react';
 import ResourceCard from '../../components/features/ResourceCard';
 
-const resources = [
-    {
-        icon: Map,
-        title: 'Offline Trail Maps',
-        description: 'High-resolution GPX and PDF maps for offline navigation.',
-        href: '#download-maps',
-    },
-    {
-        icon: Phone,
-        title: 'Emergency Guide',
-        description: 'Local rescue contacts, protocols, and nearest medical facilities.',
-        href: '#download-emergency',
-    },
-    {
-        icon: Leaf,
-        title: 'Flora & Fauna Checklist',
-        description: 'Identify endemic species and follow Leave No Trace principles.',
-        href: '#download-checklist',
-    },
-];
+import { ABOUT_RESOURCES as resources } from '../../mockData';
 
 export default function PreperationResource() {
     return (

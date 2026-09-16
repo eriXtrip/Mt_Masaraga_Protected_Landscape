@@ -3,38 +3,7 @@ import { User, PhoneCall, Stethoscope, Scale, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const HEALTH_QUESTIONS = [
-    {
-        id: 'health1',
-        question:
-            'Do you have a history of asthma, hypertension, heart disease, or irregular heartbeats?',
-    },
-    {
-        id: 'health2',
-        question:
-            'Can you comfortably walk or jog for 1 hour without experiencing severe shortness of breath or dizziness?',
-    },
-    {
-        id: 'health3',
-        question:
-            'Do you have any chronic joint, knee, or back injuries that limit your balance or ability to climb steep slopes?',
-    },
-    {
-        id: 'health4',
-        question:
-            'Do you have hemophilia, a bleeding disorder, or take blood thinners that might cause prolonged bleeding from limatik bites?',
-    },
-    {
-        id: 'health5',
-        question:
-            'Do you carry an EpiPen, inhaler, or specific antihistamines for known severe allergic reactions (Anaphylaxis)?',
-    },
-    {
-        id: 'health6',
-        question:
-            'Have you undergone any major surgical procedures or suffered a debilitating illness within the past six (6) months?',
-    },
-];
+import { HEALTH_QUESTIONS } from '../../mockData';
 
 export default function HikerDetailsForm({ participantCount = 1, onBack, onNext }) {
     const getInitialState = () => Array.from({ length: participantCount }, () => ({

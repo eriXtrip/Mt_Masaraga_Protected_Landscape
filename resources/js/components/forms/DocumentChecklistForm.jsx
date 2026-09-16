@@ -2,28 +2,7 @@ import React, { useState } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const CHECKLIST_ITEMS = [
-    {
-        id: 'id_card',
-        title: 'Valid Government-Issued ID card',
-        description: 'Original copy for verification purposes.',
-    },
-    {
-        id: 'health_declaration',
-        title: 'Health Declaration',
-        description: 'System Generated',
-    },
-    {
-        id: 'barangay_clearance',
-        title: 'Barangay Clearance / Community Tax Certificate',
-        description: 'Recent copy applicable for the current year.',
-    },
-    {
-        id: 'booking_ticket',
-        title: 'Booking Ticket Copy',
-        description: 'System Generated Ticket',
-    },
-];
+import { CHECKLIST_ITEMS } from '../../mockData';
 
 export default function DocumentChecklistForm({ onBack, onNext }) {
     const [checkedItems, setCheckedItems] = useState({});

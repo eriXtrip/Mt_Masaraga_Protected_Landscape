@@ -1,29 +1,5 @@
-const AWARDS = [
-    {
-        icon: 'workspace_premium',
-        name: 'DENR-PAMB Recognition',
-        description:
-            'Awarded for outstanding management of protected landscapes in the Bicol Region (2023).',
-    },
-    {
-        icon: 'eco',
-        name: 'Eco-Tourism Excellence',
-        description:
-            'Certified Sustainable Destination by the National Ecotourism Steering Committee.',
-    },
-    {
-        icon: 'verified_user',
-        name: 'ISO 14001 Certified',
-        description:
-            'International standard for effective environmental management systems.',
-    },
-];
+import { AWARDS, ICON_PATHS } from '../../mockData';
 
-const ICON_PATHS = {
-    workspace_premium: 'M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 7.7l5.4-.8L12 2z',
-    eco: 'M22 5v2h-3v3h-2V7h-3V5h3V2h2v3h3zm-6.5 7.5C16 15 14 17 10.5 17 8 17 5 14 5 11.5 5 8 7 6 9.5 6c3.5 0 5 3.5 6 6.5zM2 22c0-5 3-8.5 8-10.5C6 13 4 16 2 22z',
-    verified_user: 'M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z',
-};
 
 export default function Awards() {
     return (

@@ -1,12 +1,7 @@
 import { CloudLightning, CreditCard, FileText, Headset, Mountain } from 'lucide-react';
 import HelpSearchBar from '../../components/features/HelpSearchBar';
 
-const POPULAR_TOPICS = [
-    { icon: FileText, label: 'Permit Requirements' },
-    { icon: CreditCard, label: 'Payment Methods' },
-    { icon: Mountain, label: 'Trail Difficulty' },
-    { icon: CloudLightning, label: 'Weather & Alerts' },
-];
+import { POPULAR_TOPICS } from '../../mockData';
 
 export default function HelpSearchbar() {
     return (

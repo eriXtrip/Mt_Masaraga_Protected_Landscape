@@ -2,11 +2,7 @@ import React from 'react';
 import { Mountain, Calendar, ArrowRight, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const BOOKING_DETAILS = {
-    selectedTrail: 'Masaraga Summit Trail',
-    baseFeePerPax: 500.0,
-    note: '*Total calculated on next step based on pax count.',
-};
+import { BOOKING_DETAILS } from '../../mockData';
 
 const MAX_PARTICIPANTS = 5;
 

@@ -1,7 +1,15 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { ChevronDown, LogOut, User } from 'lucide-react';
+import { ChevronDown, LogOut, ShieldCheck, UserCheck, Users } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+
+import { MOCK_USERS } from '../../mockData';
+
+const ROLE_BADGES = {
+    1: { label: 'Admin', bg: 'bg-amber-600 text-white border-amber-300' },
+    2: { label: 'Park Staff', bg: 'bg-emerald-600 text-white border-emerald-300' },
+    3: { label: 'Hiker', bg: 'bg-primary text-on-primary border-primary-container' },
+};
 
 const NAV_LINKS = [
     { label: 'Home', to: '/' },
@@ -21,22 +29,19 @@ export default function Navbar() {
     const [userDropdownOpen, setUserDropdownOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
-    // Mock Authentication State & User Info (Replace with your actual Auth context/state)
+    // Authentication State using imported MOCK_USERS
     const [isLoggedIn, setIsLoggedIn] = useState(true);
-    const user = {
-        name: 'Jane Doe',
-        subtitle: 'Hiker',
-    };
+    const [currentUserIndex, setCurrentUserIndex] = useState(0);
 
-    // Helper function to extract initials from name (e.g., "Jane Doe" -> "JD")
+    // Current active user from array
+    const currentUser = MOCK_USERS[currentUserIndex] || MOCK_USERS[0];
+
+    // Helper to extract initials (e.g., "Juan Dela Cruz" -> "JD")
     const getInitials = (name) => {
         if (!name) return 'U';
-        return name
-            .split(' ')
-            .map((word) => word[0])
-            .join('')
-            .toUpperCase()
-            .slice(0, 2);
+        const parts = name.trim().split(' ');
+        if (parts.length === 1) return parts[0][0].toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     };
 
     const dropdownRef = useRef(null);
@@ -50,7 +55,7 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    // Close dropdowns when clicking outside
+    // Close dropdowns on outside click
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -79,6 +84,7 @@ export default function Navbar() {
     return (
         <header className="sticky top-0 z-50 w-full bg-on-background">
             <nav className="mx-auto flex h-14 w-full max-w-380 items-center justify-between gap-6 px-6">
+
                 {/* Logo / Brand */}
                 <Link
                     to="/"
@@ -92,7 +98,7 @@ export default function Navbar() {
                     />
                 </Link>
 
-                {/* Desktop navigation */}
+                {/* Desktop Navigation */}
                 <ul className="hidden items-center gap-6 md:flex">
                     {NAV_LINKS.map((link) => (
                         <li key={link.to} className="relative">
@@ -139,7 +145,7 @@ export default function Navbar() {
                     </li>
                 </ul>
 
-                {/* Auth actions or User Profile Badge */}
+                {/* Auth Actions / User Profile Badge */}
                 <div className="hidden items-center gap-3 md:flex">
                     {isLoggedIn ? (
                         <div className="relative" ref={userDropdownRef}>
@@ -148,24 +154,54 @@ export default function Navbar() {
                                 onClick={() => setUserDropdownOpen((prev) => !prev)}
                                 className="flex items-center gap-3 p-1.5 rounded-full hover:bg-surface-container/20 transition-colors cursor-pointer"
                             >
-                                {/* Name Initials Avatar */}
-                                <div className="w-9 h-9 rounded-full bg-primary text-on-primary text-xs font-bold flex items-center justify-center shrink-0 border border-primary-container">
-                                    {getInitials(user.name)}
+                                {/* Role-styled Initials Avatar */}
+                                <div className={`w-9 h-9 rounded-full text-xs font-bold flex items-center justify-center shrink-0 border ${ROLE_BADGES[currentUser.role]?.bg}`}>
+                                    {getInitials(currentUser.name)}
                                 </div>
                                 <div className="text-left leading-tight hidden xl:block">
-                                    <h4 className="text-xs font-bold text-on-primary truncate">{user.name}</h4>
-                                    <p className="text-[10px] font-medium text-on-primary/70 truncate">{user.subtitle}</p>
+                                    <h4 className="text-xs font-bold text-on-primary truncate flex items-center gap-1">
+                                        {currentUser.name}
+                                        {currentUser.role === 1 && <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />}
+                                    </h4>
+                                    <p className="text-[10px] font-medium text-on-primary/70 truncate">{currentUser.subtitle}</p>
                                 </div>
                                 <ChevronDown className={`h-4 w-4 text-on-primary transition-transform duration-200 ${userDropdownOpen ? 'rotate-180' : ''}`} />
                             </button>
 
                             {/* User Menu Dropdown */}
                             {userDropdownOpen && (
-                                <div className="absolute right-0 top-full mt-2 w-52 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                                <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
                                     <div className="px-3 py-2 border-b border-outline-variant/20 mb-1">
-                                        <p className="text-xs font-bold text-on-surface">{user.name}</p>
-                                        <p className="text-[10px] text-on-surface-variant">{user.subtitle}</p>
+                                        <p className="text-xs font-bold text-on-surface">{currentUser.name}</p>
+                                        <p className="text-[10px] text-on-surface-variant font-medium">{currentUser.subtitle}</p>
                                     </div>
+
+                                    {/* Role Switcher (For testing mock users) */}
+                                    <div className="px-2 py-1.5 mb-1 bg-surface-container-low rounded-xl">
+                                        <span className="text-[9px] font-bold text-outline uppercase tracking-wider block mb-1 px-1">
+                                            Switch User Role
+                                        </span>
+                                        <div className="space-y-1">
+                                            {MOCK_USERS.map((usr, idx) => (
+                                                <button
+                                                    key={usr.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setCurrentUserIndex(idx);
+                                                        setUserDropdownOpen(false);
+                                                    }}
+                                                    className={`w-full text-left px-2 py-1 text-[11px] rounded-lg font-medium flex items-center justify-between cursor-pointer ${idx === currentUserIndex
+                                                            ? 'bg-primary/10 text-primary font-bold'
+                                                            : 'text-on-surface-variant hover:bg-surface-variant/40'
+                                                        }`}
+                                                >
+                                                    <span>{usr.name}</span>
+                                                    <span className="text-[9px] opacity-75">Role {usr.role}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
                                     <button
                                         type="button"
                                         onClick={handleLogout}
@@ -183,7 +219,7 @@ export default function Navbar() {
                                 variant="outline"
                                 size="lg"
                                 onClick={() => navigate('/login')}
-                                className={"capitalize bg-transparent text-on-primary border-on-primary hover:border-muted"}
+                                className="capitalize bg-transparent text-on-primary border-on-primary hover:border-muted"
                             >
                                 Login
                             </Button>
@@ -191,7 +227,7 @@ export default function Navbar() {
                                 variant="default"
                                 size="lg"
                                 onClick={() => navigate('/signup')}
-                                className={"capitalize"}
+                                className="capitalize"
                             >
                                 Sign Up
                             </Button>
@@ -199,7 +235,7 @@ export default function Navbar() {
                     )}
                 </div>
 
-                {/* Mobile hamburger */}
+                {/* Mobile Hamburger Toggle */}
                 <Button
                     type="button"
                     aria-label="Toggle menu"
@@ -208,54 +244,28 @@ export default function Navbar() {
                     className="flex1 h-10 w-10 items-center justify-center rounded-md text-on-secondary transition-colors hover:bg-surface-container md:hidden"
                 >
                     {open ? (
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6 18 18 6M6 6l12 12"
-                            />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                         </svg>
                     ) : (
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M4 6h16M4 12h16M4 18h16"
-                            />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     )}
                 </Button>
             </nav>
 
-            {/* Mobile menu */}
-            <div
-                className={`overflow-hidden bg-surface transition-[max-height] duration-300 md:hidden ${open ? 'max-h-[600px]' : 'max-h-0'
-                    }`}
-            >
+            {/* Mobile Menu */}
+            <div className={`overflow-hidden bg-surface transition-[max-height] duration-300 md:hidden ${open ? 'max-h-150' : 'max-h-0'}`}>
                 <ul className="flex flex-col gap-1 px-4 py-4">
-                    {/* User profile section on mobile */}
                     {isLoggedIn && (
                         <li className="flex items-center gap-3 px-4 py-3 border-b border-outline-variant/30 mb-2">
-                            <div className="w-10 h-10 rounded-full bg-primary text-on-primary text-sm font-bold flex items-center justify-center shrink-0">
-                                {getInitials(user.name)}
+                            <div className={`w-10 h-10 rounded-full text-sm font-bold flex items-center justify-center shrink-0 border ${ROLE_BADGES[currentUser.role]?.bg}`}>
+                                {getInitials(currentUser.name)}
                             </div>
                             <div>
-                                <h4 className="text-sm font-bold text-on-surface">{user.name}</h4>
-                                <p className="text-xs text-on-surface-variant">{user.subtitle}</p>
+                                <h4 className="text-sm font-bold text-on-surface">{currentUser.name}</h4>
+                                <p className="text-xs text-on-surface-variant">{currentUser.subtitle}</p>
                             </div>
                         </li>
                     )}
@@ -277,7 +287,6 @@ export default function Navbar() {
                         </li>
                     ))}
 
-                    {/* Hiker Mobile Submenu Section */}
                     <li className="border-t border-outline-variant/30 pt-2 mt-1">
                         <span className="px-4 text-xs font-bold text-outline uppercase tracking-wider block mb-1">
                             Hiker Navigation
@@ -318,7 +327,7 @@ export default function Navbar() {
                                         closeAll();
                                         navigate('/login');
                                     }}
-                                    className={"capitalize bg-transparent text-primary border-primary hover:border-muted"}
+                                    className="capitalize bg-transparent text-primary border-primary hover:border-muted"
                                 >
                                     Login
                                 </Button>
@@ -329,7 +338,7 @@ export default function Navbar() {
                                         closeAll();
                                         navigate('/signup');
                                     }}
-                                    className={"capitalize"}
+                                    className="capitalize"
                                 >
                                     Sign Up
                                 </Button>

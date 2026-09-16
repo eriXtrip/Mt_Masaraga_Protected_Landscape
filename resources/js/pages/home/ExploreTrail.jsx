@@ -1,29 +1,5 @@
 import TrailCard from '../../components/features/TrailCard';
-import SabluyonRoute from '../../../../public/images/trail/SabluyonTrail.jpg'
-import BalogoRoute from '../../../../public/images/trail/BalogoTrail.jpg'
-
-const TRAILS = [
-    {
-        name: 'Amtic Trail (or Sabluyon Trail)',
-        difficulty: 'Major Climb',
-        difficultyClass: 'bg-primary-container text-on-primary-container',
-        description:
-            'This is the most popular, standard route. It begins in Sitio Sabluyon, Barangay Amtic, Ligao City. This trail is home to the famous Mt. Masaraga Campsite and features a grueling, pure uphill assault to the summit.',
-        statIcon: 'height',
-        stats: ['3-4 Hours', '12.4km'],
-        image: SabluyonRoute,
-    },
-    {
-        name: 'Balogo Trail',
-        difficulty: 'Major Climb',
-        difficultyClass: 'bg-primary text-white',
-        description:
-            'This is the alternative route that starts near Balogo East Elementary School. Depending on the path mapped out by local guides, it can cross the boundary areas near Oas or Ligao, passing through open fields and residential areas before hitting the steep mountain slopes.',
-        statIcon: 'nature',
-        stats: ['4-5 Hours', '14km'],
-        image: BalogoRoute,
-    },
-];
+import { TRAILS } from '../../mockData';
 
 export default function ExploreTrail() {
     return (

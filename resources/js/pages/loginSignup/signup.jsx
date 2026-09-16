@@ -26,14 +26,7 @@ import {
 } from 'lucide-react';
 
 const TOTAL_STEPS = 6;
-const STEP_TITLES = [
-    'Personal Name',
-    'Select Gender',
-    'Contact Email',
-    'Verify Code',
-    'Create Password',
-    'Trek Ready',
-];
+import { SIGNUP_STEPS as STEP_TITLES } from '../../mockData';
 
 export default function Signup() {
     const navigate = useNavigate();

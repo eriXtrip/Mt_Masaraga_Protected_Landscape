@@ -1,29 +1,7 @@
 import Stars from "../../components/common/Stars";
 import { ExperienceCard } from "@/components/features/ExperienceCard";
 
-const EXPERIENCES = [
-    {
-        initials: 'ES',
-        name: 'Elena Santos',
-        quote:
-            'The summit view was breathtaking! A challenging climb but the panoramic views of Bicol are worth every step.',
-        rating: 4.5,
-    },
-    {
-        initials: 'MC',
-        name: 'Marcus Chen',
-        quote:
-            'Well-maintained trails and friendly guides. The permit process was smooth and the safety briefing was very thorough.',
-        rating: 5,
-    },
-    {
-        initials: 'SJ',
-        name: 'Sarah Johnson',
-        quote:
-            'The Eco-Trail Loop was perfect for my family. My kids loved seeing the rare birds and learning about local plants.',
-        rating: 4,
-    },
-];
+import { EXPERIENCES } from '../../mockData';
 
 export default function Experience() {
     return (

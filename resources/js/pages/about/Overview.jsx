@@ -1,38 +1,8 @@
 import React, { useState } from 'react';
 import { Droplets, MoveVertical, Trees, BadgeCheck, ChevronLeft, ChevronRight } from 'lucide-react';
 
-import mtMasaragaSummit from '../../../../public/images/about/mt-masaraga-summit.jpg';
-import mtMasaragaCampsite from '../../../../public/images/about/mt-masaraga-campsite-3.jpg';
-import mtMasaragaVanishingFalls from '../../../../public/images/about/mt-masaraga-vanishing-falls.jpg';
-import mtMasaragaNaturalSpring from '../../../../public/images/about/mt-masaraga-natural-springs-trail.jpg';
+import { ABOUT_ZONES as zones } from '../../mockData';
 import { Button } from "@/components/ui/button";
-
-const zones = [
-    {
-        id: 'summit',
-        title: 'Mount Masaraga Summit',
-        desc: 'An inactive 1,328-meter stratovolcano featuring steep, rugged ridges and mossy forests. Regulated trekking trails lead to the summit crest, offering a stunning 360-degree view of Mt. Mayon and Mt. Malinao.',
-        image: mtMasaragaSummit,
-    },
-    {
-        id: 'campsite',
-        title: 'The Campsite',
-        desc: 'An established, open-air grassy campground situated right on the mountains accessible slopes. It serves as the primary jump-off point for visitors wanting to safely observe the pristine mountain environment.',
-        image: mtMasaragaCampsite,
-    },
-    {
-        id: 'watershed',
-        title: 'Natural Springs Trail',
-        desc: 'An eco-trail navigating the mountains lower primary forest slopes, which house 27 natural springs and 4 major rivers supplying clean, crystalline volcanic water to the Bicol River Basin.',
-        image: mtMasaragaNaturalSpring,
-    },
-    {
-        id: 'falls',
-        title: 'The Vanishing Falls',
-        desc: 'A hidden, ephemeral waterfall deep within the rainforest that flows exclusively after heavy rains. Reaching this seasonal wonder requires a guided 1-hour eco-trek through protected mountain trails.',
-        image: mtMasaragaVanishingFalls,
-    }
-];
 
 export default function Overview() {
     const [currentZoneIdx, setCurrentZoneIdx] = useState(0);

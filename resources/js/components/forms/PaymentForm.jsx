@@ -2,40 +2,7 @@ import React, { useState } from 'react';
 import { Wallet, CreditCard, QrCode, Building2, HandCoins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const PAYMENT_METHODS = [
-    {
-        id: 'gcash',
-        label: 'GCash',
-        icon: Wallet,
-    },
-    {
-        id: 'card',
-        label: 'Credit/Debit Card',
-        icon: CreditCard,
-    },
-    {
-        id: 'maya',
-        label: 'Maya',
-        icon: QrCode,
-    },
-    {
-        id: 'bank',
-        label: 'Bank Transfer (Landbank, BDO)',
-        icon: Building2,
-    },
-];
-
-const DEFAULT_BOOKING_SUMMARY = {
-    trail: 'Ambot Trail',
-    date: 'Oct 24, 2024',
-    participants: '4 Pax',
-    breakdown: [
-        { label: 'Environmental Fee (4 x ₱150)', amount: 600.0 },
-        { label: 'Guide Fee (1 Guide)', amount: 1200.0 },
-        { label: 'Processing Fee', amount: 50.0 },
-    ],
-    totalAmount: 1850.0,
-};
+import { PAYMENT_METHODS, DEFAULT_BOOKING_SUMMARY } from '../../mockData';
 
 export default function PaymentStepForm({
     summary = DEFAULT_BOOKING_SUMMARY,

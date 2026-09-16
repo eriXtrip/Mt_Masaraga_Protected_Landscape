@@ -1,28 +1,7 @@
 import React from 'react';
 import { Dot } from 'lucide-react';
 
-const TRAIL_PARAGRAPHS = [
-    "The Standard Summit Trail offers the most direct and well-maintained route to the peak of Mt. Masaraga. Beginning at the designated ranger station in Ligao City, the trail immediately immerses hikers in dense, secondary forest before transitioning into a more challenging, steeper ascent characterized by loose volcanic soil and cogon grass near the summit.",
-    "While considered manageable for experienced beginners, the constant incline requires good cardiovascular endurance. The final stretch provides little tree cover, exposing hikers to the elements but rewarding them with panoramic views of the surrounding Bicol region, including Mt. Mayon on clear days."
-];
-
-const TRAIL_HIGHLIGHTS = [
-    {
-        id: 'flora-fauna',
-        label: 'Flora & Fauna:',
-        description: 'Look out for pitcher plants near the summit and various endemic bird species in the lower canopy.'
-    },
-    {
-        id: 'water-sources',
-        label: 'Water Sources:',
-        description: 'One reliable spring is located roughly halfway up the trail. Treat water before consuming.'
-    },
-    {
-        id: 'campsites',
-        label: 'Campsites:',
-        description: 'A small campsite exists near the summit, accommodating up to 10 tents.'
-    }
-];
+import { TRAIL_PARAGRAPHS, TRAIL_HIGHLIGHTS } from '../../mockData';
 
 export default function TrailOverview() {
     return (

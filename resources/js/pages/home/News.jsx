@@ -1,31 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 
-const NEWS = [
-    {
-        badge: 'ADVISORY',
-        badgeClass: 'bg-red-50 text-red-700 border-red-200',
-        date: 'Oct 24, 2024',
-        title: 'Scheduled Trail Maintenance',
-        description:
-            'The Eco-Trail Loop will be partially closed for boardwalk repairs from Oct 28-30.',
-    },
-    {
-        badge: 'WEATHER',
-        badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
-        date: 'Oct 23, 2024',
-        title: 'Favorable Climbing Conditions',
-        description:
-            'Clear skies expected for the weekend. Perfect conditions for the Standard Summit trail.',
-    },
-    {
-        badge: 'UPDATE',
-        badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-        date: 'Oct 20, 2024',
-        title: 'New Online Permit System',
-        description:
-            'We have upgraded our booking portal for faster processing of climbing permits.',
-    },
-];
+import { NEWS } from '../../mockData';
 
 export default function News() {
     return (

@@ -1,28 +1,7 @@
 import React from 'react';
 import { ShieldAlert, Users, ChevronRight, MessageSquare } from 'lucide-react';
 
-const DEFAULT_CONVERSATIONS = [
-    {
-        id: 'admin-announcements',
-        type: 'admin',
-        title: 'Park Announcements',
-        subtitle: 'Official updates from Ecotourism Guest',
-        lastMessage: 'Reminder: wear face mask and observe Leave No Trace principles.',
-        timestamp: '9:30 AM',
-        unreadCount: 1,
-        icon: ShieldAlert,
-    },
-    {
-        id: 'hikers-gc',
-        type: 'gc',
-        title: 'GC Summit Trail Oct 24,2026',
-        subtitle: 'Discussion with trail companions',
-        lastMessage: 'Yes, Jane. Please present your digital ID.',
-        timestamp: '08:18 AM',
-        unreadCount: 0,
-        icon: Users,
-    },
-];
+import { DEFAULT_CONVERSATIONS } from '../../mockData';
 
 export default function ConversationList({
     conversations = DEFAULT_CONVERSATIONS,

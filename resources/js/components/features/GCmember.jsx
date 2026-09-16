@@ -3,32 +3,7 @@ import { Users, ShieldCheck, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 // Mock data based on the DEFAULT_MESSAGES senders
-const DEFAULT_MEMBERS = [
-    {
-        id: 'admin_1',
-        name: 'Park Admin',
-        avatar: 'PA',
-        role: 'Station Staff',
-        isAdmin: true,
-        isOnline: true,
-    },
-    {
-        id: 'hiker_1',
-        name: 'Jane Doe',
-        avatar: 'JD',
-        role: 'Lead Hiker',
-        isAdmin: false,
-        isOnline: true,
-    },
-    {
-        id: 'hiker_2',
-        name: 'John Smith',
-        avatar: 'JS',
-        role: 'Hiker',
-        isAdmin: false,
-        isOnline: false,
-    },
-];
+import { DEFAULT_MEMBERS } from '../../mockData';
 
 export default function GCMember({
     members = DEFAULT_MEMBERS,

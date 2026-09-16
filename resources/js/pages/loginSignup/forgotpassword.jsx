@@ -22,11 +22,7 @@ import {
 } from 'lucide-react';
 
 const TOTAL_STEPS = 3;
-const STEP_TITLES = [
-    'Find Account',
-    'Reset Code',
-    'New Password',
-];
+import { FORGOT_PASSWORD_STEPS as STEP_TITLES } from '../../mockData';
 
 export default function ForgotPassword() {
     const navigate = useNavigate();

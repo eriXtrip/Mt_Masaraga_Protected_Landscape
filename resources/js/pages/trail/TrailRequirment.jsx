@@ -1,32 +1,6 @@
 import React from 'react';
-import { CircleCheck, TriangleAlert, SunMedium } from 'lucide-react';
-
-const REQUIREMENTS = [
-    {
-        id: 1,
-        title: 'Mandatory Local Guide (1 per 5 hikers)',
-        icon: CircleCheck,
-        isWarning: false,
-    },
-    {
-        id: 2,
-        title: 'Environmental Fee (₱150/head)',
-        icon: CircleCheck,
-        isWarning: false,
-    },
-    {
-        id: 3,
-        title: 'Valid ID presented at Jump-off',
-        icon: CircleCheck,
-        isWarning: false,
-    },
-    {
-        id: 4,
-        title: 'Strictly no walk-ins during weekends',
-        icon: TriangleAlert,
-        isWarning: true,
-    },
-];
+import { SunMedium } from 'lucide-react';
+import { REQUIREMENTS } from '../../mockData';
 
 export default function TrailRequirement() {
     return (
