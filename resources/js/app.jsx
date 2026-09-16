@@ -17,6 +17,7 @@ import Booking from './pages/booking/booking';
 import GroupChat from './pages/groupchat/groupchat';
 import Transaction from './pages/transaction/transaction';
 import NewsDetail from './pages/content/NewsDetail';
+import AwardsDetail from './pages/content/AwardsDetail';
 
 import '../css/app.css';
 
@@ -38,6 +39,7 @@ ReactDOM.createRoot(document.getElementById('app')).render(
                 <Route path="/hiker/messages" element={<GroupChat />} />
                 <Route path="/hiker/transactions" element={<Transaction />} />
                 <Route path="/news/:id" element={<NewsDetail />} />
+                <Route path="/awards/:id" element={<AwardsDetail />} />
             </Routes>
             <Footer />
         </BrowserRouter>

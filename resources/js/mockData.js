@@ -1,5 +1,5 @@
 // resources/js/mockData.js
-import { CircleCheck, TriangleAlert, Receipt, ShieldCheck, Cloud, RotateCcw, FileText, CreditCard, Mountain, CloudLightning, ShieldAlert, Users, Wallet, QrCode, Building2, Map, Phone, Leaf } from 'lucide-react';
+import { Trees, Award, Users2, FileCheck, CircleCheck, TriangleAlert, Receipt, ShieldCheck, Cloud, RotateCcw, FileText, CreditCard, Mountain, CloudLightning, ShieldAlert, Users, Wallet, QrCode, Building2, Map, Phone, Leaf } from 'lucide-react';
 
 
 import SabluyonRoute from '../../public/images/trail/SabluyonTrail.jpg';
@@ -37,23 +37,110 @@ export const MOCK_USERS = [
 
 export const AWARDS = [
     {
-        icon: 'workspace_premium',
+        id: 'denr-pamb-recognition-2023',
+        iconKey: 'workspace_premium',
+        badge: '2023 Recognition',
+        title: 'DENR-PAMB Recognition',
         name: 'DENR-PAMB Recognition',
-        description:
-            'Awarded for outstanding management of protected landscapes in the Bicol Region (2023).',
+        awardingBody: 'DENR & Protected Area Management Board',
+        dateReceived: 'December 15, 2023',
+        category: 'Protected Landscape Management',
+        summary: 'Awarded for outstanding management of protected landscapes in the Bicol Region (2023). Recognized by the Department of Environment and Natural Resources for habitat protection and biodiversity monitoring.',
+        description: 'Awarded for outstanding management of protected landscapes in the Bicol Region (2023).',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBeB3ZblugQwbPIF9ls2WH9qrKx3Gk9xggmUMyj_7LzQ5Fx9XMNEFWdsHrkf8t5Ze0VMqsE50ICiRY7d008yss-3VnkOmEPQSlB1t7ut3eh7PbK-a36MQUKh1ByJ7vcGX1HGiLEnuXsJJM5uoQo1kYZsb8guKFdM2D_CKFH6pczo5tjlvqU73c-kYl6uY5sXbaVq1F363CmLDrYLH53N6vZ_BNoycxJ51gTlRhW1FINe9CnEClq1rATjw',
+        imageAlt: 'DENR-PAMB Environmental Excellence Plaque awarded to Mt. Masaraga',
+        story: {
+            title: 'Pioneering Protected Landscape Stewardship',
+            paragraphs: [
+                'The DENR-PAMB recognition marks a major milestone for the Mt. Masaraga Protected Landscape. Over the past several years, joint conservation efforts between local rangers and regional environmental units established stricter boundary monitoring to prevent illegal flora harvesting and encroachment.',
+                'Through continuous forest patrol logging, community-led reforestation campaigns, and wildlife sanctuary designations, the park maintained peak forest canopy health while safely hosting thousands of outdoor enthusiasts across the Bicol Region.'
+            ]
+        },
+        metrics: [
+            {
+                id: 'canopy',
+                value: '98%',
+                label: 'Protected Forest Canopy',
+                icon: Trees
+            },
+            {
+                id: 'patrols',
+                value: '350+',
+                label: 'Annual Ranger Patrols',
+                icon: ShieldCheck
+            }
+        ]
     },
     {
-        icon: 'eco',
+        id: 'eco-tourism-excellence',
+        iconKey: 'eco',
+        badge: 'National Certification',
+        title: 'Eco-Tourism Excellence',
         name: 'Eco-Tourism Excellence',
-        description:
-            'Certified Sustainable Destination by the National Ecotourism Steering Committee.',
+        awardingBody: 'National Ecotourism Steering Committee',
+        dateReceived: 'August 20, 2024',
+        category: 'Sustainable Ecotourism Destination',
+        summary: 'Certified Sustainable Destination by the National Ecotourism Steering Committee. Honored for zero-waste trail management, mandatory guide deployment, and sustainable community livelihood integration.',
+        description: 'Certified Sustainable Destination by the National Ecotourism Steering Committee.',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBx58jMKv8xlkDEyNHDKNiXJjYn0NidutYK_dDbexJKelvXUpFsVpmDwTt8Q5tP5wXx6Rn76iZxLCxnVqGAq2XKx53JtHvz3CHpRc3Q3P9jw4RhB9nbG3a9hBSv-aI19vhUl7mDuP1EXDzPpQ1G0w-hH8a--Iczrmi2tszKoSJovleF2bGjWQDxmOp0mywUZVyPEuLW3L_aGmSY_oCikOS1GbFHYfdnM4ayp917gqttM2U9k3AkxKG7Pw',
+        imageAlt: 'Sustainable Eco-Tourism Excellence certificate presented to Mt. Masaraga office',
+        story: {
+            title: 'Community-Led Sustainable Tourism',
+            paragraphs: [
+                'Ecotourism excellence was achieved by shifting park policies toward direct community engagement. Every hike conducted on Mt. Masaraga directly supports accredited local guides, porter networks, and nearby barangay eco-initiatives.',
+                'Our strict "Leave No Trace" check-in policy requires hikers to declare all single-use plastics before entering the trailheads. This initiative successfully eliminated solid waste build-up along peak summit trails.'
+            ]
+        },
+        metrics: [
+            {
+                id: 'waste',
+                value: '0%',
+                label: 'Trail Waste Tolerance',
+                icon: Leaf
+            },
+            {
+                id: 'guides',
+                value: '120+',
+                label: 'Local Guides Employed',
+                icon: Users2
+            }
+        ]
     },
     {
-        icon: 'verified_user',
+        id: 'iso-14001-certified',
+        iconKey: 'verified_user',
+        badge: 'Global Compliance',
+        title: 'ISO 14001 Certified',
         name: 'ISO 14001 Certified',
-        description:
-            'International standard for effective environmental management systems.',
-    },
+        awardingBody: 'International Organization for Standardization',
+        dateReceived: 'May 10, 2024',
+        category: 'Environmental Management System',
+        summary: 'International standard for effective environmental management systems. Certified for rigorous risk mitigation, trail erosion control, and sustainable resource allocation.',
+        description: 'International standard for effective environmental management systems.',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBO915Ka3cjQMZlDZw0OEVZwbJpI-YctaQy8GlwTDNw0NdRjMpB9XNKqnVGuCw8fZnNG6osqoV8Y7iKbSCd9bDTg_-qY0gnOOQPpJt64yB3l_XB18b6WtaUm44AkWAOp1n9NQIge83u-zMcQ3vbSWjumtiS4JkAQc2jh50VEPIXUM0giQGq-pimE4eacDuLJD0mDDgqpUZnG4jNPtmXRNhpImJr3fuXHiNxk5THrVtbLySptu2TZ_pJRA',
+        imageAlt: 'ISO 14001 Environmental System audit documentation at park headquarters',
+        story: {
+            title: 'International Environmental Standards',
+            paragraphs: [
+                'Achieving ISO 14001 certification required auditing every operational process within the protected area. From digital permit processing to emergency evacuation readiness, our administrative infrastructure meets international standards.',
+                'This certification guarantees that all trail maintenance, summit access caps, and environmental assessments are systematically logged, reviewed, and updated annually to minimize ecological footprints.'
+            ]
+        },
+        metrics: [
+            {
+                id: 'compliance',
+                value: '100%',
+                label: 'Audit Standard Met',
+                icon: FileCheck
+            },
+            {
+                id: 'standard',
+                value: 'ISO 14001',
+                label: 'Global Standard',
+                icon: Award
+            }
+        ]
+    }
 ];
 
 export const ICON_PATHS = {

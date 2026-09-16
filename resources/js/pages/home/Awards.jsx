@@ -1,3 +1,5 @@
+
+
 import { AWARDS, ICON_PATHS } from '../../mockData';
 
 export default function Awards() {
@@ -45,14 +47,14 @@ export default function Awards() {
                                         viewBox="0 0 24 24"
                                         className="h-5 w-5 fill-current"
                                     >
-                                        <path d={ICON_PATHS[award.icon]} />
+                                        <path d={ICON_PATHS[award.iconKey]} />
                                     </svg>
                                 </div>
 
                                 {/* Award Details */}
                                 <div className="space-y-1">
-                                    <h3 className="text-lg font-bold leading-snug text-on-surface md:text-xl">
-                                        {award.name}
+                                    <h3 className="text-lg cursor-pointer font-bold leading-snug text-on-surface md:text-xl hover:text-primary">
+                                        <a href={`/awards/${award.id}`}>{award.name}</a>
                                     </h3>
                                     <p className="text-sm leading-relaxed text-on-surface-variant md:text-base">
                                         {award.description}
