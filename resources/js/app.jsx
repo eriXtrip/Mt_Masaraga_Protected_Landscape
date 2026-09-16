@@ -14,6 +14,7 @@ import ForgotPassword from './pages/loginSignup/forgotpassword';
 import Trail from './pages/trail/trail';
 import Booking from './pages/booking/booking';
 import GroupChat from './pages/groupchat/groupchat';
+import Transaction from './pages/transaction/transaction';
 
 import '../css/app.css';
 
@@ -32,6 +33,7 @@ ReactDOM.createRoot(document.getElementById('app')).render(
                 <Route path="/forgot-password" element={<ForgotPassword />} />1
                 <Route path="/booking" element={<Booking />} />
                 <Route path="/hiker/messages" element={<GroupChat />} />
+                <Route path="/hiker/transactions" element={<Transaction />} />
             </Routes>
             <Footer />
         </BrowserRouter>

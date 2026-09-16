@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { ChevronDown, Receipt, MessageSquare } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const NAV_LINKS = [
@@ -11,8 +11,8 @@ const NAV_LINKS = [
 ];
 
 const HIKER_DROPDOWN = [
-    { label: 'Transactions', to: '/hiker/transactions', icon: Receipt },
-    { label: 'Messages', to: '/hiker/messages', icon: MessageSquare },
+    { label: 'Transactions', to: '/hiker/transactions' },
+    { label: 'Messages', to: '/hiker/messages' },
 ];
 
 export default function Navbar() {
@@ -103,7 +103,6 @@ export default function Navbar() {
                                             onClick={closeAll}
                                             className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
                                         >
-                                            <IconComponent className="h-4 w-4 text-primary shrink-0" />
                                             <span>{item.label}</span>
                                         </Link>
                                     );
@@ -217,7 +216,6 @@ export default function Navbar() {
                                         }`
                                     }
                                 >
-                                    <IconComponent className="h-4 w-4 text-primary shrink-0" />
                                     <span>{item.label}</span>
                                 </NavLink>
                             );

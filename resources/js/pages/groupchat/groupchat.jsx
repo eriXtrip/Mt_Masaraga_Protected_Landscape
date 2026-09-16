@@ -44,7 +44,7 @@ export default function GroupChat() {
 
                 {/* Drawer Container (Slide-over on Mobile, In-grid Column on Desktop) */}
                 <aside
-                    className={`fixed inset-y-0 right-0 z-40 lg:z-auto w-80 lg:w-full lg:static transform transition-all duration-300 ease-in-out ${showMembers
+                    className={`fixed inset-y-0 right-0 mt-15 z-40 lg:z-auto w-80 lg:w-full lg:static transform transition-all duration-300 ease-in-out ${showMembers
                         ? 'translate-x-0 lg:col-span-3 lg:block'
                         : 'translate-x-full lg:hidden'
                         }`}
