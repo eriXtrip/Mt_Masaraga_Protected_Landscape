@@ -13,6 +13,7 @@ import Login from './pages/loginSignup/login';
 import ForgotPassword from './pages/loginSignup/forgotpassword';
 import Trail from './pages/trail/trail';
 import Booking from './pages/booking/booking';
+import GroupChat from './pages/groupchat/groupchat';
 
 import '../css/app.css';
 
@@ -30,6 +31,7 @@ ReactDOM.createRoot(document.getElementById('app')).render(
                 <Route path="/login" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />1
                 <Route path="/booking" element={<Booking />} />
+                <Route path="/groupchat" element={<GroupChat />} />
             </Routes>
             <Footer />
         </BrowserRouter>

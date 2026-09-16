@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProgressNode from '@/components/features/ProgressNode';
 import { Calendar } from '@/components/ui/calendar';
 import BookingSummaryCard from '@/components/features/BookingSummaryCard';
@@ -23,6 +24,7 @@ export const SLOTS = {
 };
 
 export default function Booking() {
+    const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(1);
     const [date, setDate] = useState(undefined);
     const [showPaymentOverlay, setShowPaymentOverlay] = useState(false);
@@ -209,7 +211,7 @@ export default function Booking() {
                             console.log('Sending pass to email...');
                         }}
                         onJoinGroupChat={() => {
-                            console.log('Redirecting to Hiker Group Chat...');
+                            navigate('/groupchat');
                         }}
                         onGoToChecklist={() => {
                             goToStep(3);
