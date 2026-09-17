@@ -266,16 +266,11 @@ export const NEWS = [
             {
                 type: 'paragraph',
                 text: 'Hikers planning trips during these dates should use the Ridge Trail connection as an alternative route to access the upper summit paths.'
-            },
-            {
-                type: 'callout',
-                title: 'Safety Notice',
-                text: 'Please observe all posted barrier tape and do not attempt to enter closed construction zones while repairs are underway.'
             }
         ],
         contact: {
-            phone: '+63 (052) 555-0198',
-            email: 'ranger.station@masaraga.gov'
+            phone: '+63 917-EMS-SAFE',
+            email: 'support@masaraga.gov.ph'
         }
     },
     {
@@ -314,11 +309,6 @@ export const NEWS = [
             {
                 type: 'paragraph',
                 text: 'While conditions are clear, temperatures remain cool near the summit during early morning hours. Pack adequate hydration, sun protection, and a light jacket.'
-            },
-            {
-                type: 'callout',
-                title: 'Guide Reminder',
-                text: 'Early morning slots (4:00 AM - 6:00 AM) are filling up quickly. Ensure your guide assignment is confirmed before arrival.'
             }
         ],
         contact: {
@@ -363,11 +353,6 @@ export const NEWS = [
             {
                 type: 'paragraph',
                 text: 'Hikers can visit the main navigation menu, select "Book New Hike", choose an available calendar slot, and complete payment within minutes.'
-            },
-            {
-                type: 'callout',
-                title: 'System Support',
-                text: 'Having trouble with an existing booking? Contact our online support desk or present your booking reference at the base ranger station.'
             }
         ],
         contact: {

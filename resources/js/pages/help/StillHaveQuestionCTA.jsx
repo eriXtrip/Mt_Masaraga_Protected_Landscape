@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import { Clock, Mail, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function StillHaveQuestionCTA() {
+    const navigate = useNavigate();
     return (
         <section className="bg-surface px-4 py-8 sm:px-6 sm:py-10 md:py-14">
             <div className="mx-auto w-full max-w-6xl">
@@ -19,6 +21,9 @@ export default function StillHaveQuestionCTA() {
                             <Button
                                 variant="default"
                                 size="xl"
+                                onClick={() => {
+                                    navigate('/contact');
+                                }}
                             >
                                 <Mail />
                                 <span>Contact Support</span>

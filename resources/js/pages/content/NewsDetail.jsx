@@ -129,26 +129,6 @@ export default function NewsDetail() {
                                     );
                                 }
 
-                                if (section.type === 'callout') {
-                                    return (
-                                        <div key={idx} className="mt-8 rounded-xl border border-outline-variant/40 bg-surface-container-low/60 p-6">
-                                            <div className="flex items-start gap-4">
-                                                <div className="rounded-lg bg-primary/10 p-2 text-primary shrink-0">
-                                                    <Info className="h-5 w-5" />
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <h3 className="text-base font-bold text-on-surface">
-                                                        {section.title}
-                                                    </h3>
-                                                    <p className="text-sm leading-relaxed text-on-surface-variant">
-                                                        {section.text}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                }
-
                                 return null;
                             })
                         ) : (
@@ -163,37 +143,51 @@ export default function NewsDetail() {
                 <aside className="lg:w-1/3 flex flex-col gap-10">
 
                     {/* Emergency Contact Block */}
-                    <div className="rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-6 space-y-4">
-                        <div className="flex items-center gap-3 border-b border-outline-variant/20 pb-4">
-                            <div className="rounded-lg bg-red-500/10 p-2 text-red-600 dark:text-red-400">
-                                <AlertTriangle className="h-5 w-5" />
+                    <div className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 space-y-5">
+                        {/* Header */}
+                        <div className="flex items-center justify-between border-b border-outline-variant/20 pb-3">
+                            <div className="flex items-center gap-2.5">
+                                <h3 className="text-sm font-extrabold uppercase tracking-wider text-on-surface">
+                                    Emergency Hotline
+                                </h3>
                             </div>
-                            <h3 className="text-lg font-bold text-on-surface">
-                                Emergency Contact
-                            </h3>
+                            <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-red-600 dark:text-red-400">
+                                24/7 Patrol
+                            </span>
                         </div>
 
                         <p className="text-xs leading-relaxed text-on-surface-variant">
-                            For immediate assistance regarding trail conditions or emergencies during the maintenance period.
+                            For immediate assistance regarding trail hazards, injuries, or ranger dispatches.
                         </p>
 
-                        <div className="space-y-2 pt-1">
-                            <a
-                                href={`tel:${(currentArticle.contact?.phone || '+63 (052) 555-0198').replace(/[^0-9+]/g, '')}`}
-                                className="flex items-center gap-3 rounded-lg bg-surface-container-low/60 p-3 text-xs font-semibold text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
-                            >
-                                <Phone className="h-4 w-4 text-primary shrink-0" />
-                                <span>{currentArticle.contact?.phone || '+63 (052) 555-0198'}</span>
-                            </a>
+                        {/* Primary Hotline Action Button */}
+                        <a
+                            href={`tel:${(currentArticle.contact?.phone || '+63 (052) 555-0198').replace(/[^0-9+]/g, '')}`}
+                            className="group relative flex items-center justify-between overflow-hidden rounded-xl border border-error-container bg-error-container p-4 text-on-error-container transition-all hover:bg-error/30 active:scale-[0.99]"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="rounded-lg bg-white/20 p-2 transition-transform group-hover:scale-110">
+                                    <Phone className="h-5 w-5 fill-current" />
+                                </div>
+                                <div>
+                                    <span className="block text-[10px] font-bold uppercase tracking-wider">
+                                        Direct Ranger Station
+                                    </span>
+                                    <span className="text-base font-black tracking-tight md:text-lg">
+                                        {currentArticle.contact?.phone || '+63 (052) 555-0198'}
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
 
-                            <a
-                                href={`mailto:${currentArticle.contact?.email || 'ranger.station@masaraga.gov'}`}
-                                className="flex items-center gap-3 rounded-lg bg-surface-container-low/60 p-3 text-xs font-semibold text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
-                            >
-                                <Mail className="h-4 w-4 text-primary shrink-0" />
-                                <span className="truncate">{currentArticle.contact?.email || 'ranger.station@masaraga.gov'}</span>
-                            </a>
-                        </div>
+                        {/* Secondary Contact Link (Email) */}
+                        <a
+                            href={`mailto:${currentArticle.contact?.email || 'ranger.station@masaraga.gov'}`}
+                            className="flex items-center gap-2.5 px-1 text-xs font-medium text-on-surface-variant hover:text-primary transition-colors"
+                        >
+                            <Mail className="h-3.5 w-3.5 text-outline" />
+                            <span className="truncate">{currentArticle.contact?.email || 'ranger.station@masaraga.gov'}</span>
+                        </a>
                     </div>
 
                     {/* Related Updates Section */}

@@ -8,7 +8,7 @@ import { MOCK_USERS } from '../../mockData';
 const ROLE_BADGES = {
     1: { label: 'Admin', bg: 'bg-amber-600 text-white border-amber-300' },
     2: { label: 'Park Staff', bg: 'bg-emerald-600 text-white border-emerald-300' },
-    3: { label: 'Hiker', bg: 'bg-primary text-on-primary border-primary-container' },
+    3: { label: 'Hiker', bg: 'bg-primary border-primary-container' },
 };
 
 const NAV_LINKS = [
@@ -155,11 +155,11 @@ export default function Navbar() {
                                 className="flex items-center gap-3 p-1.5 rounded-full hover:bg-surface-container/20 transition-colors cursor-pointer"
                             >
                                 {/* Role-styled Initials Avatar */}
-                                <div className={`w-9 h-9 rounded-full text-xs font-bold flex items-center justify-center shrink-0 border ${ROLE_BADGES[currentUser.role]?.bg}`}>
+                                <div className={`w-9 h-9 rounded-full text-xs text-inverse-on-surface font-bold flex items-center justify-center shrink-0 border ${ROLE_BADGES[currentUser.role]?.bg}`}>
                                     {getInitials(currentUser.name)}
                                 </div>
                                 <div className="text-left leading-tight hidden xl:block">
-                                    <h4 className="text-xs font-bold text-on-primary truncate flex items-center gap-1">
+                                    <h4 className="text-xs font-bold text-inverse-on-surface truncate flex items-center gap-1">
                                         {currentUser.name}
                                         {currentUser.role === 1 && <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />}
                                     </h4>
@@ -191,8 +191,8 @@ export default function Navbar() {
                                                         setUserDropdownOpen(false);
                                                     }}
                                                     className={`w-full text-left px-2 py-1 text-[11px] rounded-lg font-medium flex items-center justify-between cursor-pointer ${idx === currentUserIndex
-                                                            ? 'bg-primary/10 text-primary font-bold'
-                                                            : 'text-on-surface-variant hover:bg-surface-variant/40'
+                                                        ? 'bg-primary/10 text-primary font-bold'
+                                                        : 'text-on-surface-variant hover:bg-surface-variant/40'
                                                         }`}
                                                 >
                                                     <span>{usr.name}</span>
