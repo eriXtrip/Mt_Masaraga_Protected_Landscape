@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
@@ -18,30 +18,46 @@ import GroupChat from './pages/groupchat/groupchat';
 import Transaction from './pages/transaction/transaction';
 import NewsDetail from './pages/content/NewsDetail';
 import AwardsDetail from './pages/content/AwardsDetail';
+import NotFound from './pages/utilitypage/NotFound';
+import AccessDenied from './pages/utilitypage/AccessDenied';
 
 import '../css/app.css';
+
+// Layout component that renders Navbar and Footer around child routes
+const MainLayout = () => (
+    <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+    </>
+);
 
 ReactDOM.createRoot(document.getElementById('app')).render(
     <React.StrictMode>
         <BrowserRouter>
             <ScrollToTop />
-            <Navbar />
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/trail" element={<Trail />} />
-                <Route path="/help" element={<Help />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />1
-                <Route path="/booking" element={<Booking />} />
-                <Route path="/hiker/messages" element={<GroupChat />} />
-                <Route path="/hiker/transactions" element={<Transaction />} />
-                <Route path="/news/:id" element={<NewsDetail />} />
-                <Route path="/awards/:id" element={<AwardsDetail />} />
+                {/* Routes wrapped with Navbar and Footer */}
+                <Route element={<MainLayout />}>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/trail" element={<Trail />} />
+                    <Route path="/help" element={<Help />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/booking" element={<Booking />} />
+                    <Route path="/hiker/messages" element={<GroupChat />} />
+                    <Route path="/hiker/transactions" element={<Transaction />} />
+                    <Route path="/news/:id" element={<NewsDetail />} />
+                    <Route path="/awards/:id" element={<AwardsDetail />} />
+                </Route>
+
+                {/* Standalone full-page route without Navbar or Footer */}
+                <Route path="*" element={<NotFound />} />
+                <Route path="/access-denied" element={<AccessDenied />} />
             </Routes>
-            <Footer />
         </BrowserRouter>
     </React.StrictMode>
 );
