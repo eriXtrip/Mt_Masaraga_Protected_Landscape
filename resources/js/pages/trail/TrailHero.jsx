@@ -1,10 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { Calendar } from 'lucide-react';
 import Stars from '../../components/common/Stars';
-import SabluyonRoute from '../../../../public/images/trail/SabluyonTrail.jpg';
 import { Button } from "@/components/ui/button";
 
-export default function TrailHero() {
+export default function TrailHero({ trail }) {
     const navigate = useNavigate();
 
     return (
@@ -12,8 +11,8 @@ export default function TrailHero() {
             {/* Background Image Container */}
             <div className="absolute inset-0 z-0">
                 <img
-                    src={SabluyonRoute}
-                    alt="Sabluyon Route - Mt. Masaraga"
+                    src={trail?.image}
+                    alt={`${trail?.name} - Mt. Masaraga`}
                     className="h-full w-full object-cover object-center"
                 />
 
@@ -27,7 +26,7 @@ export default function TrailHero() {
                 {/* Title and Rating Info */}
                 <div className="max-w-2xl space-y-3">
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-tight">
-                        Standard Summit Trail
+                        {trail.name}
                     </h1>
 
                     <div className="flex flex-wrap items-center gap-2.5 text-sm md:text-base">
@@ -47,7 +46,7 @@ export default function TrailHero() {
                         type="button"
                         variant="default"
                         size="lg"
-                        onClick={() => navigate('/booking')}
+                        onClick={() => navigate(`/booking/${trail?.id}`)}
                         className="w-full sm:w-auto font-bold gap-2 text-base px-6 py-6 rounded-2xl transition-transform active:scale-[0.98] cursor-pointer"
                     >
                         <Calendar className="h-5 w-5" aria-hidden="true" />

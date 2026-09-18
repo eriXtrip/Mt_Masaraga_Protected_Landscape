@@ -43,16 +43,24 @@ export default function TrailCard({ trail }) {
                 </p>
 
                 {/* Stats Grid */}
-                <div className="mb-4 mt-auto grid grid-cols-2 gap-2 rounded-2xl bg-surface-container-low/60 p-2.5 border border-outline-variant/20 text-xs font-bold text-on-surface">
-                    <div className="flex items-center gap-2 px-2 py-1">
-                        <Clock size={15} className="text-primary shrink-0" aria-hidden="true" />
-                        <span className="truncate">{trail.stats[0]}</span>
-                    </div>
-
-                    <div className="flex items-center gap-2 border-l border-outline-variant/30 px-2 py-1">
-                        <Mountain size={15} className="text-primary shrink-0" aria-hidden="true" />
-                        <span className="truncate">{trail.stats[1]}</span>
-                    </div>
+                <div className="mb-4 mt-auto grid grid-cols-2 lg:grid-cols-4 gap-2 rounded-2xl bg-surface-container-low/60 p-3 border border-outline-variant/20 text-xs font-bold text-on-surface">
+                    {trail.stats.map((stat, index) => (
+                        <div
+                            key={index}
+                            className={`flex items-center gap-2.5 px-3 py-1.5 ${index !== 0 ? 'border-l border-outline-variant/20' : ''
+                                }`}
+                        >
+                            <stat.icon className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
+                            <div className="flex flex-col min-w-0">
+                                <span className="text-[10px] font-medium uppercase tracking-wider text-on-surface-variant leading-none mb-0.5">
+                                    {stat.label}
+                                </span>
+                                <span className="truncate font-extrabold text-on-surface leading-tight">
+                                    {stat.value}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
                 {/* Full Card CTA Button */}
@@ -60,7 +68,7 @@ export default function TrailCard({ trail }) {
                     type="button"
                     variant="default"
                     size="lg"
-                    onClick={() => navigate('/trail')}
+                    onClick={() => navigate(`/trail/${trail.id}`)}
                     className="w-full rounded-xl font-bold transition-all duration-200 cursor-pointer shadow-xs active:scale-[0.98]"
                 >
                     Explore Trail

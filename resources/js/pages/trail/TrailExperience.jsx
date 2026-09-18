@@ -5,16 +5,15 @@ import { Button } from '@/components/ui/button';
 const INITIAL_VISIBLE_COUNT = 2;
 const PAGE_SIZE = 2;
 
-import { TRAIL_EXPERIENCES } from '../../mockData';
-
-export default function TrailExperience() {
+export default function TrailExperience({ trail }) {
+    const trailReviews = trail?.reviews || [];
     const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
 
-    const displayedReviews = TRAIL_EXPERIENCES.slice(0, visibleCount);
-    const hasMore = visibleCount < TRAIL_EXPERIENCES.length;
+    const displayedReviews = trailReviews.slice(0, visibleCount);
+    const hasMore = visibleCount < trailReviews.length;
 
     const handleLoadMore = () => {
-        setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, TRAIL_EXPERIENCES.length));
+        setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, trailReviews.length));
     };
 
     const handleShowLess = () => {
@@ -29,7 +28,7 @@ export default function TrailExperience() {
                     Hiker Reviews
                 </h3>
                 <span className="text-xs text-on-surface-variant font-medium">
-                    Showing {displayedReviews.length} of {TRAIL_EXPERIENCES.length}
+                    Showing {displayedReviews.length} of {trailReviews.length}
                 </span>
             </div>
 
@@ -61,10 +60,10 @@ export default function TrailExperience() {
                     size="lg"
                     onClick={handleLoadMore}
                 >
-                    Load More Reviews ({TRAIL_EXPERIENCES.length - visibleCount} remaining)
+                    Load More Reviews ({trailReviews.length - visibleCount} remaining)
                 </Button>
             ) : (
-                TRAIL_EXPERIENCES.length > INITIAL_VISIBLE_COUNT && (
+                trailReviews.length > INITIAL_VISIBLE_COUNT && (
                     <Button
                         variant="ghost"
                         className="w-full text-on-surface-variant hover:text-on-surface"

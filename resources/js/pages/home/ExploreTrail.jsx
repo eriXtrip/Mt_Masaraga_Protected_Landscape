@@ -15,8 +15,8 @@ export default function ExploreTrail() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-10">
-                    {TRAILS.map((trail) => (
-                        <TrailCard key={trail.name} trail={trail} />
+                    {Object.values(TRAILS).map((trail) => (
+                        <TrailCard key={trail.id} trail={trail} />
                     ))}
                 </div>
             </div>

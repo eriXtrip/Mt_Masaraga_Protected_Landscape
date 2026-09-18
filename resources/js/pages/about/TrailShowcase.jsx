@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Map, Flag, Tent, Mountain, TreePine, GripVertical } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
-import { ABOUT_TRAILS as trails } from '../../mockData';
+import { TRAILS as trails } from '../../mockData';
 
 function WaypointIcon({ type }) {
     if (type === 'summit') {
@@ -174,9 +174,6 @@ export default function TrailShowcase() {
                             <div className="mt-2 flex items-baseline gap-2 border-b border-outline-variant pb-4">
                                 <span className="text-4xl font-extrabold tracking-tight text-on-surface">
                                     {trail.difficulty}
-                                </span>
-                                <span className="rounded-full bg-primary-container/15 px-2.5 py-0.5 text-sm font-bold text-primary">
-                                    {trail.difficultyLabel}
                                 </span>
                             </div>
 

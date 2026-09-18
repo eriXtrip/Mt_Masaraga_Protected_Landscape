@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import ProgressNode from '@/components/features/ProgressNode';
 import { Calendar } from '@/components/ui/calendar';
 import BookingSummaryCard from '@/components/features/BookingSummaryCard';
@@ -10,6 +10,7 @@ import BookingConfirmation from './BookingConfirmation';
 import PaymentOverlay from '@/components/features/PaymentOverlay';
 
 import QR from '../../../../public/images/QR_Code_Example.svg.webp';
+import { BOOKING_DETAILS, TRAILS } from '../../mockData';
 
 const STEPS = ['Select Date', 'Hikers Details', 'Checklist', 'Payment'];
 
@@ -25,6 +26,13 @@ export const SLOTS = {
 
 export default function Booking() {
     const navigate = useNavigate();
+    const { id } = useParams();
+
+    // 1. Resolve trail key safely (defaults to 'amtic' if undefined or invalid)
+    const trailId = id && TRAILS[id] ? id : 'amtic';
+    const trail = TRAILS[trailId];
+    const trailBookingDetails = BOOKING_DETAILS[trailId] || BOOKING_DETAILS.amtic;
+
     const [currentStep, setCurrentStep] = useState(1);
     const [date, setDate] = useState(undefined);
     const [showPaymentOverlay, setShowPaymentOverlay] = useState(false);
@@ -33,6 +41,16 @@ export default function Booking() {
     // Application Data State
     const [hikerData, setHikerData] = useState(null);
     const [paymentData, setPaymentData] = useState(null);
+
+    // Reset all state when trail id changes
+    useEffect(() => {
+        setCurrentStep(1);
+        setDate(undefined);
+        setShowPaymentOverlay(false);
+        setParticipantCount(1);
+        setHikerData(null);
+        setPaymentData(null);
+    }, [trailId]);
 
     const goToStep = (step) => {
         setCurrentStep(step);
@@ -57,13 +75,13 @@ export default function Booking() {
             qrCodeUrl: QR,
             status: 'Valid',
             date: formattedSelectedDate,
-            trail: 'Masaraga Summit Trail',
+            trail: trailBookingDetails.selectedTrail,
             leadHiker: 'Assigned by Admin',
-            hikerName: hiker.fullName, // additional info for the card
+            hikerName: hiker.fullName,
         }))
         : undefined;
 
-    const baseFee = 500;
+    const baseFee = trailBookingDetails.baseFeePerPax;
     const totalBaseFee = baseFee * participantCount;
     const processingFee = 50;
     const totalAmount = totalBaseFee + processingFee;
@@ -80,7 +98,7 @@ export default function Booking() {
     };
 
     const bookingSummary = {
-        trail: 'Masaraga Summit Trail',
+        trail: trailBookingDetails.selectedTrail,
         date: formattedSelectedDate,
         participants: `${participantCount} Pax`,
         breakdown: [
@@ -98,7 +116,7 @@ export default function Booking() {
                 {currentStep <= 4 && (
                     <div className="p-6 md:p-8 flex flex-col items-center justify-center">
                         <h1 className="text-3xl font-bold text-on-surface mb-8">
-                            Booking Application
+                            Booking Application — {trail.name}
                         </h1>
 
                         <div className="flex items-center justify-center gap-2 sm:gap-4 w-full max-w-2xl">
@@ -152,6 +170,8 @@ export default function Booking() {
                                     </div>
                                     <div className="lg:col-span-4 sticky top-6">
                                         <BookingSummaryCard
+                                            trailName={trailBookingDetails.selectedTrail}
+                                            baseFee={baseFee}
                                             selectedDate={formattedSelectedDate}
                                             participantCount={participantCount}
                                             setParticipantCount={setParticipantCount}
@@ -185,6 +205,7 @@ export default function Booking() {
                                 />
                             )}
 
+                            {/* STEP 4: PAYMENT FORM */}
                             {currentStep === 4 && (
                                 <PaymentForm
                                     summary={bookingSummary}
@@ -199,6 +220,7 @@ export default function Booking() {
                     </div>
                 )}
 
+                {/* STEP 5: BOOKING CONFIRMATION */}
                 {currentStep === 5 && (
                     <BookingConfirmation
                         selectedDate={formattedSelectedDate}

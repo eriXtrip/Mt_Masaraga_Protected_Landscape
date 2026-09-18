@@ -1,9 +1,10 @@
 import React from 'react';
 import { Dot } from 'lucide-react';
 
-import { TRAIL_PARAGRAPHS, TRAIL_HIGHLIGHTS } from '../../mockData';
+export default function TrailOverview({ trail }) {
+    const paragraphs = trail?.paragraphs || [];
+    const highlights = trail?.highlights || [];
 
-export default function TrailOverview() {
     return (
         <div className="w-full space-y-6">
             <div className="bg-surface-container-lowest rounded-2xl p-8 md:p-10 border border-outline-variant/30 shadow-sm hover:shadow-md transition-shadow">
@@ -19,7 +20,7 @@ export default function TrailOverview() {
 
                 {/* Narrative Text */}
                 <div className="space-y-4 text-on-surface/85 text-base md:text-lg leading-relaxed">
-                    {TRAIL_PARAGRAPHS.map((paragraph, index) => (
+                    {paragraphs.map((paragraph, index) => (
                         <p key={index}>{paragraph}</p>
                     ))}
                 </div>
@@ -30,7 +31,7 @@ export default function TrailOverview() {
                         Trail Highlights &amp; Key Points
                     </h4>
                     <ul className="space-y-3.5">
-                        {TRAIL_HIGHLIGHTS.map((highlight) => (
+                        {highlights.map((highlight) => (
                             <li key={highlight.id} className="flex items-start gap-2 text-on-surface/90">
                                 <Dot className="h-6 w-6 text-primary shrink-0 -mt-0.5" />
                                 <div>

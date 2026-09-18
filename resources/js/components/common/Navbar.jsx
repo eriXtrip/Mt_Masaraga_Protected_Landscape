@@ -1,6 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { ChevronDown, LogOut, ShieldCheck, UserCheck, Users } from 'lucide-react';
+import {
+    ChevronDown,
+    LogOut,
+    ShieldCheck,
+    ScrollText,
+    MessageSquare
+} from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 import { MOCK_USERS } from '../../mockData';
@@ -18,14 +24,13 @@ const NAV_LINKS = [
     { label: 'Contact Us', to: '/contact' },
 ];
 
-const HIKER_DROPDOWN = [
-    { label: 'Transactions', to: '/hiker/transactions' },
-    { label: 'Messages', to: '/hiker/messages' },
+const HIKER_USER_LINKS = [
+    { label: 'My Transactions', to: '/hiker/transactions', icon: ScrollText },
+    { label: 'Messages & Chat', to: '/hiker/messages', icon: MessageSquare },
 ];
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
-    const [hikerDropdownOpen, setHikerDropdownOpen] = useState(false);
     const [userDropdownOpen, setUserDropdownOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -44,7 +49,6 @@ export default function Navbar() {
         return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     };
 
-    const dropdownRef = useRef(null);
     const userDropdownRef = useRef(null);
     const navigate = useNavigate();
 
@@ -55,12 +59,9 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    // Close dropdowns on outside click
+    // Close user dropdown on outside click
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setHikerDropdownOpen(false);
-            }
             if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
                 setUserDropdownOpen(false);
             }
@@ -71,7 +72,6 @@ export default function Navbar() {
 
     const closeAll = () => {
         setOpen(false);
-        setHikerDropdownOpen(false);
         setUserDropdownOpen(false);
     };
 
@@ -115,34 +115,6 @@ export default function Navbar() {
                             </NavLink>
                         </li>
                     ))}
-
-                    {/* Hiker Dropdown Menu */}
-                    <li className="relative" ref={dropdownRef}>
-                        <button
-                            type="button"
-                            onClick={() => setHikerDropdownOpen((prev) => !prev)}
-                            className="flex items-center gap-1 py-2 text-sm font-medium text-on-primary hover:text-on-secondary transition-colors cursor-pointer"
-                        >
-                            <span>Hiker</span>
-                            <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${hikerDropdownOpen ? 'rotate-180' : ''}`} />
-                        </button>
-
-                        {/* Dropdown Menu Popup */}
-                        {hikerDropdownOpen && (
-                            <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
-                                {HIKER_DROPDOWN.map((item) => (
-                                    <Link
-                                        key={item.to}
-                                        to={item.to}
-                                        onClick={closeAll}
-                                        className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
-                                    >
-                                        <span>{item.label}</span>
-                                    </Link>
-                                ))}
-                            </div>
-                        )}
-                    </li>
                 </ul>
 
                 {/* Auth Actions / User Profile Badge */}
@@ -170,10 +142,33 @@ export default function Navbar() {
 
                             {/* User Menu Dropdown */}
                             {userDropdownOpen && (
-                                <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                                <div className="absolute right-0 top-full mt-2 w-60 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+
+                                    {/* User Header Info */}
                                     <div className="px-3 py-2 border-b border-outline-variant/20 mb-1">
                                         <p className="text-xs font-bold text-on-surface">{currentUser.name}</p>
                                         <p className="text-[10px] text-on-surface-variant font-medium">{currentUser.subtitle}</p>
+                                    </div>
+
+                                    {/* Hiker Profile Navigation Options (Transactions & Messages) */}
+                                    <div className="space-y-0.5 py-1 border-b border-outline-variant/20 mb-1">
+                                        <span className="text-[9px] font-bold text-outline uppercase tracking-wider block mb-1 px-3">
+                                            Hiker Account
+                                        </span>
+                                        {HIKER_USER_LINKS.map((item) => {
+                                            const IconComponent = item.icon;
+                                            return (
+                                                <Link
+                                                    key={item.to}
+                                                    to={item.to}
+                                                    onClick={closeAll}
+                                                    className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
+                                                >
+                                                    <IconComponent className="h-4 w-4 shrink-0 text-primary" />
+                                                    <span>{item.label}</span>
+                                                </Link>
+                                            );
+                                        })}
                                     </div>
 
                                     {/* Role Switcher (For testing mock users) */}
@@ -202,6 +197,7 @@ export default function Navbar() {
                                         </div>
                                     </div>
 
+                                    {/* Logout Button */}
                                     <button
                                         type="button"
                                         onClick={handleLogout}
@@ -241,7 +237,7 @@ export default function Navbar() {
                     aria-label="Toggle menu"
                     aria-expanded={open}
                     onClick={() => setOpen((v) => !v)}
-                    className="flex1 h-10 w-10 items-center justify-center rounded-md text-on-secondary transition-colors hover:bg-surface-container md:hidden"
+                    className="flex h-10 w-10 items-center justify-center rounded-md text-on-secondary transition-colors hover:bg-surface-container md:hidden"
                 >
                     {open ? (
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -255,8 +251,8 @@ export default function Navbar() {
                 </Button>
             </nav>
 
-            {/* Mobile Menu */}
-            <div className={`overflow-hidden bg-surface transition-[max-height] duration-300 md:hidden ${open ? 'max-h-150' : 'max-h-0'}`}>
+            {/* Mobile Menu Drawer */}
+            <div className={`overflow-hidden bg-surface transition-[max-height] duration-300 md:hidden ${open ? 'max-h-160' : 'max-h-0'}`}>
                 <ul className="flex flex-col gap-1 px-4 py-4">
                     {isLoggedIn && (
                         <li className="flex items-center gap-3 px-4 py-3 border-b border-outline-variant/30 mb-2">
@@ -270,6 +266,7 @@ export default function Navbar() {
                         </li>
                     )}
 
+                    {/* General Page Links */}
                     {NAV_LINKS.map((link) => (
                         <li key={link.to}>
                             <NavLink
@@ -287,27 +284,35 @@ export default function Navbar() {
                         </li>
                     ))}
 
-                    <li className="border-t border-outline-variant/30 pt-2 mt-1">
-                        <span className="px-4 text-xs font-bold text-outline uppercase tracking-wider block mb-1">
-                            Hiker Navigation
-                        </span>
-                        {HIKER_DROPDOWN.map((item) => (
-                            <NavLink
-                                key={item.to}
-                                to={item.to}
-                                onClick={closeAll}
-                                className={({ isActive }) =>
-                                    `flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-semibold ${isActive
-                                        ? 'bg-primary-container text-on-primary-container'
-                                        : 'text-on-surface hover:bg-surface-container'
-                                    }`
-                                }
-                            >
-                                <span>{item.label}</span>
-                            </NavLink>
-                        ))}
-                    </li>
+                    {/* Logged In Hiker Quick Links */}
+                    {isLoggedIn && (
+                        <li className="border-t border-outline-variant/30 pt-2 mt-1">
+                            <span className="px-4 text-xs font-bold text-outline uppercase tracking-wider block mb-1">
+                                Hiker Account
+                            </span>
+                            {HIKER_USER_LINKS.map((item) => {
+                                const IconComponent = item.icon;
+                                return (
+                                    <NavLink
+                                        key={item.to}
+                                        to={item.to}
+                                        onClick={closeAll}
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-semibold ${isActive
+                                                ? 'bg-primary-container text-on-primary-container'
+                                                : 'text-on-surface hover:bg-surface-container'
+                                            }`
+                                        }
+                                    >
+                                        <IconComponent className="h-4 w-4 shrink-0 text-primary" />
+                                        <span>{item.label}</span>
+                                    </NavLink>
+                                );
+                            })}
+                        </li>
+                    )}
 
+                    {/* Auth Action Buttons */}
                     <li className="mt-3 flex flex-col gap-3 border-t border-outline-variant pt-4">
                         {isLoggedIn ? (
                             <Button

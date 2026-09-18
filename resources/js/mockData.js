@@ -1,5 +1,5 @@
 // resources/js/mockData.js
-import { Trees, Award, Users2, FileCheck, CircleCheck, TriangleAlert, Receipt, ShieldCheck, Cloud, RotateCcw, FileText, CreditCard, Mountain, CloudLightning, ShieldAlert, Users, Wallet, QrCode, Building2, Map, Phone, Leaf } from 'lucide-react';
+import { Trees, Award, Users2, FileCheck, MapPin, TrendingUp, Clock, CircleCheck, TriangleAlert, Receipt, ShieldCheck, Cloud, RotateCcw, FileText, CreditCard, Mountain, CloudLightning, ShieldAlert, Users, Wallet, QrCode, Building2, Map, Phone, Leaf } from 'lucide-react';
 
 
 import SabluyonRoute from '../../public/images/trail/SabluyonTrail.jpg';
@@ -18,6 +18,8 @@ export const MOCK_USERS = [
         email: 'admin@masaraga.gov.ph',
         role: 1, // Role 1: Admin
         subtitle: 'System Administrator',
+        password: 'ADmin1',
+        secondaryPin: '123456'
     },
     {
         id: 'user_staff',
@@ -25,13 +27,16 @@ export const MOCK_USERS = [
         email: 'staff@masaraga.gov.ph',
         role: 2, // Role 2: Hiker Staff / Guide
         subtitle: 'Park Staff / Guide',
+        password: 'STAFF1',
+
     },
     {
         id: 'user_hiker',
         name: 'Jane Doe',
         email: 'hiker@example.com',
         role: 3, // Role 3: User Hiker
-        subtitle: 'Lead Hiker',
+        subtitle: 'Hiker',
+        password: 'HIKER1',
     },
 ];
 
@@ -173,28 +178,122 @@ export const EXPERIENCES = [
     },
 ];
 
-export const TRAILS = [
-    {
+export const TRAILS = {
+    amtic: {
+        id: 'amtic',
         name: 'Amtic Trail (or Sabluyon Trail)',
         difficulty: 'Major Climb',
         difficultyClass: 'bg-primary-container text-on-primary-container',
         description:
-            'This is the most popular, standard route. It begins in Sitio Sabluyon, Barangay Amtic, Ligao City. This trail is home to the famous Mt. Masaraga Campsite and features a grueling, pure uphill assault to the summit.',
+            'The primary and most established route up Mt. Masaraga, starting at Sitio Sabluyon, Brgy. Amtic, Ligao City. Known for its relentless steep inclines, dense jungle canopy, and technical rope-assisted ridge assault leading to the summit.',
         statIcon: 'height',
-        stats: ['3-4 Hours', '12.4km'],
+        stats: [
+            { icon: MapPin, value: "1,328m", label: "Elevation" },
+            { icon: TrendingUp, value: "7/9", label: "Difficulty" },
+            { icon: Clock, value: "8-10h", label: "Duration" },
+            { icon: Map, value: "9.2km", label: "Distance" }
+        ],
         image: SabluyonRoute,
+        subtitle: 'Continuous steep assault through tropical rain forest and technical mossy ridgelines.',
+        difficultyRating: '7/9',
+        difficultyLabel: 'Major Climb',
+        duration: '1-2 Days',
+        trailClass: 'Class 3-4',
+        technicality: 'High (Fixed Ropes)',
+        waypoints: [
+            { name: 'Sitio Sabluyon Jump-off', description: 'Registration, guide assignment & safety briefing', icon: 'start' },
+            { name: 'Camp 1 (Bamboos)', description: 'First rest area near lower stream', icon: 'camp' },
+            { name: 'Camp 2 (Assault Base)', description: 'Staging ground before steep ridge climb', icon: 'camp' },
+            { name: 'Mt. Masaraga Summit', description: '360° view of Mayon Volcano and Albay Gulf', icon: 'summit' },
+        ],
+        elevationPoints: [
+            { label: 'Sabluyon Base', elevation: '220m', x: 70, y: 260 },
+            { label: 'Amintao Rest Stop', elevation: '580m', x: 220, y: 195 },
+            { label: 'Fixed Ropes Pitch', elevation: '920m', x: 390, y: 140 },
+            { label: 'Mossy Forest Spine', elevation: '1,180m', x: 530, y: 95 },
+            { label: 'Masaraga Peak', elevation: '1,328m', x: 660, y: 35, isSummit: true },
+        ],
+        paragraphs: [
+            'The Amtic Trail serves as the official, standard route to the summit of Mt. Masaraga. Commencing at Sitio Sabluyon in Barangay Amtic, Ligao City, the trail immediately engages hikers with sustained uphill gradients through dense dipterocarp forest before transitioning into steep, razor-back ridges.',
+            'Requires strong physical conditioning and surefootedness. Climbers negotiate exposed roots, loose volcanic soil, and several vertical pitches equipped with fixed ropes. The high canopy shelters diverse wildlife, leading up to an unshaded peak offering an unobstructed panorama of Mayon Volcano, Mt. Malinao, and the surrounding Albay plains.',
+        ],
+        highlights: [
+            { id: 'flora-fauna', label: 'Flora & Fauna:', description: 'Home to Nepenthes pitcher plants, wild orchids, endemic Rufous Hornbills, and Philippine Macaques.' },
+            { id: 'water-sources', label: 'Water Sources:', description: 'Last reliable water source is located near Camp 1 (Seasonal stream). Filtration mandatory.' },
+            { id: 'campsites', label: 'Campsites:', description: 'Limited summit space fits 4-5 tents. Base camp at Camp 2 offers better wind shelter.' },
+        ],
+        gallery: [
+            { id: 1, src: mtMasaragaSummit, alt: "Hikers negotiating steep dirt trail shaded by thick jungle tree cover", title: "Forest Assault", subtitle: "Lower forest elevation trail" },
+            { id: 2, src: mtMasaragaCampsite, alt: "Dense mossy branches and ferns along high altitude ridge line", title: "Mossy Spine", subtitle: "Upper canopy cloud forest" },
+            { id: 3, src: mtMasaragaVanishingFalls, alt: "Overlook of Albay plains and Mayon Volcano from Masaraga summit", title: "Summit Viewpoint", subtitle: "Peak observation area" },
+            { id: 4, src: mtMasaragaNaturalSpring, alt: "Freshwater stream flowing over rocks along lower trail", title: "Sabluyon Spring", subtitle: "Mid-way hydration point" },
+        ],
+        reviews: [
+            { id: 1, initials: 'ES', name: 'Elena Santos', quote: 'A brutal pure-assault climb! The rope sections tested our grip, but standing at the summit with Mayon in full view was surreal.', date: 'Oct 12, 2024', rating: 5 },
+            { id: 2, initials: 'MC', name: 'Marcus Chen', quote: 'Strenuous hike with zero flat sections. Excellent PAMB local guides who kept our pace safe through the mossy ridge.', date: 'Sep 28, 2024', rating: 5 },
+            { id: 3, initials: 'SJ', name: 'Sarah Johnson', quote: 'Trail is technical and slippery when wet. Bring gloves for the rope segments and plenty of water!', date: 'Sep 15, 2024', rating: 4 },
+            { id: 4, initials: 'RV', name: 'Ramon Valdez', quote: 'Challenging day-climb. Completed in 9 hours total. The forest cover keeps you cool until the final ridge assault.', date: 'Aug 30, 2024', rating: 4.5 },
+            { id: 5, initials: 'AL', name: 'Anna Lopez', quote: 'Top-tier adventure in Albay. The pitcher plants near the top were amazing to see in their natural habitat.', date: 'Aug 14, 2024', rating: 5 },
+        ],
     },
-    {
+    ligao: {
+        id: 'ligao',
         name: 'Balogo Trail',
-        difficulty: 'Major Climb',
+        difficulty: 'Moderate-Major',
         difficultyClass: 'bg-primary text-white',
         description:
-            'This is the alternative route that starts near Balogo East Elementary School. Depending on the path mapped out by local guides, it can cross the boundary areas near Oas or Ligao, passing through open fields and residential areas before hitting the steep mountain slopes.',
+            'A scenic alternative route initiating near Brgy. Balogo East. This path winds through quiet agricultural farmlands and open cogon grasslands before merging into the forested upper slopes of Mt. Masaraga.',
         statIcon: 'nature',
-        stats: ['4-5 Hours', '14km'],
+        stats: [
+            { icon: MapPin, value: "1,328m", label: "Elevation" },
+            { icon: TrendingUp, value: "5/9", label: "Difficulty" },
+            { icon: Clock, value: "7-9h", label: "Duration" },
+            { icon: Map, value: "8.1km", label: "Distance" }
+        ],
         image: BalogoRoute,
+        subtitle: 'A balanced route blending agricultural countryside paths with forested ridgelines.',
+        difficultyRating: '5/9',
+        difficultyLabel: 'Moderate Climb',
+        duration: '1 Day',
+        trailClass: 'Class 1-3',
+        technicality: 'Moderate (Scrambling)',
+        waypoints: [
+            { name: 'Brgy. Balogo Jump-off', description: 'Logbook sign-in & guide briefing', icon: 'start' },
+            { name: 'Coconut Plantation Gate', description: 'Gentle incline through local farmlands', icon: 'camp' },
+            { name: 'Balogo Ridge Viewpoint', description: 'Open clearing facing Ligao City valleys', icon: 'camp' },
+            { name: 'Mt. Masaraga Summit', description: 'Peak junction with 360° panorama', icon: 'summit' },
+        ],
+        elevationPoints: [
+            { label: 'Balogo Elementary', elevation: '280m', x: 70, y: 255 },
+            { label: 'Coconut Grove', elevation: '520m', x: 220, y: 200 },
+            { label: 'Cogon Ridgeline', elevation: '810m', x: 390, y: 150 },
+            { label: 'High Junction', elevation: '1,050m', x: 530, y: 100 },
+            { label: 'Masaraga Peak', elevation: '1,328m', x: 660, y: 35, isSummit: true },
+        ],
+        paragraphs: [
+            'The Balogo Trail presents a varied landscape trek starting from the eastern foothills of Ligao. Hikers traverse coconut groves, small mountain communities, and open brushlands, gaining steady elevation before entering the rainforest zone near the mid-way point.',
+            'Although offering a slightly more gradual start than the Amtic route, the trail merges into steep terrain near the upper ridge. Sun protection is essential during the early stages due to open plantation stretches, while the upper section requires careful footwork over exposed roots and rocky ledges.',
+        ],
+        highlights: [
+            { id: 'flora-fauna', label: 'Flora & Fauna:', description: 'Abundant wild orchids, tree ferns, fruit bats, and native songbirds along the forest boundary.' },
+            { id: 'water-sources', label: 'Water Sources:', description: 'No reliable water sources along the open ridge. Carry minimum 3L of water per person.' },
+            { id: 'campsites', label: 'Campsites:', description: 'Shaded resting spots available at Coconut Grove. No established camping on open ridges.' },
+        ],
+        gallery: [
+            { id: 1, src: mtMasaragaSummit, alt: "Path passing through open coconut fields toward mountain base", title: "Farmland Approach", subtitle: "Balogo lower trail section" },
+            { id: 2, src: mtMasaragaCampsite, alt: "Open ridge trail surrounded by tall cogon grass and distant hills", title: "Balogo Ridgeline", subtitle: "Mid-trail observation area" },
+            { id: 3, src: mtMasaragaVanishingFalls, alt: "High altitude vantage point showing surrounding Albay landscape", title: "Valley Overlook", subtitle: "Upper ridge viewpoint" },
+            { id: 4, src: mtMasaragaNaturalSpring, alt: "Shaded rest station under rainforest canopy", title: "Forest Junction", subtitle: "Upper trail canopy zone" },
+        ],
+        reviews: [
+            { id: 1, initials: 'JM', name: 'Jayson Mendoza', quote: 'Great alternative to Amtic! The initial walk through the farmlands was pleasant before we hit the steep forest trail.', date: 'Nov 04, 2024', rating: 5 },
+            { id: 2, initials: 'KL', name: 'Kristine Lim', quote: 'Start early to beat the heat on the open plantation sections. Gorgeous views of the valley as you gain height!', date: 'Oct 19, 2024', rating: 4.5 },
+            { id: 3, initials: 'DR', name: 'Danilo Reyes', quote: 'Well-marked trail guided by local Balogo rangers. A bit muddy near the high junction, but manageable.', date: 'Sep 02, 2024', rating: 4 },
+            { id: 4, initials: 'CP', name: 'Clara Pascual', quote: 'Less crowded route with wonderful countryside scenery. Highly recommended for experienced day hikers!', date: 'Aug 22, 2024', rating: 5 },
+            { id: 5, initials: 'BT', name: 'Ben Torres', quote: 'Challenging yet rewarding trek. Make sure to bring enough water as there are no streams along this ridge.', date: 'Jul 11, 2024', rating: 4.5 },
+        ],
     },
-];
+};
 
 export const GALLERY_ITEMS = [
     {
@@ -381,54 +480,6 @@ export const RELATED_UPDATES = [
     }
 ];
 
-export const TRAIL_EXPERIENCES = [
-    {
-        id: 1,
-        initials: 'ES',
-        name: 'Elena Santos',
-        quote:
-            'The summit view was breathtaking! A challenging climb but the panoramic views of Bicol are worth every step.',
-        date: 'Oct 12, 2024',
-        rating: 5,
-    },
-    {
-        id: 2,
-        initials: 'MC',
-        name: 'Marcus Chen',
-        quote:
-            'Well-maintained trails and friendly guides. The permit process was smooth and the safety briefing was very thorough.',
-        date: 'Sep 28, 2024',
-        rating: 4,
-    },
-    {
-        id: 3,
-        initials: 'SJ',
-        name: 'Sarah Johnson',
-        quote:
-            'The Eco-Trail Loop was perfect for my family. My kids loved seeing the rare birds and learning about local plants.',
-        date: 'Sep 15, 2024',
-        rating: 5,
-    },
-    {
-        id: 4,
-        initials: 'RV',
-        name: 'Ramon Valdez',
-        quote:
-            'Great trail condition overall. Prepare for steep inclines toward the summit. Hydration is key!',
-        date: 'Aug 30, 2024',
-        rating: 4.5,
-    },
-    {
-        id: 5,
-        initials: 'AL',
-        name: 'Anna Lopez',
-        quote:
-            'Highly recommend hiring a guide. Very knowledgeable about local flora and kept our group safe throughout.',
-        date: 'Aug 14, 2024',
-        rating: 5,
-    },
-];
-
 export const MOCK_TRANSACTIONS = [
     {
         transactionId: 'TXN-2026-1024',
@@ -503,60 +554,6 @@ export const MOCK_TRANSACTIONS = [
             referenceNo: 'Ref: MYA88301923',
         },
     },
-];
-
-export const TRAIL_GALLERY_IMAGES = [
-    {
-        id: 1,
-        src: mtMasaragaSummit,
-        alt: "Hikers walking along wooden boardwalk through lush tropical canopy",
-        title: "Boardwalk Trek",
-        subtitle: "Sub-canopy trail section"
-    },
-    {
-        id: 2,
-        src: mtMasaragaCampsite,
-        alt: "Lush moss-covered tree trunks and fern details in cloud forest",
-        title: "Moss & Flora",
-        subtitle: "Primary cloud forest zone"
-    },
-    {
-        id: 3,
-        src: mtMasaragaVanishingFalls,
-        alt: "Summit view of volcanic ridges and sunrise clouds",
-        title: "Summit Caldera",
-        subtitle: "Observation ridge viewpoint"
-    },
-    {
-        id: 4,
-        src: mtMasaragaNaturalSpring,
-        alt: "Natural spring water source along the trail",
-        title: "Natural Spring",
-        subtitle: "Mid-trail water station"
-    }
-];
-
-export const TRAIL_PARAGRAPHS = [
-    "The Standard Summit Trail offers the most direct and well-maintained route to the peak of Mt. Masaraga. Beginning at the designated ranger station in Ligao City, the trail immediately immerses hikers in dense, secondary forest before transitioning into a more challenging, steeper ascent characterized by loose volcanic soil and cogon grass near the summit.",
-    "While considered manageable for experienced beginners, the constant incline requires good cardiovascular endurance. The final stretch provides little tree cover, exposing hikers to the elements but rewarding them with panoramic views of the surrounding Bicol region, including Mt. Mayon on clear days."
-];
-
-export const TRAIL_HIGHLIGHTS = [
-    {
-        id: 'flora-fauna',
-        label: 'Flora & Fauna:',
-        description: 'Look out for pitcher plants near the summit and various endemic bird species in the lower canopy.'
-    },
-    {
-        id: 'water-sources',
-        label: 'Water Sources:',
-        description: 'One reliable spring is located roughly halfway up the trail. Treat water before consuming.'
-    },
-    {
-        id: 'campsites',
-        label: 'Campsites:',
-        description: 'A small campsite exists near the summit, accommodating up to 10 tents.'
-    }
 ];
 
 export const REQUIREMENTS = [
@@ -659,21 +656,6 @@ export const POPULAR_TOPICS = [
     { icon: CloudLightning, label: 'Weather & Alerts' },
 ];
 
-export const FORGOT_PASSWORD_STEPS = [
-    'Find Account',
-    'Reset Code',
-    'New Password',
-];
-
-export const SIGNUP_STEPS = [
-    'Personal Name',
-    'Select Gender',
-    'Contact Email',
-    'Verify Code',
-    'Create Password',
-    'Trek Ready',
-];
-
 export const ABOUT_ZONES = [
     {
         id: 'summit',
@@ -722,90 +704,19 @@ export const ABOUT_RESOURCES = [
     },
 ];
 
-export const ABOUT_TRAILS = {
+export const BOOKING_DETAILS = {
     amtic: {
-        name: 'Amtic Trail',
-        subtitle: 'Continuous forested ascent with scenic viewpoints and technical ridge sections.',
-        difficulty: '6/9',
-        difficultyLabel: 'Major Climb',
-        duration: '2-3 Days',
-        trailClass: 'Class 1-4',
-        technicality: 'High (Ropes req.)',
-        waypoints: [
-            {
-                name: 'Brgy. Amtic Jump-off',
-                description: 'Registration & Briefing',
-                icon: 'start',
-            },
-            {
-                name: 'Camp 1',
-                description: 'Water source available',
-                icon: 'camp',
-            },
-            {
-                name: 'Camp 2 (Assault Base)',
-                description: 'Dense mossy forest',
-                icon: 'camp',
-            },
-            {
-                name: 'Summit',
-                description: '360° view of Mayon',
-                icon: 'summit',
-            },
-        ],
-        elevationPoints: [
-            { label: 'Jump-off', elevation: '250m', x: 70, y: 260 },
-            { label: 'Amintao Viewdeck', elevation: '680m', x: 220, y: 195 },
-            { label: 'Rope Section', elevation: '950m', x: 390, y: 140 },
-            { label: 'Mossy Forest Ridge', elevation: '1,150m', x: 530, y: 95 },
-            { label: 'Mt. Masaraga Summit', elevation: '1,328m', x: 660, y: 35, isSummit: true },
-        ],
+        id: 'amtic',
+        selectedTrail: 'Amtic Trail (or Sabluyon Trail)',
+        baseFeePerPax: 500.0,
+        note: '*Total calculated on next step based on pax count.',
     },
     ligao: {
-        name: 'Ligao Summit Trail',
-        subtitle: 'A scenic route passing through lush forests and panoramic ridgelines.',
-        difficulty: '5/9',
-        difficultyLabel: 'Moderate Climb',
-        duration: '1-2 Days',
-        trailClass: 'Class 1-3',
-        technicality: 'Moderate',
-        waypoints: [
-            {
-                name: 'Brgy. Ligao Jump-off',
-                description: 'Registration & gear check',
-                icon: 'start',
-            },
-            {
-                name: 'Forest Gate Camp',
-                description: 'Sheltered resting area',
-                icon: 'camp',
-            },
-            {
-                name: 'Ridge Trail',
-                description: 'Open ridgeline views',
-                icon: 'camp',
-            },
-            {
-                name: 'Summit',
-                description: 'Panoramic Albay landscape',
-                icon: 'summit',
-            },
-        ],
-        elevationPoints: [
-            { label: 'Jump-off', elevation: '300m', x: 70, y: 255 },
-            { label: 'Forest Gate', elevation: '580m', x: 220, y: 200 },
-            { label: 'Ridge Trail', elevation: '870m', x: 390, y: 150 },
-            { label: 'Lookout Point', elevation: '1,080m', x: 530, y: 100 },
-            { label: 'Summit', elevation: '1,328m', x: 660, y: 35, isSummit: true },
-        ],
+        id: 'ligao',
+        selectedTrail: 'Balogo Trail',
+        baseFeePerPax: 500.0,
+        note: '*Total calculated on next step based on pax count.',
     },
-};
-
-
-export const BOOKING_DETAILS = {
-    selectedTrail: 'Masaraga Summit Trail',
-    baseFeePerPax: 500.0,
-    note: '*Total calculated on next step based on pax count.',
 };
 
 export const DEFAULT_MESSAGES = [

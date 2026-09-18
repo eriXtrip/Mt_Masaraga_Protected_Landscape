@@ -59,21 +59,21 @@ export default function Footer() {
                             <a
                                 href="#"
                                 aria-label="Facebook"
-                                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/60 p-2 transition-all hover:bg-[#5b8c31] hover:text-white"
+                                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/60 p-2 transition-all hover:bg-primary-container hover:text-white"
                             >
                                 <img src={Facebook} alt="Facebook" className="h-4 w-4 object-contain" />
                             </a>
                             <a
                                 href="#"
                                 aria-label="Instagram"
-                                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/60 p-2 transition-all hover:bg-[#5b8c31] hover:text-white"
+                                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/60 p-2 transition-all hover:bg-primary-container hover:text-white"
                             >
                                 <img src={Instagram} alt="Instagram" className="h-4 w-4 object-contain" />
                             </a>
                             <a
                                 href="#"
                                 aria-label="X"
-                                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/60 p-2 transition-all hover:bg-[#5b8c31] hover:text-white"
+                                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/60 p-2 transition-all hover:bg-primary-container hover:text-white"
                             >
                                 <img src={X} alt="X" className="h-4 w-4 object-contain" />
                             </a>

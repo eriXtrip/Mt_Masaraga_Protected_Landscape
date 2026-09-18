@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Mountain from '../../components/icons/Mountain';
 import Hiking from '../../components/icons/Hiking';
 import { ArrowRight, Eye, EyeOff, ShieldCheck, Mail } from 'lucide-react';
-import MtMasaraga from '../../../../public/images/loginSignup/mt-masaraga-hero.jpg'
+import MtMasaraga from '../../../../public/images/loginSignup/mt-masaraga-hero.jpg';
 import { Button } from "@/components/ui/button";
-
+import AdminAuthModal from '../../components/features/AdminAuthModal';
+import { MOCK_USERS } from '../../mockData';
 
 export default function Login() {
+    const navigate = useNavigate();
     const [form, setForm] = useState({
         email: '',
         password: '',
@@ -15,14 +17,53 @@ export default function Login() {
     });
     const [showPassword, setShowPassword] = useState(false);
 
+    // Modal state
+    const [showAdminModal, setShowAdminModal] = useState(false);
+    const [pendingUser, setPendingUser] = useState(null);
+
     const update = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // 1. Find user match from MOCK_USERS by email (fallback to admin user if unmatched for easy testing)
+        const matchedUser = MOCK_USERS.find(
+            (u) => u.email?.toLowerCase() === form.email.toLowerCase()
+        ) || MOCK_USERS[0];
+
+        // 2. Intercept and open modal if Role is 1 (Admin)
+        if (matchedUser && matchedUser.role === 1) {
+            setPendingUser(matchedUser);
+            setShowAdminModal(true);
+            return;
+        }
+
+        // 3. Standard user login flow
+        completeLogin(matchedUser);
+    };
+
+    const handleAdminConfirm = (secondaryPin) => {
+        console.log('Verified secondary PIN:', secondaryPin);
+        setShowAdminModal(false);
+        completeLogin(pendingUser);
+    };
+
+    const completeLogin = (user) => {
+        console.log('Login Successful:', user || form);
+        navigate('/');
     };
 
     return (
-        <div className="flex min-h-screen w-full flex-col bg-surface text-on-surface lg:flex-row">
+        <div className="relative flex min-h-screen w-full flex-col bg-surface text-on-surface lg:flex-row">
+
+            {/* Standalone Admin Modal Component */}
+            <AdminAuthModal
+                isOpen={showAdminModal}
+                onClose={() => setShowAdminModal(false)}
+                user={pendingUser}
+                onConfirm={handleAdminConfirm}
+            />
+
             {/* Left Side: Hero Image */}
             <div className="hidden w-full shrink-0 bg-cover bg-center bg-surface-variant lg:flex lg:w-[42%] xl:w-[40%] relative flex-col justify-end p-12">
                 <img
@@ -58,11 +99,11 @@ export default function Login() {
             <div className="flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%]">
                 <div className="max-w-md w-full mx-auto pt-5 pb-12">
                     {/* Header + Mobile Logo */}
-                    <div className="flex items-center gap-2 text-primary lg:hidden">
-                        <Mountain className="h-13 w-13" />
+                    <div className="flex items-center gap-2 text-primary lg:hidden mb-6">
+                        <Mountain className="h-10 w-10" />
                         <span className="text-headline-md font-bold">Mt. Masaraga PL</span>
                     </div>
-                    <div className="mb-12 text-center md:text-left">
+                    <div className="mb-8 text-center md:text-left">
                         <h2 className="text-headline-lg-mobile font-bold text-on-surface md:text-headline-lg">
                             Welcome Back
                         </h2>
@@ -72,8 +113,7 @@ export default function Login() {
                     </div>
 
                     {/* Form Area */}
-                    <div className="flex h-150 flex-col justify-start overflow-y-auto px-1">
-                        {/* Form */}
+                    <div className="flex flex-col justify-start px-1">
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
                                 <label className="block font-label-md text-label-md text-on-surface mb-2" htmlFor="email">
@@ -88,7 +128,7 @@ export default function Login() {
                                         required
                                         value={form.email}
                                         onChange={(e) => update('email', e.target.value)}
-                                        placeholder="name@example.com"
+                                        placeholder="admin@masaraga.gov.ph"
                                         className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest py-2 pl-9 pr-3 text-body-sm text-on-surface placeholder:text-outline transition-all focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none"
                                     />
                                 </div>
@@ -133,7 +173,7 @@ export default function Login() {
                                     onChange={(e) => update('remember', e.target.checked)}
                                     className="h-4 w-4 cursor-pointer rounded border-outline-variant bg-surface-container-lowest text-primary transition-colors focus:ring-primary focus:ring-offset-surface"
                                 />
-                                <label className="ml-3 font-body-sm text-body-sm text-on-surface-variant" htmlFor="remember">
+                                <label className="ml-3 font-body-sm text-body-sm text-on-surface-variant cursor-pointer" htmlFor="remember">
                                     Remember Me
                                 </label>
                             </div>
@@ -142,10 +182,10 @@ export default function Login() {
                                 type="submit"
                                 variant="default"
                                 size="lg"
-                                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint"
+                                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-label-md font-semibold text-on-secondary shadow-sm transition-colors hover:bg-surface-tint cursor-pointer"
                             >
                                 <span>Login</span>
-                                <ArrowRight />
+                                <ArrowRight className="h-4 w-4" />
                             </Button>
                         </form>
 

@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
 import { Images, Fullscreen, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { TRAIL_GALLERY_IMAGES as GALLERY_IMAGES } from '../../mockData';
-
 const PREVIEW_COUNT = 3;
 
-const TrailGallery = () => {
+const TrailGallery = ({ trail }) => {
+  const galleryImages = trail?.gallery || [];
   const [showAll, setShowAll] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
 
-  const displayedImages = showAll ? GALLERY_IMAGES : GALLERY_IMAGES.slice(0, PREVIEW_COUNT);
+  const displayedImages = showAll ? galleryImages : galleryImages.slice(0, PREVIEW_COUNT);
 
   const openLightbox = (index) => setSelectedIndex(index);
   const closeLightbox = () => setSelectedIndex(null);
 
   const handlePrev = (e) => {
     e.stopPropagation();
-    setSelectedIndex((prevIndex) => (prevIndex === 0 ? GALLERY_IMAGES.length - 1 : prevIndex - 1));
+    setSelectedIndex((prevIndex) => (prevIndex === 0 ? galleryImages.length - 1 : prevIndex - 1));
   };
 
   const handleNext = (e) => {
     e.stopPropagation();
-    setSelectedIndex((prevIndex) => (prevIndex === GALLERY_IMAGES.length - 1 ? 0 : prevIndex + 1));
+    setSelectedIndex((prevIndex) => (prevIndex === galleryImages.length - 1 ? 0 : prevIndex + 1));
   };
 
   return (
@@ -36,7 +35,7 @@ const TrailGallery = () => {
           onClick={() => setShowAll((prev) => !prev)}
           className="inline-flex items-center gap-2 text-primary font-bold text-sm hover:text-primary/80 transition-colors group cursor-pointer"
         >
-          <span>{showAll ? 'Show Less' : `View All (${GALLERY_IMAGES.length})`}</span>
+          <span>{showAll ? 'Show Less' : `View All (${galleryImages.length})`}</span>
         </button>
       </div>
 
@@ -91,7 +90,7 @@ const TrailGallery = () => {
           </button>
 
           {/* Previous Button */}
-          {GALLERY_IMAGES.length > 1 && (
+          {galleryImages.length > 1 && (
             <button
               onClick={handlePrev}
               className="absolute left-4 text-white/80 hover:text-white bg-white/10 p-2 rounded-full backdrop-blur-md transition-colors cursor-pointer"
@@ -107,22 +106,22 @@ const TrailGallery = () => {
             className="max-w-4xl max-h-[85vh] flex flex-col items-center"
           >
             <img
-              src={GALLERY_IMAGES[selectedIndex].src}
-              alt={GALLERY_IMAGES[selectedIndex].alt}
+              src={galleryImages[selectedIndex].src}
+              alt={galleryImages[selectedIndex].alt}
               className="max-h-[75vh] w-auto object-contain rounded-lg shadow-2xl"
             />
             <div className="mt-4 text-center">
               <h3 className="text-white font-semibold text-base sm:text-lg">
-                {GALLERY_IMAGES[selectedIndex].title}
+                {galleryImages[selectedIndex].title}
               </h3>
               <p className="text-white/70 text-xs sm:text-sm">
-                {GALLERY_IMAGES[selectedIndex].subtitle}
+                {galleryImages[selectedIndex].subtitle}
               </p>
             </div>
           </div>
 
           {/* Next Button */}
-          {GALLERY_IMAGES.length > 1 && (
+          {galleryImages.length > 1 && (
             <button
               onClick={handleNext}
               className="absolute right-4 text-white/80 hover:text-white bg-white/10 p-2 rounded-full backdrop-blur-md transition-colors cursor-pointer"

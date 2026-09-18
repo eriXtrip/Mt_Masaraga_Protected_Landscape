@@ -1,30 +1,42 @@
 import React from 'react';
 import { Mountain, Calendar, ArrowRight, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
 import { BOOKING_DETAILS } from '../../mockData';
 
 const MAX_PARTICIPANTS = 5;
 
 export default function BookingSummaryCard({
-    selectedDate = 'No Date Selected',
+    trailId = 'amtic',
+    selectedTrail,
+    baseFeePerPax,
+    selectedDate = 'Please select a date',
     participantCount = 1,
     setParticipantCount,
     onContinue,
     onCancel,
     className = '',
 }) {
+    // Lookup data directly from BOOKING_DETAILS using trailId
+    const trailBookingData = BOOKING_DETAILS[trailId] || BOOKING_DETAILS.amtic;
+
+    // Use passed props if available, otherwise read directly from BOOKING_DETAILS
+    const activeTrailName = selectedTrail || trailBookingData.selectedTrail;
+    const activeBaseFee = baseFeePerPax ?? trailBookingData.baseFeePerPax;
+    const activeNote = trailBookingData.note;
+
     const formatCurrency = (amount) =>
         new Intl.NumberFormat('en-PH', {
             style: 'currency',
             currency: 'PHP',
         }).format(amount);
 
+    const isDateSelected = selectedDate && selectedDate !== 'Please select a date';
+
     const SUMMARY_ITEMS = [
         {
             id: 'trail',
             label: 'Selected Trail',
-            value: BOOKING_DETAILS.selectedTrail,
+            value: activeTrailName,
             icon: Mountain,
         },
         {
@@ -75,44 +87,46 @@ export default function BookingSummaryCard({
             </div>
 
             {/* Pax Selector */}
-            <div className="border-t border-outline-variant/60 pt-5 space-y-4 mb-6">
-                <div className="flex justify-between items-center">
-                    <div>
-                        <span className="text-sm font-bold text-on-surface block">Participants</span>
-                        <span className="text-xs text-on-surface-variant font-medium">
-                            Max {MAX_PARTICIPANTS} hikers per booking
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-3 bg-surface-container border border-outline-variant/50 rounded-lg p-1">
-                        <button
-                            type="button"
-                            onClick={() => setParticipantCount(Math.max(1, participantCount - 1))}
-                            disabled={participantCount <= 1}
-                            className="p-2 rounded hover:bg-surface-variant/50 text-on-surface-variant transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                        >
-                            <Minus className="h-4 w-4" />
-                        </button>
-                        <span className="font-bold text-on-surface w-4 text-center">{participantCount}</span>
-                        <button
-                            type="button"
-                            onClick={() => setParticipantCount(Math.min(MAX_PARTICIPANTS, participantCount + 1))}
-                            disabled={participantCount >= MAX_PARTICIPANTS}
-                            className="p-2 rounded hover:bg-surface-variant/50 text-on-surface-variant transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                        >
-                            <Plus className="h-4 w-4" />
-                        </button>
+            {setParticipantCount && (
+                <div className="border-t border-outline-variant/60 pt-5 space-y-4 mb-6">
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <span className="text-sm font-bold text-on-surface block">Participants</span>
+                            <span className="text-xs text-on-surface-variant font-medium">
+                                Max {MAX_PARTICIPANTS} hikers per booking
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-3 bg-surface-container border border-outline-variant/50 rounded-lg p-1">
+                            <button
+                                type="button"
+                                onClick={() => setParticipantCount(Math.max(1, participantCount - 1))}
+                                disabled={participantCount <= 1}
+                                className="p-2 rounded hover:bg-surface-variant/50 text-on-surface-variant transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                            >
+                                <Minus className="h-4 w-4" />
+                            </button>
+                            <span className="font-bold text-on-surface w-4 text-center">{participantCount}</span>
+                            <button
+                                type="button"
+                                onClick={() => setParticipantCount(Math.min(MAX_PARTICIPANTS, participantCount + 1))}
+                                disabled={participantCount >= MAX_PARTICIPANTS}
+                                className="p-2 rounded hover:bg-surface-variant/50 text-on-surface-variant transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                            >
+                                <Plus className="h-4 w-4" />
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* Price Calculation & Estimated Breakdown */}
             <div className="border-t border-outline-variant/60 pt-5 space-y-3 mb-6">
                 <div className="flex justify-between items-center text-sm">
                     <span className="text-on-surface-variant font-medium">
-                        Base Fee ({participantCount} x {formatCurrency(BOOKING_DETAILS.baseFeePerPax)})
+                        Base Fee ({participantCount} x {formatCurrency(activeBaseFee)})
                     </span>
                     <span className="font-bold text-on-surface">
-                        {formatCurrency(BOOKING_DETAILS.baseFeePerPax * participantCount)}
+                        {formatCurrency(activeBaseFee * participantCount)}
                     </span>
                 </div>
 
@@ -122,11 +136,11 @@ export default function BookingSummaryCard({
                             Total Estimated
                         </span>
                         <span className="text-[11px] text-on-surface-variant italic leading-tight">
-                            {BOOKING_DETAILS.note}
+                            {activeNote}
                         </span>
                     </div>
                     <span className="text-2xl font-black text-primary ml-2 shrink-0">
-                        {formatCurrency(BOOKING_DETAILS.baseFeePerPax * participantCount)}
+                        {formatCurrency(activeBaseFee * participantCount)}
                     </span>
                 </div>
             </div>
@@ -137,8 +151,8 @@ export default function BookingSummaryCard({
                     onClick={onContinue}
                     variant="default"
                     size="lg"
-                    className="w-full"
-                    disabled={selectedDate === 'No Date Selected'}
+                    className="w-full font-bold cursor-pointer"
+                    disabled={!isDateSelected}
                 >
                     <span>Continue to Hiker Details</span>
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -148,7 +162,7 @@ export default function BookingSummaryCard({
                     onClick={onCancel}
                     variant="outline"
                     size="lg"
-                    className="w-full"
+                    className="w-full font-bold cursor-pointer"
                 >
                     Cancel
                 </Button>

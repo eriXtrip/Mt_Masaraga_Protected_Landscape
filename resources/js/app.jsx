@@ -42,12 +42,14 @@ ReactDOM.createRoot(document.getElementById('app')).render(
                     <Route path="/" element={<Home />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/trail" element={<Trail />} />
+                    <Route path="/trail/:id" element={<Trail />} />
                     <Route path="/help" element={<Help />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="/booking" element={<Booking />} />
+                    <Route path="/booking/:id" element={<Booking />} />
+                    <Route path="/booking/" element={<Booking />} />
                     <Route path="/hiker/messages" element={<GroupChat />} />
                     <Route path="/hiker/transactions" element={<Transaction />} />
                     <Route path="/news/:id" element={<NewsDetail />} />
