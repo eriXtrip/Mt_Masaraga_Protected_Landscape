@@ -29,6 +29,9 @@ import WildlifeProtection from './pages/legal/WildlifeProtection';
 import TermsConditions from './pages/legal/TermsConditions';
 import Disclaimer from './pages/legal/Disclaimer';
 import RefundPolicy from './pages/legal/RefundPolicy';
+import HikerDashboard from './pages/hiker/HikerDashboard';
+import Profile from './pages/hiker/Profile';
+import DigitalPasses from './pages/hiker/DigitalPasses';
 
 import '../css/app.css';
 
@@ -88,6 +91,9 @@ const App = () => {
                     <Route path="/booking" element={<Booking />} />
                     <Route path="/hiker/messages" element={<GroupChat />} />
                     <Route path="/hiker/transactions" element={<Transaction />} />
+                    <Route path="/hiker/dashboard" element={<HikerDashboard />} />
+                    <Route path="/hiker/profile" element={<Profile />} />
+                    <Route path="/hiker/passes" element={<DigitalPasses />} />
                     <Route path="/news/:id" element={<NewsDetail />} />
                     <Route path="/awards/:id" element={<AwardsDetail />} />
                     <Route path="/legal/privacy-policy" element={<PrivacyNotice />} />

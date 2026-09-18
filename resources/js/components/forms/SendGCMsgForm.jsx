@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Paperclip, Send } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 export default function SendGCMsgForm({
