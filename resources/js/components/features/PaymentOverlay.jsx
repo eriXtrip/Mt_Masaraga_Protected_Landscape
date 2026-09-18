@@ -101,8 +101,8 @@ export default function PaymentOverlay({
                         </div>
 
                         <div className="flex items-center gap-2 text-xs text-on-surface-variant">
-                            <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                            <span>Encrypted 256-bit Secure Gateway</span>
+                            <ShieldCheck className="h-4 w-4 text-primary" />
+                            <span>Your receipt and e-passes will appear after payment.</span>
                         </div>
 
                         <div className="w-full flex flex-col gap-3 pt-2">
@@ -111,7 +111,7 @@ export default function PaymentOverlay({
                                 onClick={handleStartPayment}
                                 className="w-full font-bold gap-2 text-base"
                             >
-                                <span>Authorize & Pay {formatCurrency(amount)}</span>
+                                <span>Confirm & Pay {formatCurrency(amount)}</span>
                                 <ArrowRight className="h-5 w-5" />
                             </Button>
                             <Button variant="ghost" size="lg" onClick={onClose}>
@@ -143,7 +143,7 @@ export default function PaymentOverlay({
                 {/* --- STATE 3: SUCCESS ANIMATION --- */}
                 {status === 'success' && (
                     <div className="flex flex-col items-center text-center py-4 space-y-6 animate-in zoom-in-95 duration-200">
-                        <div className="w-20 h-20 rounded-full bg-emerald-500/10 text-primary flex items-center justify-center border border-primary/20">
+                        <div className="w-20 h-20 rounded-full bg-secondary-container text-primary flex items-center justify-center border border-primary/20">
                             <CheckCircle2 className="h-12 w-12" />
                         </div>
 
@@ -178,7 +178,7 @@ export default function PaymentOverlay({
                 {/* --- STATE 4: FAILED ANIMATION --- */}
                 {status === 'failed' && (
                     <div className="flex flex-col items-center text-center py-4 space-y-6 animate-in zoom-in-95 duration-200">
-                        <div className="w-20 h-20 rounded-full bg-rose-500/10 text-rose-600 flex items-center justify-center border border-rose-500/20">
+                        <div className="w-20 h-20 rounded-full bg-error-container text-error flex items-center justify-center border border-error/20">
                             <XCircle className="h-12 w-12" />
                         </div>
 

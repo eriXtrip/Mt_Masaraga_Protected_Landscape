@@ -31,20 +31,20 @@ export default function PaymentStepForm({
     return (
         <form
             onSubmit={handleSubmit}
-            className="grid grid-cols-1 gap-6 items-start mt-6 bg-on-secondary border border-outline-variant/60 rounded-2xl p-6 md:p-8 shadow-sm"
+            className="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-5 sm:p-8 shadow-sm"
         >
             {/* Header */}
-            <div className="text-center sm:text-left border-b border-outline-variant/30 pb-4">
-                <h1 className="font-headline-xl text-2xl md:text-3xl font-bold text-on-surface mb-2">
+            <div className="border-b border-outline-variant/30 pb-4 mb-2">
+                <h1 className="text-2xl md:text-3xl font-bold text-on-surface mb-2">
                     Select Payment Method
                 </h1>
-                <p className="font-body-lg text-sm md:text-base text-on-surface-variant">
+                <p className="text-sm md:text-base text-on-surface-variant">
                     Choose how you want to pay for your booking.
                 </p>
             </div>
 
             {/* Payment Methods Options */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 mt-6">
                 {PAYMENT_METHODS.map((method) => {
                     const IconComponent = method.icon;
                     const isSelected = selectedMethod === method.id;
@@ -52,9 +52,9 @@ export default function PaymentStepForm({
                     return (
                         <label
                             key={method.id}
-                            className={`bg-surface-container-lowest border rounded-xl p-6 flex items-center gap-4 cursor-pointer hover:bg-surface-container-low transition-colors duration-200 ${isSelected
+                            className={`bg-surface/80 border rounded-xl p-6 flex items-center gap-4 cursor-pointer hover:bg-surface-container-low/70 transition-colors duration-200 ${isSelected
                                 ? 'border-primary ring-1 ring-primary bg-primary/5'
-                                : 'border-outline-variant/30'
+                                : 'border-outline-variant/50'
                                 }`}
                         >
                             <input
@@ -66,7 +66,7 @@ export default function PaymentStepForm({
                                 className="w-5 h-5 text-primary border-outline focus:ring-primary cursor-pointer"
                             />
                             <div className="flex-1 flex items-center justify-between">
-                                <span className="font-headline-md text-base font-bold text-on-surface">
+                                <span className="text-base font-bold text-on-surface">
                                     {method.label}
                                 </span>
                                 <IconComponent className="h-5 w-5 text-outline shrink-0" />
@@ -77,8 +77,8 @@ export default function PaymentStepForm({
             </div>
 
             {/* Booking Summary Card */}
-            <div className="p-0 pt-6">
-                <h3 className="font-headline-md text-xl font-bold mb-6 text-on-surface">
+            <div className="pt-6">
+                <h3 className="text-xl font-bold mb-6 text-on-surface">
                     Booking Summary
                 </h3>
 

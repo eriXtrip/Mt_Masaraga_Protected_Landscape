@@ -49,7 +49,7 @@ export default function BookingSummaryCard({
 
     return (
         <div
-            className={`bg-surface-container-lowest rounded-2xl p-6 md:p-8 shadow-xl shadow-[#172b1d]/5 border border-outline-variant/60 transition-all duration-300 hover:shadow-2xl ${className}`}
+            className={`bg-surface-container-lowest rounded-2xl p-6 md:p-8 shadow-sm border border-outline-variant/40 ${className}`}
         >
             {/* Header */}
             <div className="border-b border-outline-variant/60 pb-5 mb-5">
@@ -155,7 +155,7 @@ export default function BookingSummaryCard({
                     disabled={!isDateSelected}
                 >
                     <span>Continue to Hiker Details</span>
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover/button:translate-x-1" />
                 </Button>
 
                 <Button

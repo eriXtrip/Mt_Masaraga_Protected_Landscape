@@ -120,8 +120,8 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                     <div
                         key={index}
                         className={`bg-surface-container-lowest border rounded-2xl overflow-hidden shadow-xs transition-all duration-300 ${isOpen
-                                ? 'border-primary/40 ring-1 ring-primary/20'
-                                : 'border-outline-variant/60 hover:border-outline-variant'
+                            ? 'border-primary/40 ring-1 ring-primary/20'
+                            : 'border-outline-variant/60 hover:border-outline-variant'
                             }`}
                     >
                         {/* Accordion Header */}
@@ -131,14 +131,14 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                         >
                             <div className="flex items-center gap-3.5 flex-wrap">
                                 <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-colors ${complete
-                                        ? 'bg-primary/15 text-primary'
-                                        : 'bg-surface-container-high text-on-surface-variant'
+                                    ? 'bg-primary/15 text-primary'
+                                    : 'bg-surface-container-high text-on-surface-variant'
                                     }`}>
                                     {index + 1}
                                 </div>
-                                <h1 className="text-xl md:text-2xl font-extrabold text-on-surface tracking-tight">
+                                <h2 className="text-xl md:text-2xl font-extrabold text-on-surface tracking-tight">
                                     Hiker {index + 1} Details
-                                </h1>
+                                </h2>
                                 {formData.fullName.trim() !== '' && (
                                     <span className="text-xs font-semibold text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full">
                                         {formData.fullName}
@@ -167,10 +167,10 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                             <div className="space-y-8 p-6 md:p-8 pt-2 border-t border-outline-variant/30 animate-in fade-in duration-200">
                                 {/* Hiker Profile Section */}
                                 <section className="space-y-4">
-                                    <h2 className="text-lg font-extrabold text-on-surface flex items-center gap-2.5 border-b border-outline-variant/20 pb-3">
+                                    <h3 className="text-lg font-extrabold text-on-surface flex items-center gap-2.5 border-b border-outline-variant/20 pb-3">
                                         <User className="h-5 w-5 text-primary" />
                                         Hiker Information
-                                    </h2>
+                                    </h3>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
                                         <div className="space-y-1.5">
                                             <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant block">
@@ -180,7 +180,7 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                                 name="fullName"
                                                 value={formData.fullName}
                                                 onChange={(e) => handleInputChange(index, e)}
-                                                className="w-full bg-surface border-outline-variant/80 rounded-xl px-4 py-2.5 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                                className="w-full"
                                                 placeholder="Juan Dela Cruz"
                                                 type="text"
                                                 required
@@ -195,7 +195,7 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                                 value={formData.dateOfBirth}
                                                 onChange={(e) => handleInputChange(index, e)}
                                                 max={maxDate}
-                                                className="w-full bg-surface border-outline-variant/80 rounded-xl px-4 py-2.5 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                                className="w-full"
                                                 type="date"
                                                 required
                                             />
@@ -208,7 +208,7 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                                 name="address"
                                                 value={formData.address}
                                                 onChange={(e) => handleInputChange(index, e)}
-                                                className="w-full bg-surface border-outline-variant/80 rounded-xl px-4 py-2.5 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                                className="w-full"
                                                 placeholder="Barangay, City/Municipality, Province"
                                                 type="text"
                                                 required
@@ -219,10 +219,10 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
 
                                 {/* Emergency Contact Section */}
                                 <section className="space-y-4">
-                                    <h2 className="text-lg font-extrabold text-on-surface flex items-center gap-2.5 border-b border-outline-variant/20 pb-3">
+                                    <h3 className="text-lg font-extrabold text-on-surface flex items-center gap-2.5 border-b border-outline-variant/20 pb-3">
                                         <PhoneCall className="h-5 w-5 text-primary" />
                                         Emergency Contact
-                                    </h2>
+                                    </h3>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
                                         <div className="space-y-1.5">
                                             <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant block">
@@ -232,7 +232,7 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                                 name="emergencyName"
                                                 value={formData.emergencyName}
                                                 onChange={(e) => handleInputChange(index, e)}
-                                                className="w-full bg-surface border-outline-variant/80 rounded-xl px-4 py-2.5 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                                className="w-full"
                                                 placeholder="Maria Dela Cruz"
                                                 type="text"
                                                 required
@@ -246,7 +246,7 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                                 name="emergencyRelationship"
                                                 value={formData.emergencyRelationship}
                                                 onChange={(e) => handleInputChange(index, e)}
-                                                className="w-full bg-surface border-outline-variant/80 rounded-xl px-4 py-2.5 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                                className="w-full"
                                                 placeholder="Spouse / Parent / Sibling"
                                                 type="text"
                                                 required
@@ -260,7 +260,7 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                                 name="emergencyContact"
                                                 value={formData.emergencyContact}
                                                 onChange={(e) => handleInputChange(index, e)}
-                                                className="w-full bg-surface border-outline-variant/80 rounded-xl px-4 py-2.5 text-sm text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                                className="w-full"
                                                 placeholder="+63 900 000 0000"
                                                 type="tel"
                                                 required
@@ -271,10 +271,10 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
 
                                 {/* Health Declaration Section */}
                                 <section className="space-y-4">
-                                    <h2 className="text-lg font-extrabold text-on-surface flex items-center gap-2.5 border-b border-outline-variant/20 pb-3">
+                                    <h3 className="text-lg font-extrabold text-on-surface flex items-center gap-2.5 border-b border-outline-variant/20 pb-3">
                                         <Stethoscope className="h-5 w-5 text-primary" />
                                         Health Declaration
-                                    </h2>
+                                    </h3>
                                     <div className="space-y-3 pt-1">
                                         {HEALTH_QUESTIONS.map((item) => {
                                             const currentAnswer = formData.healthAnswers[item.id];
@@ -301,8 +301,8 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                                                     />
                                                                     <span
                                                                         className={`inline-block px-5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${isSelected
-                                                                                ? 'bg-primary text-on-primary shadow-xs'
-                                                                                : 'bg-surface border border-outline-variant/80 text-on-surface-variant hover:border-primary/50'
+                                                                            ? 'bg-primary text-inverse-on-surface shadow-xs'
+                                                                            : 'bg-surface border border-outline-variant/80 text-on-surface-variant hover:border-primary/50'
                                                                             }`}
                                                                     >
                                                                         {option}
@@ -319,10 +319,10 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
 
                                 {/* Liability Waiver Section */}
                                 <section className="space-y-4">
-                                    <h2 className="text-lg font-extrabold text-on-surface flex items-center gap-2.5 border-b border-outline-variant/20 pb-3">
+                                    <h3 className="text-lg font-extrabold text-on-surface flex items-center gap-2.5 border-b border-outline-variant/20 pb-3">
                                         <Scale className="h-5 w-5 text-primary" />
                                         Liability Waiver
-                                    </h2>
+                                    </h3>
                                     <div className="h-40 overflow-y-auto p-4 rounded-xl border border-outline-variant/60 bg-surface-container-lowest text-xs text-on-surface-variant leading-relaxed space-y-2.5">
                                         <p>
                                             <strong className="text-on-surface">1. Assumption of Risk:</strong> I understand that hiking Mount
@@ -375,7 +375,7 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                     variant="default"
                     size="lg"
                     disabled={!isFormValid}
-                    className="rounded-xl bg-primary text-on-primary font-bold shadow-md hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
+                    className="rounded-xl bg-primary font-bold shadow-md hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
                 >
                     Proceed to Document Checklist
                 </Button>

@@ -44,6 +44,11 @@ export default function Booking() {
     const [hikerData, setHikerData] = useState(null);
     const [paymentData, setPaymentData] = useState(null);
 
+    // Scroll smoothly to top whenever step changes (specifically steps 2, 3, 4, 5)
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [currentStep]);
+
     // Reset all state when trail id changes
     useEffect(() => {
         setCurrentStep(1);
@@ -111,15 +116,23 @@ export default function Booking() {
     };
 
     return (
-        <div ref={sectionRef} className="min-h-screen bg-surface p-4 md:p-8 font-sans overflow-hidden">
-            <div className={`max-w-6xl mx-auto space-y-6 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div ref={sectionRef} className="min-h-screen bg-surface font-sans">
+            <div className={`max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-12 space-y-8 md:space-y-10 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
                 {/* Header / Progress Section (Only visible during steps 1 - 4) */}
                 {currentStep <= 4 && (
-                    <div className="p-6 md:p-8 flex flex-col items-center justify-center">
-                        <h1 className="text-3xl font-bold text-on-surface mb-8">
-                            Booking Application — {trail.name}
-                        </h1>
+                    <header className="flex flex-col items-center text-center gap-6 md:gap-8">
+                        <div>
+                            <p className="text-[11px] font-bold uppercase tracking-widest text-primary">
+                                Trail Booking
+                            </p>
+                            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-on-surface mt-2">
+                                Book {trail.name}
+                            </h1>
+                            <p className="text-sm md:text-base text-on-surface-variant mt-2 max-w-xl">
+                                Pick your climb date, register every hiker, confirm your documents, and pay.
+                            </p>
+                        </div>
 
                         <div className="flex items-center justify-center gap-2 sm:gap-4 w-full max-w-2xl">
                             {STEPS.map((stepName, index) => {
@@ -130,8 +143,7 @@ export default function Booking() {
                                 return (
                                     <div
                                         key={step}
-                                        className={`flex items-center ${index < STEPS.length - 1 ? 'flex-1' : ''
-                                            }`}
+                                        className={`flex items-center ${index < STEPS.length - 1 ? 'flex-1' : ''}`}
                                     >
                                         <ProgressNode
                                             step={step}
@@ -152,17 +164,17 @@ export default function Booking() {
                                 );
                             })}
                         </div>
-                    </div>
+                    </header>
                 )}
 
                 {/* Steps Content Area */}
                 {currentStep <= 4 && (
-                    <div className="flex gap-6 items-start mt-6">
-                        <div className="flex-1">
+                    <div className="flex flex-col gap-6">
+                        <div className="flex-1 min-w-0">
                             {/* STEP 1: SELECT DATE */}
                             {currentStep === 1 && (
-                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-6">
-                                    <div className="lg:col-span-8 bg-surface-container-lowest border border-outline-variant/60 rounded-2xl p-6 md:p-8 shadow-sm">
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                                    <div className="lg:col-span-8 bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-5 sm:p-8 shadow-sm">
                                         <Calendar
                                             mode="single"
                                             selected={date}
@@ -170,7 +182,7 @@ export default function Booking() {
                                             slots={SLOTS}
                                         />
                                     </div>
-                                    <div className="lg:col-span-4 sticky top-6">
+                                    <div className="lg:col-span-4 lg:sticky lg:top-6">
                                         <BookingSummaryCard
                                             trailName={trailBookingDetails.selectedTrail}
                                             baseFee={baseFee}
@@ -178,7 +190,7 @@ export default function Booking() {
                                             participantCount={participantCount}
                                             setParticipantCount={setParticipantCount}
                                             onContinue={handleNextStep}
-                                            onCancel={() => goToStep(1)}
+                                            onCancel={() => navigate('/trail')}
                                             className="w-full"
                                         />
                                     </div>

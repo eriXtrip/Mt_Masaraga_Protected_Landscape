@@ -145,25 +145,32 @@ export default function BookingConfirmation({
     };
 
     return (
-        <main ref={sectionRef} className="grow pb-32 px-1 sm:px-8 max-w-7xl mx-auto w-full relative overflow-hidden">
+        <main ref={sectionRef}>
             <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-start transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
                 {/* Left Column: Confirmation & Interactive Pass Carousel */}
                 <div className="lg:col-span-7 flex flex-col gap-6">
 
                     {/* Success Header */}
-                    <section className="text-center md:text-left flex flex-col items-center md:items-start gap-4">
-                        <div className="bg-secondary-container text-on-secondary-container rounded-full p-4 inline-flex shadow-sm">
-                            <CheckCircle2 className="h-12 w-12 text-primary" />
+                    <section className="flex flex-col items-center md:flex-row md:items-center gap-4 text-center md:text-left">
+                        <div className="h-12 w-12 rounded-2xl bg-secondary-container text-primary flex items-center justify-center shrink-0">
+                            <CheckCircle2 className="h-7 w-7" />
                         </div>
-                        <h2 className="text-3xl md:text-4xl font-bold text-primary">
-                            Booking Confirmed!
-                        </h2>
+                        <div>
+                            <p className="text-[11px] font-bold uppercase tracking-widest text-primary">
+                                Booking Confirmed
+                            </p>
+                            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-on-surface mt-1">
+                                You're all set, hiker!
+                            </h2>
+                            <p className="text-sm md:text-base text-on-surface-variant mt-1">
+                                Your e-passes and payment receipt are ready below.
+                            </p>
+                        </div>
                     </section>
 
                     {/* Single Active Pass Card */}
                     <section className="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm relative overflow-hidden transition-all duration-300">
-                        <div className="absolute inset-0 bg-linear-to-br from-primary-container/5 to-transparent pointer-events-none" />
 
                         {/* Pass Counter Badge & Navigation Header */}
                         {displayPasses.length > 1 && (
@@ -235,23 +242,23 @@ export default function BookingConfirmation({
                     </section>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col h-25 md:flex-row w-full gap-4 mt-2">
+                    <div className="flex flex-col sm:flex-row w-full gap-4 mt-2">
                         <Button
                             variant="default"
                             size="lg"
                             onClick={onDownloadPdf}
-                            className="flex-1 cursor-pointer"
+                            className="flex-1 gap-2 cursor-pointer"
                         >
-                            <Download />
+                            <Download className="h-4 w-4" />
                             <span className="text-sm">Download PDF Passes</span>
                         </Button>
                         <Button
                             variant="outline"
                             size="lg"
                             onClick={handleOpenEmailModal}
-                            className="flex-1 cursor-pointer"
+                            className="flex-1 gap-2 cursor-pointer"
                         >
-                            <Mail />
+                            <Mail className="h-4 w-4" />
                             <span className="text-sm">Send to Email</span>
                         </Button>
                     </div>
@@ -261,28 +268,28 @@ export default function BookingConfirmation({
                 <div className="lg:col-span-5 flex flex-col gap-6 mt-8 lg:mt-0">
 
                     {/* Hiker Chat CTA Card */}
-                    <div
+                    <button
+                        type="button"
                         onClick={onJoinGroupChat}
-                        className="bg-secondary text-on-secondary rounded-2xl p-6 shadow-lg relative overflow-hidden cursor-pointer hover:shadow-xl transition-all group transform hover:-translate-y-1 duration-300"
+                        className="bg-secondary text-on-secondary rounded-2xl p-6 shadow-md relative overflow-hidden cursor-pointer hover:-translate-y-0.5 transition-all w-full text-left group"
                     >
-                        <div className="absolute -right-10 -top-10 bg-white/10 w-32 h-32 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
-                        <div className="flex items-center justify-between relative z-10">
-                            <div className="flex items-center gap-4">
-                                <div className="bg-on-secondary/20 p-3 rounded-full shrink-0">
-                                    <MessageSquare className="h-6 w-6 text-on-secondary fill-on-secondary/20" />
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-bold mb-0.5">
-                                        Join Group Announcement
-                                    </h3>
-                                    <p className="text-xs text-on-secondary/80">
-                                        Announcement from the Park Staff.
-                                    </p>
-                                </div>
+                        <div className="flex items-center justify-between relative">
+                        <div className="flex items-center gap-4">
+                            <div className="bg-on-secondary/20 p-3 rounded-full shrink-0">
+                                <MessageSquare className="h-6 w-6 text-on-secondary fill-on-secondary/20" />
                             </div>
-                            <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform shrink-0" />
+                            <div>
+                                <h3 className="text-lg font-bold mb-0.5">
+                                    Join Group Announcement
+                                </h3>
+                                <p className="text-xs text-on-secondary/80">
+                                    Announcement from the Park Staff.
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                        <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform shrink-0" />
+                        </div>
+                    </button>
 
                     {/* Receipt Summary Card */}
                     <div className="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-6 shadow-sm">
@@ -320,7 +327,7 @@ export default function BookingConfirmation({
                     </div>
 
                     {/* Hiker Resources */}
-                    <div className="bg-surface-container border border-outline-variant/10 rounded-2xl p-6 shadow-sm">
+                    <div className="bg-surface-container border border-outline-variant/40 rounded-2xl p-6 shadow-sm">
                         <h3 className="text-xs font-bold text-primary uppercase tracking-wider mb-4 flex items-center gap-2">
                             <ListChecks className="h-4 w-4" />
                             Hiker Resources
@@ -371,8 +378,8 @@ export default function BookingConfirmation({
                             }}
                             className="inline-flex items-center gap-1.5 text-primary font-bold text-sm hover:underline underline-offset-4 cursor-pointer"
                         >
-                            <span>Back to Home</span>
-                            <ArrowRight className="h-4 w-4" />
+                            <ChevronLeft className="h-4 w-4" />
+                            <span>Back to Checklist</span>
                         </a>
                     </div>
 
@@ -450,7 +457,7 @@ export default function BookingConfirmation({
                             </form>
                         ) : (
                             <div className="flex flex-col items-center text-center py-4 space-y-4 animate-in zoom-in-95 duration-200">
-                                <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center border border-emerald-500/20">
+                                <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
                                     <CheckCircle2 className="h-10 w-10" />
                                 </div>
                                 <div className="space-y-1">

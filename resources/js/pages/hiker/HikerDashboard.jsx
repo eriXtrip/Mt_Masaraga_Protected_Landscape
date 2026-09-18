@@ -219,7 +219,7 @@ export default function HikerDashboard() {
                     <div className="flex items-center gap-2 mb-4">
                         <p className="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Quick Actions</p>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {QUICK_ACTIONS.map((action) => {
                             const Icon = action.icon;
                             return (

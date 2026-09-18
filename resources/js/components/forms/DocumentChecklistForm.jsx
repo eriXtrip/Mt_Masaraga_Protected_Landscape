@@ -27,12 +27,12 @@ export default function DocumentChecklistForm({ onBack, onNext }) {
     };
 
     return (
-        <div className="grid grid-cols-1 space-y-1 gap-3 items-start mt-6 bg-on-secondary border border-outline-variant/60 rounded-2xl p-6 md:p-8 shadow-sm">
+        <div className="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-5 sm:p-8 shadow-sm">
             <header className="mb-6">
-                <h1 className="font-headline-lg text-2xl md:text-3xl font-bold text-on-surface mb-2">
+                <h1 className="text-2xl md:text-3xl font-bold text-on-surface mb-2">
                     Physical Document Checklist
                 </h1>
-                <p className="font-body-lg text-sm md:text-base text-on-surface-variant">
+                <p className="text-sm md:text-base text-on-surface-variant">
                     Ensure you have all required documents before proceeding.
                 </p>
             </header>
@@ -41,10 +41,10 @@ export default function DocumentChecklistForm({ onBack, onNext }) {
             <div className="bg-error-container text-on-error-container rounded-xl p-6 flex gap-4 items-start border border-error/20 mb-6">
                 <AlertTriangle className="h-6 w-6 shrink-0 mt-0.5 text-error" />
                 <div>
-                    <h3 className="font-headline-md text-base font-bold mb-1">
+                    <h3 className="text-base font-bold mb-1">
                         Important Notice
                     </h3>
-                    <p className="font-body-md text-sm text-on-error-container/90">
+                    <p className="text-sm text-on-error-container/90">
                         No digital document upload required. Physical copies MUST be presented at the trail jump-off point.
                     </p>
                 </div>
@@ -58,7 +58,7 @@ export default function DocumentChecklistForm({ onBack, onNext }) {
                         return (
                             <label
                                 key={item.id}
-                                className={`bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 flex items-start gap-4 cursor-pointer hover:bg-surface-container-low transition-colors duration-200 ${isChecked ? 'ring-1 ring-primary border-primary/40' : ''
+                                className={`bg-surface/80 border border-outline-variant/50 rounded-xl p-6 flex items-start gap-4 cursor-pointer hover:bg-surface-container-low/70 transition-colors duration-200 ${isChecked ? 'ring-1 ring-primary border-primary/40' : ''
                                     }`}
                             >
                                 <div className="pt-1">
@@ -70,10 +70,10 @@ export default function DocumentChecklistForm({ onBack, onNext }) {
                                     />
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <span className="font-headline-md text-base font-bold text-on-surface">
+                                    <span className="text-base font-bold text-on-surface">
                                         {item.title}
                                     </span>
-                                    <span className="font-body-sm text-sm text-on-surface-variant">
+                                    <span className="text-sm text-on-surface-variant">
                                         {item.description}
                                     </span>
                                 </div>
@@ -93,7 +93,7 @@ export default function DocumentChecklistForm({ onBack, onNext }) {
                                 className="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary cursor-pointer"
                             />
                         </div>
-                        <span className="font-body-md text-sm text-on-surface font-semibold">
+                        <span className="text-sm text-on-surface font-semibold">
                             I confirm that I will carry physical copies on hike day.
                         </span>
                     </label>
