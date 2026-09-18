@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
+import { useInView } from '@/hooks/useInView';
 import { Clock, Mail, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function StillHaveQuestionCTA() {
     const navigate = useNavigate();
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     return (
-        <section className="bg-surface px-4 py-8 sm:px-6 sm:py-10 md:py-14">
-            <div className="mx-auto w-full max-w-6xl">
+        <section ref={sectionRef} className="bg-surface px-4 py-8 sm:px-6 sm:py-10 md:py-14 overflow-hidden">
+            <div className={`mx-auto w-full max-w-6xl transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <div className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-10 text-center shadow-sm md:p-14">
                     <div className="mx-auto max-w-2xl space-y-4">
                         <h2 className="text-3xl font-bold tracking-tight text-on-surface sm:text-4xl">

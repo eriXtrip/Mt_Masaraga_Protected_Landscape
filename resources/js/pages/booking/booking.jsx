@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useInView } from '@/hooks/useInView';
 import { useNavigate, useParams } from 'react-router-dom';
 import ProgressNode from '@/components/features/ProgressNode';
 import { Calendar } from '@/components/ui/calendar';
@@ -27,6 +28,7 @@ export const SLOTS = {
 export default function Booking() {
     const navigate = useNavigate();
     const { id } = useParams();
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
 
     // 1. Resolve trail key safely (defaults to 'amtic' if undefined or invalid)
     const trailId = id && TRAILS[id] ? id : 'amtic';
@@ -109,8 +111,8 @@ export default function Booking() {
     };
 
     return (
-        <div className="min-h-screen bg-surface p-4 md:p-8 font-sans">
-            <div className="max-w-6xl mx-auto space-y-6">
+        <div ref={sectionRef} className="min-h-screen bg-surface p-4 md:p-8 font-sans overflow-hidden">
+            <div className={`max-w-6xl mx-auto space-y-6 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
                 {/* Header / Progress Section (Only visible during steps 1 - 4) */}
                 {currentStep <= 4 && (

@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { useInView } from '@/hooks/useInView';
 import ConversationList from '../../components/features/ConversationList';
 import Conversation from '../../components/features/Conversation';
 import GCMember from '../../components/features/GCmember';
 
 export default function GroupChat() {
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const [activeTab, setActiveTab] = useState('hikers-gc');
     const [showMembers, setShowMembers] = useState(false);
 
     return (
-        <div className="max-w-7xl mx-auto my-4 md:my-6 px-3 md:px-4 relative">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 items-start">
+        <div ref={sectionRef} className="max-w-7xl mx-auto my-4 md:my-6 px-3 md:px-4 relative overflow-hidden">
+            <div className={`grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 items-start transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
                 {/* 1. Left Sidebar: Channel & Group Selector (Fixed 3 cols on desktop) */}
                 <div className="lg:col-span-3">

@@ -1,4 +1,5 @@
 import { ExternalLink, MapPin } from 'lucide-react';
+import { useInView } from '@/hooks/useInView';
 
 const CENTER_LAT = 13.31859;
 const CENTER_LON = 123.59756;
@@ -19,6 +20,8 @@ const toTile = (lat, lon, zoom) => {
 };
 
 export default function ContactMap() {
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
+
     const centerTile = toTile(CENTER_LAT, CENTER_LON, ZOOM);
     const x0 = Math.floor(centerTile.x) - Math.floor(GRID_COLS / 2);
     const y0 = Math.floor(centerTile.y) - Math.floor(GRID_ROWS / 2);
@@ -29,7 +32,7 @@ export default function ContactMap() {
     const markerY = Math.floor(GRID_ROWS / 2) * TILE_SIZE + dy;
 
     return (
-        <section className="relative h-96 w-full overflow-hidden border-y border-outline-variant bg-surface-container">
+        <section ref={sectionRef} className={`relative h-96 w-full overflow-hidden border-y border-outline-variant bg-surface-container transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div
                 className="absolute left-1/2 top-1/2"
                 style={{

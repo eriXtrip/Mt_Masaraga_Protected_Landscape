@@ -61,7 +61,7 @@ export default function AccessDenied() {
 
                 {/* 2. Visual Hierarchy & Park Branding Graphic */}
                 <div className="relative mx-auto flex h-48 w-48 items-center justify-center">
-                    <div className="absolute inset-0 rounded-3xl bg-amber-500/10 blur-xl" />
+                    <div className="absolute inset-0 rounded-3xl bg-primary/40 blur-3xl" />
 
                     {/* Mt. Masaraga Park Gate / Lock Motif */}
                     <div className="relative z-10 flex items-center justify-center">
@@ -87,7 +87,7 @@ export default function AccessDenied() {
                         variant="default"
                         size="lg"
                         onClick={() => navigate("/login")}
-                        className="inline-flex items-center gap-2 font-bold cursor-pointer rounded-xl px-6 bg-amber-600 hover:bg-amber-700 text-white shadow-xs"
+                        className="inline-flex items-center gap-2 font-bold cursor-pointer rounded-xl px-6"
                     >
                         <KeyRound className="h-4 w-4" />
                         <span>Log In / Verify Permit Clearance</span>
@@ -115,18 +115,18 @@ export default function AccessDenied() {
                                 <Link
                                     key={item.title}
                                     to={item.to}
-                                    className="group relative flex flex-col justify-between rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4 shadow-xs transition-all hover:border-amber-500/50 hover:bg-surface-container-low/60 hover:shadow-sm"
+                                    className="group relative flex flex-col justify-between rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4 shadow-xs transition-all hover:border-primary/40 hover:bg-surface-container-low/60 hover:shadow-sm"
                                 >
                                     <div className="space-y-3">
                                         <div className="flex items-center justify-between">
-                                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 transition-transform group-hover:scale-105">
+                                            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-105">
                                                 <IconComponent className="h-4 w-4" />
                                             </div>
-                                            <ChevronRight className="h-4 w-4 text-outline transition-transform group-hover:translate-x-1 group-hover:text-amber-600" />
+                                            <ChevronRight className="h-4 w-4 text-outline transition-transform group-hover:translate-x-1 group-hover:text-primary" />
                                         </div>
 
                                         <div>
-                                            <h3 className="text-xs font-bold text-on-surface group-hover:text-amber-700 dark:group-hover:text-amber-300 transition-colors">
+                                            <h3 className="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">
                                                 {item.title}
                                             </h3>
                                             <p className="mt-1 text-[11px] text-on-surface-variant leading-relaxed">

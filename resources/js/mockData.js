@@ -13,13 +13,12 @@ import mtMasaragaNaturalSpring from '../../public/images/about/mt-masaraga-natur
 // Sample Mock Database / Credentials List
 export const MOCK_USERS = [
     {
-        id: 'user_admin',
-        name: 'Juan Dela Cruz',
-        email: 'admin@masaraga.gov.ph',
-        role: 1, // Role 1: Admin
-        subtitle: 'System Administrator',
-        password: 'ADmin1',
-        secondaryPin: '123456'
+        id: 'user_hiker',
+        name: 'Jon Eric Tripulca',
+        email: 'hiker@example.com',
+        role: 3, // Role 3: User Hiker
+        subtitle: 'Hiker',
+        password: 'HIKER1',
     },
     {
         id: 'user_staff',
@@ -29,15 +28,17 @@ export const MOCK_USERS = [
         subtitle: 'Park Staff / Guide',
         password: 'STAFF1',
 
-    },
+    },    
     {
-        id: 'user_hiker',
-        name: 'Jane Doe',
-        email: 'hiker@example.com',
-        role: 3, // Role 3: User Hiker
-        subtitle: 'Hiker',
-        password: 'HIKER1',
+        id: 'user_admin',
+        name: 'Juan Dela Cruz',
+        email: 'admin@masaraga.gov.ph',
+        role: 1, // Role 1: Admin
+        subtitle: 'System Administrator',
+        password: 'ADmin1',
+        secondaryPin: '123456'
     },
+    
 ];
 
 export const AWARDS = [
@@ -223,9 +224,9 @@ export const TRAILS = {
             { id: 'campsites', label: 'Campsites:', description: 'Limited summit space fits 4-5 tents. Base camp at Camp 2 offers better wind shelter.' },
         ],
         gallery: [
-            { id: 1, src: mtMasaragaSummit, alt: "Hikers negotiating steep dirt trail shaded by thick jungle tree cover", title: "Forest Assault", subtitle: "Lower forest elevation trail" },
-            { id: 2, src: mtMasaragaCampsite, alt: "Dense mossy branches and ferns along high altitude ridge line", title: "Mossy Spine", subtitle: "Upper canopy cloud forest" },
-            { id: 3, src: mtMasaragaVanishingFalls, alt: "Overlook of Albay plains and Mayon Volcano from Masaraga summit", title: "Summit Viewpoint", subtitle: "Peak observation area" },
+            { id: 1, src: mtMasaragaSummit, alt: "Hikers negotiating steep dirt trail shaded by thick jungle tree cover", title: "Trail Assault", subtitle: "Near the point elevation trail" },
+            { id: 2, src: mtMasaragaCampsite, alt: "Dense mossy branches and ferns along high altitude ridge line", title: "Campsite", subtitle: "The Mt. Masaraga Campsite" },
+            { id: 3, src: mtMasaragaVanishingFalls, alt: "Overlook of Albay plains and Mayon Volcano from Masaraga summit", title: "Vanishing Falls", subtitle: "The Vanishing Falls of MT. Masaraga" },
             { id: 4, src: mtMasaragaNaturalSpring, alt: "Freshwater stream flowing over rocks along lower trail", title: "Sabluyon Spring", subtitle: "Mid-way hydration point" },
         ],
         reviews: [
@@ -302,9 +303,9 @@ export const GALLERY_ITEMS = [
         caption: 'Morning Mist over Mt. Masaraga',
     },
     {
-        src: '/images/gallery/tropical-bird.jpg',
-        alt: 'Rare tropical bird in rainforest',
-        caption: 'Native Flora & Avian Wildlife',
+        src: '/images/gallery/Spilornis-holospilus.jpg',
+        alt: 'Spilornis holospilus',
+        caption: 'Spilornis holospilus',
     },
     {
         src: '/images/gallery/boardwalk.jpg',
@@ -312,20 +313,40 @@ export const GALLERY_ITEMS = [
         caption: 'Protected Canopy Boardwalk',
     },
     {
-        src: '/images/gallery/forest-stream.jpg',
-        alt: 'Mountain stream with crystal water',
-        caption: 'Pristine Forest Streams',
+        src: '/images/gallery/mt-masaraga-vanishing-falls.jpg',
+        alt: 'Mt. Masaraga Vanishing Falls',
+        caption: 'Mt. Masaraga Vanishing Falls',
     },
     {
-        src: '/images/gallery/sunrise-deck.jpg',
-        alt: 'Wooden viewing deck overlooking sea of clouds at sunrise',
-        caption: 'Sunrise View Deck & Cloud Sea',
+        src: '/images/gallery/rafflesia-lagascae.jpg',
+        alt: 'Rafflesia lagascae',
+        caption: 'Rafflesia lagascae',
     },
     {
         src: '/images/gallery/cloud-forest.jpg',
         alt: 'Lush green ferns and moss-covered forest',
         caption: 'Ancient Cloud Forest Canopy',
     },
+    {
+        src: '/images/gallery/gonocephalus-sophiae.jpg',
+        alt: 'Gonocephalus sophiae',
+        caption: 'Gonocephalus sophiae',
+    },
+    {
+        src: '/images/gallery/loriculus-philippensis.jpg',
+        alt: 'Loriculus philippensis',
+        caption: 'Loriculus philippensis',
+    },
+    {
+        src: '/images/gallery/mt-masaraga-campsite-3.jpg',
+        alt: 'Mt. Masaraga Campsite',
+        caption: 'Mt. Masaraga Campsite',
+    },
+    {
+        src: '/images/gallery/trimeresurus-flavomaculatus.jpg',
+        alt: 'Trimeresurus flavomaculatus',
+        caption: 'Trimeresurus flavomaculatus',
+    }
 ];
 
 export const NEWS = [

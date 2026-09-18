@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useInView } from '@/hooks/useInView';
 import { Link, useNavigate } from 'react-router-dom';
 import ProgressNode from '../../components/features/ProgressNode';
 import Hiking from '../../components/icons/Hiking';
@@ -38,6 +39,7 @@ const STEP_TITLES = [
 
 export default function Signup() {
     const navigate = useNavigate();
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const [currentStep, setCurrentStep] = useState(1);
     const [direction, setDirection] = useState('forward');
 
@@ -116,7 +118,7 @@ export default function Signup() {
     const strengthColors = ['text-error', 'text-error', 'text-tertiary', 'text-primary'];
 
     return (
-        <div className="flex min-h-screen w-full flex-col bg-surface text-on-surface lg:flex-row">
+        <div ref={sectionRef} className="flex min-h-screen w-full flex-col bg-surface text-on-surface lg:flex-row overflow-hidden">
             {/* Left Side: Hero Image Background */}
             <div className="hidden w-full shrink-0 bg-cover bg-center bg-surface-variant lg:flex lg:w-[42%] xl:w-[40%] relative flex-col justify-end p-12">
                 <img
@@ -151,7 +153,7 @@ export default function Signup() {
             </div>
 
             {/* Right Side: Multi-Step Registration Wizard */}
-            <div className="flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%]">
+            <div className={`flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%] transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <div className="max-w-md w-full mx-auto pt-5 pb-12">
                     {/* Header + Mobile Logo */}
                     <div className="flex items-center gap-2 text-primary lg:hidden">

@@ -1,13 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import { Calendar } from 'lucide-react';
+import { useInView } from '@/hooks/useInView';
 import Stars from '../../components/common/Stars';
 import { Button } from "@/components/ui/button";
 
 export default function TrailHero({ trail }) {
     const navigate = useNavigate();
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
 
     return (
-        <section className="relative flex h-105 sm:h-108 md:h-110 w-full items-end overflow-hidden rounded-3xl bg-surface-container-high border border-outline-variant/30">
+        <section ref={sectionRef} className={`relative flex h-105 sm:h-108 md:h-110 w-full items-end overflow-hidden rounded-3xl bg-surface-container-high border border-outline-variant/30 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             {/* Background Image Container */}
             <div className="absolute inset-0 z-0">
                 <img

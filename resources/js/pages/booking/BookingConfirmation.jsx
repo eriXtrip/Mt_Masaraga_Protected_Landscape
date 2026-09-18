@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useInView } from '@/hooks/useInView';
 import QR from '../../../../public/images/QR_Code_Example.svg.webp';
 import HikerTicketPass from '../../components/features/HikerTicketPass';
 import { Input } from '@/components/ui/input';
@@ -91,6 +92,7 @@ export default function BookingConfirmation({
     onGoToChecklist,
 }) {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
 
     // Modal State
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -143,8 +145,8 @@ export default function BookingConfirmation({
     };
 
     return (
-        <main className="grow pb-32 px-1 sm:px-8 max-w-7xl mx-auto w-full relative">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <main ref={sectionRef} className="grow pb-32 px-1 sm:px-8 max-w-7xl mx-auto w-full relative overflow-hidden">
+            <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-start transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
                 {/* Left Column: Confirmation & Interactive Pass Carousel */}
                 <div className="lg:col-span-7 flex flex-col gap-6">

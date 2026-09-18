@@ -1,12 +1,15 @@
 import { CloudLightning, CreditCard, FileText, Headset, Mountain } from 'lucide-react';
 import HelpSearchBar from '../../components/features/HelpSearchBar';
+import { useInView } from '@/hooks/useInView';
 
 import { POPULAR_TOPICS } from '../../mockData';
 
 export default function HelpSearchbar() {
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
+
     return (
-        <section className="relative w-full overflow-hidden px-6 pt-16 pb-6 md:px-5 lg:px-10">
-            <div className="mx-auto max-w-6xl">
+        <section ref={sectionRef} className="relative w-full overflow-hidden px-6 pt-16 pb-6 md:px-5 lg:px-10">
+            <div className={`mx-auto max-w-6xl transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <div className="flex flex-col items-center justify-center px-1 py-14 text-center sm:px-10 md:px-14">
                     <div className="mx-auto w-full max-w-3xl">
 

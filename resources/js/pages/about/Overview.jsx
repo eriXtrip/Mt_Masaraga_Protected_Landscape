@@ -4,8 +4,11 @@ import { Droplets, MoveVertical, Trees, BadgeCheck, ChevronLeft, ChevronRight } 
 import { ABOUT_ZONES as zones } from '../../mockData';
 import { Button } from "@/components/ui/button";
 
+import { useInView } from '@/hooks/useInView';
+
 export default function Overview() {
     const [currentZoneIdx, setCurrentZoneIdx] = useState(0);
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
 
     const inspectZone = (zoneId) => {
         const idx = zones.findIndex(z => z.id === zoneId);
@@ -21,12 +24,17 @@ export default function Overview() {
     const currentZone = zones[currentZoneIdx];
 
     return (
-        <section className="relative w-full overflow-hidden px-6 pt-16 pb-6 md:px-5 lg:px-10">
+        <section ref={sectionRef} className="relative w-full overflow-hidden px-6 pt-16 pb-6 md:px-5 lg:px-10">
             <div className="max-w-6xl mx-auto pt-20">
                 {/* Two Column Modern Spatial Hero Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
                     {/* Left Content & Interactive Stats Column */}
-                    <div className="lg:col-span-6 flex flex-col justify-between space-y-6">
+                    <div
+                        className={`lg:col-span-6 flex flex-col justify-between space-y-6 transition-all duration-700 ease-out ${isInView
+                                ? 'opacity-100 translate-y-0'
+                                : 'opacity-0 translate-y-8'
+                            }`}
+                    >
                         <div>
                             {/* Main Title */}
                             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#172b1d] tracking-tight leading-[1.12] mb-5">
@@ -39,8 +47,14 @@ export default function Overview() {
                                 Under the stewardship of the Protected Area Management Board (PAMB) and the Department of Environment and Natural Resources (DENR), active bio-monitoring preserves its endemic flora and fauna, making it an extraordinary living laboratory for environmental research.
                             </p>
 
-                            {/*Micro Feature Tabs */}
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                            {/* Micro Feature Tabs */}
+                            <div
+                                style={{ transitionDelay: '200ms' }}
+                                className={`grid grid-cols-2 sm:grid-cols-4 gap-2.5 transition-all duration-700 ease-out ${isInView
+                                        ? 'opacity-100 translate-y-0'
+                                        : 'opacity-0 translate-y-6'
+                                    }`}
+                            >
                                 {/* Stat 1 */}
                                 <div className="metric-card text-left p-3 rounded-xl bg-white/70 border border-[#5b8c31]/20">
                                     <div className="flex items-center justify-between mb-1">
@@ -85,7 +99,13 @@ export default function Overview() {
                     </div>
 
                     {/* Right Interactive Spatial Visual Column */}
-                    <div className="lg:col-span-6 relative flex flex-col min-h-125 lg:min-h-140 rounded-3xl overflow-hidden border border-[#c2cfc5] shadow-xl group/card">
+                    <div
+                        style={{ transitionDelay: '350ms' }}
+                        className={`lg:col-span-6 relative flex flex-col min-h-125 lg:min-h-140 rounded-3xl overflow-hidden border border-[#c2cfc5] shadow-xl group/card transition-all duration-700 ease-out ${isInView
+                                ? 'opacity-100 translate-y-0 scale-100'
+                                : 'opacity-0 translate-y-8 scale-95'
+                            }`}
+                    >
                         {/* Dynamic Landscape Photography Layers */}
                         <div className="absolute inset-0 z-0 overflow-hidden bg-[#172b1d]">
                             {zones.map((zone, idx) => (
@@ -96,7 +116,7 @@ export default function Overview() {
                                     src={zone.image}
                                 />
                             ))}
-                            {/* Subtle gradient overlays for readibility */}
+                            {/* Subtle gradient overlays for readability */}
                             <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/25 to-black/30 pointer-events-none"></div>
                         </div>
 
@@ -113,14 +133,14 @@ export default function Overview() {
                                     <div className="flex items-center gap-1.5">
                                         <Button
                                             aria-label="Previous zone"
-                                            className="w-8 h-8 rounded-lg bg-white/15 hover:bg-[#5b8c31] hover:text-white transition-colors flex items-center justify-center text-white/90 active:scale-95 border border-white/10"
+                                            className="w-8 h-8 rounded-lg bg-white/15 hover:bg-[#5b8c31] hover:text-white transition-colors flex items-center justify-center text-white/90 active:scale-95 border border-white/10 cursor-pointer"
                                             onClick={() => cycleZone(-1)}
                                         >
                                             <ChevronLeft className="w-4 h-4" />
                                         </Button>
                                         <Button
                                             aria-label="Next zone"
-                                            className="w-8 h-8 rounded-lg bg-white/15 hover:bg-[#5b8c31] hover:text-white transition-colors flex items-center justify-center text-white/90 active:scale-95 border border-white/10"
+                                            className="w-8 h-8 rounded-lg bg-white/15 hover:bg-[#5b8c31] hover:text-white transition-colors flex items-center justify-center text-white/90 active:scale-95 border border-white/10 cursor-pointer"
                                             onClick={() => cycleZone(1)}
                                         >
                                             <ChevronRight className="w-4 h-4" />

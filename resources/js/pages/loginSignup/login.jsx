@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useInView } from '@/hooks/useInView';
 import { Link, useNavigate } from 'react-router-dom';
 import Mountain from '../../components/icons/Mountain';
 import Hiking from '../../components/icons/Hiking';
@@ -10,6 +11,7 @@ import { MOCK_USERS } from '../../mockData';
 
 export default function Login() {
     const navigate = useNavigate();
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const [form, setForm] = useState({
         email: '',
         password: '',
@@ -54,7 +56,7 @@ export default function Login() {
     };
 
     return (
-        <div className="relative flex min-h-screen w-full flex-col bg-surface text-on-surface lg:flex-row">
+        <div ref={sectionRef} className="relative flex min-h-screen w-full flex-col bg-surface text-on-surface lg:flex-row overflow-hidden">
 
             {/* Standalone Admin Modal Component */}
             <AdminAuthModal
@@ -96,7 +98,7 @@ export default function Login() {
             </div>
 
             {/* Right Side: Login Form */}
-            <div className="flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%]">
+            <div className={`flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%] transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <div className="max-w-md w-full mx-auto pt-5 pb-12">
                     {/* Header + Mobile Logo */}
                     <div className="flex items-center gap-2 text-primary lg:hidden mb-6">

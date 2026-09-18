@@ -1,12 +1,14 @@
 import React from 'react';
 import { Dot } from 'lucide-react';
+import { useInView } from '@/hooks/useInView';
 
 export default function TrailOverview({ trail }) {
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const paragraphs = trail?.paragraphs || [];
     const highlights = trail?.highlights || [];
 
     return (
-        <div className="w-full space-y-6">
+        <div ref={sectionRef} className={`w-full space-y-6 overflow-hidden transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="bg-surface-container-lowest rounded-2xl p-8 md:p-10 border border-outline-variant/30 shadow-sm hover:shadow-md transition-shadow">
 
                 {/* Title & Category */}

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
+import SplashScreen from './components/common/SplashScreen';
 
 import Home from './pages/home/home';
 import About from './pages/about/about';
@@ -20,6 +21,7 @@ import NewsDetail from './pages/content/NewsDetail';
 import AwardsDetail from './pages/content/AwardsDetail';
 import NotFound from './pages/utilitypage/NotFound';
 import AccessDenied from './pages/utilitypage/AccessDenied';
+import Maintenance from './pages/utilitypage/Maintenance';
 
 import '../css/app.css';
 
@@ -32,9 +34,36 @@ const MainLayout = () => (
     </>
 );
 
-ReactDOM.createRoot(document.getElementById('app')).render(
-    <React.StrictMode>
+const App = () => {
+    // Only show splash screen once per browser session
+    const [showSplash, setShowSplash] = useState(() => {
+        return !sessionStorage.getItem('hasSeenSplash');
+    });
+
+    // Handle smooth unmounting of splash screen
+    const handleSplashComplete = useCallback(() => {
+        sessionStorage.setItem('hasSeenSplash', 'true');
+        setShowSplash(false);
+    }, []);
+
+    // Manage body overflow during splash screen
+    useEffect(() => {
+        if (showSplash) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [showSplash]);
+
+    return (
         <BrowserRouter>
+            {showSplash && (
+                <SplashScreen onComplete={handleSplashComplete} />
+            )}
             <ScrollToTop />
             <Routes>
                 {/* Routes wrapped with Navbar and Footer */}
@@ -49,17 +78,24 @@ ReactDOM.createRoot(document.getElementById('app')).render(
                     <Route path="/login" element={<Login />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/booking/:id" element={<Booking />} />
-                    <Route path="/booking/" element={<Booking />} />
+                    <Route path="/booking" element={<Booking />} />
                     <Route path="/hiker/messages" element={<GroupChat />} />
                     <Route path="/hiker/transactions" element={<Transaction />} />
                     <Route path="/news/:id" element={<NewsDetail />} />
                     <Route path="/awards/:id" element={<AwardsDetail />} />
                 </Route>
 
-                {/* Standalone full-page route without Navbar or Footer */}
+                {/* Standalone full-page routes */}
                 <Route path="*" element={<NotFound />} />
                 <Route path="/access-denied" element={<AccessDenied />} />
+                <Route path="/maintenance" element={<Maintenance />} />
             </Routes>
         </BrowserRouter>
+    );
+};
+
+ReactDOM.createRoot(document.getElementById('app')).render(
+    <React.StrictMode>
+        <App />
     </React.StrictMode>
 );

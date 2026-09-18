@@ -1,12 +1,21 @@
 import { ArrowRight } from 'lucide-react';
 
 import { NEWS } from '../../mockData';
+import { useInView } from '@/hooks/useInView';
 
 export default function News() {
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
+
     return (
-        <section className="bg-surface px-6 py-6 md:px-12 md:py-8">
+        <section ref={sectionRef} className="bg-surface px-6 py-6 md:px-12 md:py-8 overflow-hidden">
             <div className="mx-auto max-w-6xl">
-                <div className="mb-8">
+                {/* Header Section */}
+                <div
+                    className={`mb-8 transition-all duration-700 ease-out ${isInView
+                            ? 'opacity-100 translate-y-0'
+                            : 'opacity-0 translate-y-8'
+                        }`}
+                >
                     <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-on-surface md:text-4xl">
                         News & Announcements
                     </h2>
@@ -15,11 +24,16 @@ export default function News() {
                     </p>
                 </div>
 
+                {/* News Cards Grid */}
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                    {NEWS.map((item) => (
+                    {NEWS.map((item, index) => (
                         <div
                             key={item.id}
-                            className="flex flex-col justify-between rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm transition-shadow hover:shadow-md"
+                            style={{ transitionDelay: `${index * 125}ms` }}
+                            className={`flex flex-col justify-between rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm transition-all duration-700 ease-out hover:shadow-md ${isInView
+                                    ? 'opacity-100 translate-y-0 scale-100'
+                                    : 'opacity-0 translate-y-8 scale-95'
+                                }`}
                         >
                             <div>
                                 <div className="mb-4 flex items-center justify-between">
@@ -46,7 +60,7 @@ export default function News() {
                                 >
                                     <span>Read More</span>
                                     <ArrowRight
-                                        className=" h-5 w-5 transition-transform group-hover:translate-x-1 ml-1"
+                                        className="h-5 w-5 transition-transform group-hover:translate-x-1 ml-1"
                                     />
                                 </a>
                             </div>

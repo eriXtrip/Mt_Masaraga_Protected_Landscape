@@ -3,6 +3,7 @@ import { Map, Flag, Tent, Mountain, TreePine, GripVertical } from 'lucide-react'
 import { Button } from "@/components/ui/button";
 
 import { TRAILS as trails } from '../../mockData';
+import { useInView } from '@/hooks/useInView';
 
 function WaypointIcon({ type }) {
     if (type === 'summit') {
@@ -28,13 +29,19 @@ function WaypointIcon({ type }) {
 
 export default function TrailShowcase() {
     const [activeTrail, setActiveTrail] = useState('amtic');
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const trail = trails[activeTrail];
 
     return (
-        <section className="w-full px-6 py-16 md:px-12 lg:px-16">
+        <section ref={sectionRef} className="w-full px-6 py-16 md:px-12 lg:px-16 overflow-hidden">
             <div className="mx-auto max-w-6xl">
                 {/* Section Header & Trail Tabs */}
-                <div className="flex flex-col gap-4 border-b border-outline-variant pb-6 md:flex-row md:items-center md:justify-between">
+                <div
+                    className={`flex flex-col gap-4 border-b border-outline-variant pb-6 md:flex-row md:items-center md:justify-between transition-all duration-700 ease-out ${isInView
+                            ? 'opacity-100 translate-y-0'
+                            : 'opacity-0 translate-y-8'
+                        }`}
+                >
                     <div>
                         <h2 className="text-2xl font-extrabold tracking-tight text-on-surface md:text-3xl">
                             Trail Showcase
@@ -59,7 +66,7 @@ export default function TrailShowcase() {
                                     variant={isActive ? "default" : "ghost"}
                                     aria-selected={isActive}
                                     onClick={() => setActiveTrail(key)}
-                                    className="rounded-lg px-4 py-2 text-xs font-semibold md:text-sm"
+                                    className="rounded-lg px-4 py-2 text-xs font-semibold md:text-sm cursor-pointer"
                                 >
                                     {t.name}
                                 </Button>
@@ -71,7 +78,13 @@ export default function TrailShowcase() {
                 {/* Main Showcase Grid */}
                 <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
                     {/* Elevation Profile */}
-                    <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm md:p-6 lg:col-span-8">
+                    <div
+                        style={{ transitionDelay: '200ms' }}
+                        className={`relative flex flex-col justify-between overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm md:p-6 lg:col-span-8 transition-all duration-700 ease-out ${isInView
+                                ? 'opacity-100 translate-y-0 scale-100'
+                                : 'opacity-0 translate-y-8 scale-95'
+                            }`}
+                    >
                         <div>
                             <span className="mb-2 inline-block rounded-md bg-primary-container/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
                                 Elevation Profile
@@ -87,7 +100,8 @@ export default function TrailShowcase() {
                         {/* Elevation Chart SVG */}
                         <div className="relative mt-6 min-h-75 flex-col items-end border-t border-outline-variant pt-4">
                             <svg
-                                className="h-72 w-full overflow-visible"
+                                key={activeTrail}
+                                className="h-72 w-full overflow-visible animate-in fade-in duration-500"
                                 viewBox="0 0 760 300"
                                 preserveAspectRatio="none"
                             >
@@ -167,7 +181,13 @@ export default function TrailShowcase() {
                     {/* Sidebar Cards */}
                     <div className="flex flex-col gap-4 lg:col-span-4">
                         {/* Trail Difficulty Card */}
-                        <div className="rounded-2xl border border-outline-variant bg-surface-container-low p-5 shadow-sm md:p-6">
+                        <div
+                            style={{ transitionDelay: '350ms' }}
+                            className={`rounded-2xl border border-outline-variant bg-surface-container-low p-5 shadow-sm md:p-6 transition-all duration-700 ease-out ${isInView
+                                    ? 'opacity-100 translate-y-0'
+                                    : 'opacity-0 translate-y-8'
+                                }`}
+                        >
                             <span className="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">
                                 Trail Difficulty
                             </span>
@@ -194,7 +214,13 @@ export default function TrailShowcase() {
                         </div>
 
                         {/* Key Waypoints Card */}
-                        <div className="flex-1 rounded-2xl border border-outline-variant bg-surface-container-low p-5 shadow-sm md:p-6">
+                        <div
+                            style={{ transitionDelay: '500ms' }}
+                            className={`flex-1 rounded-2xl border border-outline-variant bg-surface-container-low p-5 shadow-sm md:p-6 transition-all duration-700 ease-out ${isInView
+                                    ? 'opacity-100 translate-y-0'
+                                    : 'opacity-0 translate-y-8'
+                                }`}
+                        >
                             <span className="mb-4 block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">
                                 Key Waypoints
                             </span>

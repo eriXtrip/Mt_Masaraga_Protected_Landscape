@@ -1,4 +1,5 @@
 import React from 'react';
+import { useInView } from '@/hooks/useInView';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Verified, Trees, Users2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { AWARDS } from '../../mockData';
 export default function AwardDetails() {
     const navigate = useNavigate();
     const { id } = useParams();
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const data = AWARDS.find((award) => award.id === id);
 
     return (
@@ -29,9 +31,9 @@ export default function AwardDetails() {
             </header>
 
             {/* Main Content Area */}
-            <main className="mx-auto w-full max-w-7xl px-6 py-5 md:px-15 md:py-10 ">
-
-                {/* Hero Section */}
+            <main ref={sectionRef} className="mx-auto w-full max-w-7xl px-6 py-5 md:px-15 md:py-10 overflow-hidden">
+                <div className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                    {/* Hero Section */}
                 <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-16 mb-16">
 
                     {/* Image Column */}
@@ -136,7 +138,7 @@ export default function AwardDetails() {
 
                     </div>
                 </section>
-
+                </div>
             </main>
         </div>
     );

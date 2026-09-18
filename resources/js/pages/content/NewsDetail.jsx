@@ -1,4 +1,5 @@
 import React from 'react';
+import { useInView } from '@/hooks/useInView';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
     AlertTriangle,
@@ -17,6 +18,7 @@ import { NEWS } from '../../mockData';
 export default function NewsDetail() {
     const navigate = useNavigate();
     const { id } = useParams();
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
 
     // Match article by URL parameter ID, fallback to first article if not found
     const currentArticle = NEWS.find((item) => item.id === id) || NEWS[0];
@@ -60,7 +62,7 @@ export default function NewsDetail() {
             </header>
 
             {/* Main Article Layout */}
-            <main className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 py-5 md:px-15 md:py-10 lg:flex-row lg:gap-16">
+            <main ref={sectionRef} className={`mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 py-5 md:px-15 md:py-10 lg:flex-row lg:gap-16 overflow-hidden transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
                 {/* Left Column: Article Narrative Body */}
                 <article className="grow lg:w-2/3 flex flex-col gap-8">

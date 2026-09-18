@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useInView } from '@/hooks/useInView';
 import { ExperienceCard } from '@/components/features/ExperienceCard';
 import { Button } from '@/components/ui/button';
 
@@ -6,6 +7,7 @@ const INITIAL_VISIBLE_COUNT = 2;
 const PAGE_SIZE = 2;
 
 export default function TrailExperience({ trail }) {
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const trailReviews = trail?.reviews || [];
     const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
 
@@ -21,7 +23,7 @@ export default function TrailExperience({ trail }) {
     };
 
     return (
-        <section className="w-full max-w-md bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 transition-all hover:shadow-md">
+        <section ref={sectionRef} className={`w-full max-w-md bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 hover:shadow-md transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             {/* Header */}
             <div className="flex items-center justify-between mb-6 pb-2 border-b border-outline-variant/30">
                 <h3 className="text-xl font-bold text-on-surface tracking-tight">

@@ -1,10 +1,13 @@
 import { HelpCircle, MapPin } from 'lucide-react';
 import SendMsgForm from '../../components/forms/SendMsgForm';
+import { useInView } from '@/hooks/useInView';
 
 export default function GetInTouch() {
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
+
     return (
-        <section className="relative w-full overflow-hidden px-6 pt-16 pb-6 md:px-5 lg:px-10">
-            <div className="mx-auto w-full max-w-6xl pt-10 lg:pt-20 md:pt-10 sm:pt-5">
+        <section ref={sectionRef} className="relative w-full overflow-hidden px-6 pt-16 pb-6 md:px-5 lg:px-10">
+            <div className={`mx-auto w-full max-w-6xl pt-10 lg:pt-20 md:pt-10 sm:pt-5 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <div className="text-center">
                     <h2 className="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl md:text-5xl">
                         Get in Touch

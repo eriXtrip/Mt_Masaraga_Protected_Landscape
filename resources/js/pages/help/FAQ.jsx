@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useInView } from '@/hooks/useInView';
 import { ChevronDown, Cloud, Receipt, RotateCcw, ShieldCheck } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 import { FAQ_CATEGORIES } from '../../mockData';
 export default function FAQ() {
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const [openItems, setOpenItems] = useState({ '0-0': true, '1-0': true });
 
     const toggleItem = (key) => {
@@ -11,8 +13,8 @@ export default function FAQ() {
     };
 
     return (
-        <section className="bg-surface px-4 py-8 sm:px-6 sm:py-10 md:py-14">
-            <div className="mx-auto max-w-3xl space-y-10 lg:max-w-4xl">
+        <section ref={sectionRef} className="bg-surface px-4 py-8 sm:px-6 sm:py-10 md:py-14 overflow-hidden">
+            <div className={`mx-auto max-w-3xl space-y-10 lg:max-w-4xl transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 {FAQ_CATEGORIES.map(({ icon: Icon, title, items }, categoryIndex) => (
                     <div key={title} className="space-y-4">
                         <div className="flex items-center gap-2.5">

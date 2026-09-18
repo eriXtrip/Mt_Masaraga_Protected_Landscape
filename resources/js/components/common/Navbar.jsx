@@ -14,7 +14,7 @@ import { MOCK_USERS } from '../../mockData';
 const ROLE_BADGES = {
     1: { label: 'Admin', bg: 'bg-amber-600 text-white border-amber-300' },
     2: { label: 'Park Staff', bg: 'bg-emerald-600 text-white border-emerald-300' },
-    3: { label: 'Hiker', bg: 'bg-primary border-primary-container' },
+    3: { label: 'Hiker', bg: 'bg-primary text-white border-primary-container' },
 };
 
 const NAV_LINKS = [

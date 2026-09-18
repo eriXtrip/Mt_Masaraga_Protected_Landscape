@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useInView } from '@/hooks/useInView';
 import BookingConfirmation from '../booking/BookingConfirmation';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,6 +18,7 @@ import { MOCK_TRANSACTIONS } from '../../mockData';
 
 export default function Transaction() {
     const navigate = useNavigate();
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
     const [selectedTransaction, setSelectedTransaction] = useState(null);
@@ -63,8 +65,8 @@ export default function Transaction() {
     }
 
     return (
-        <div className="min-h-screen bg-surface p-4 md:p-8 font-sans">
-            <div className="max-w-5xl mx-auto space-y-6">
+        <div ref={sectionRef} className="min-h-screen bg-surface p-4 md:p-8 font-sans overflow-hidden">
+            <div className={`max-w-5xl mx-auto space-y-6 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
                 {/* Page Title & Summary Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

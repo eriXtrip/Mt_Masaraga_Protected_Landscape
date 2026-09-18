@@ -1,10 +1,12 @@
 import React from 'react';
+import { useInView } from '@/hooks/useInView';
 import { SunMedium } from 'lucide-react';
 import { REQUIREMENTS } from '../../mockData';
 
 export default function TrailRequirement() {
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     return (
-        <section className="w-full max-w-md bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 transition-all hover:shadow-md">
+        <section ref={sectionRef} className={`w-full max-w-md bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 hover:shadow-md transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             {/* Title */}
             <h2 className="text-xl font-bold text-on-surface mb-5 flex items-center gap-2">
                 Requirements
