@@ -22,6 +22,10 @@ import AwardsDetail from './pages/content/AwardsDetail';
 import NotFound from './pages/utilitypage/NotFound';
 import AccessDenied from './pages/utilitypage/AccessDenied';
 import Maintenance from './pages/utilitypage/Maintenance';
+import PrivacyNotice from './pages/legal/PrivacyNotice';
+import CookieTerms from './pages/legal/CookieTerms';
+import EcotourismNotice from './pages/legal/EcotourismNotice';
+import WildlifeProtection from './pages/legal/WildlifeProtection';
 
 import '../css/app.css';
 
@@ -83,6 +87,10 @@ const App = () => {
                     <Route path="/hiker/transactions" element={<Transaction />} />
                     <Route path="/news/:id" element={<NewsDetail />} />
                     <Route path="/awards/:id" element={<AwardsDetail />} />
+                    <Route path="/legal/privacy-policy" element={<PrivacyNotice />} />
+                    <Route path="/legal/cookie-policy" element={<CookieTerms />} />
+                    <Route path="/legal/ecotourism-policy" element={<EcotourismNotice />} />
+                    <Route path="/legal/wildlife-protection" element={<WildlifeProtection />} />
                 </Route>
 
                 {/* Standalone full-page routes */}
@@ -94,8 +102,17 @@ const App = () => {
     );
 };
 
-ReactDOM.createRoot(document.getElementById('app')).render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>
-);
+// Prevent HMR from calling createRoot repeatedly on the same DOM element
+const container = document.getElementById('app');
+
+if (container) {
+    if (!window.__reactRoot) {
+        window.__reactRoot = ReactDOM.createRoot(container);
+    }
+
+    window.__reactRoot.render(
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    );
+}

@@ -17,10 +17,10 @@ const QUICK_LINKS = [
 ];
 
 const LEGAL_LINKS = [
-    'Privacy Policy',
-    'Cookie Policy',
-    'Ecotourism Policy (Leave No Trace)',
-    'Wildlife Protection'
+    { label: 'Privacy Policy', to: '/legal/privacy-policy' },
+    { label: 'Cookie Policy', to: '/legal/cookie-policy' },
+    { label: 'Ecotourism Policy (Leave No Trace)', to: '/legal/ecotourism-policy' },
+    { label: 'Wildlife Protection', to: '/legal/wildlife-protection' },
 ];
 
 export default function Footer() {
@@ -122,11 +122,11 @@ export default function Footer() {
                             Legal & Policies
                         </h3>
                         <ul className="space-y-2 text-xs">
-                            {LEGAL_LINKS.map((item) => (
-                                <li key={item}>
-                                    <a href="#" className="transition-colors hover:text-[#5b8c31]">
-                                        {item}
-                                    </a>
+                            {LEGAL_LINKS.map((link) => (
+                                <li key={link.to}>
+                                    <Link to={link.to} className="transition-colors hover:text-[#5b8c31]">
+                                        {link.label}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

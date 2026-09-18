@@ -13,8 +13,8 @@ export default function Experience() {
                 {/* Header Section */}
                 <div
                     className={`mb-10 text-center transition-all duration-700 ease-out ${isInView
-                            ? 'opacity-100 translate-y-0'
-                            : 'opacity-0 translate-y-8'
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 translate-y-8'
                         }`}
                 >
                     <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-on-surface md:text-4xl">
@@ -33,8 +33,8 @@ export default function Experience() {
                             key={review.name}
                             style={{ transitionDelay: `${index * 125}ms` }}
                             className={`transition-all duration-700 ease-out ${isInView
-                                    ? 'opacity-100 translate-y-0 scale-100'
-                                    : 'opacity-0 translate-y-8 scale-95'
+                                ? 'opacity-100 translate-y-0 scale-100'
+                                : 'opacity-0 translate-y-8 scale-95'
                                 }`}
                         >
                             <ExperienceCard
@@ -43,7 +43,7 @@ export default function Experience() {
                                 quote={review.quote}
                                 date={review.date}
                                 rating={review.rating}
-                                isLast={review.isLast}
+                                islast={review.islast}
                                 variant="default"
                             />
                         </div>
