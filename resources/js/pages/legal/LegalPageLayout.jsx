@@ -1,6 +1,6 @@
 export default function LegalPageLayout({ title, subtitle, eyebrow, lastUpdated, children }) {
     return (
-        <section className="relative w-full px-6 pt-16 pb-6 md:px-5 lg:px-10">
+        <section className="relative w-full px-6 pt-10 pb-6 md:px-5 lg:px-10">
             <div className="mx-auto max-w-4xl pt-5">
 
                 {/* Page Title */}

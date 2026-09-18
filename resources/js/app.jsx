@@ -26,6 +26,9 @@ import PrivacyNotice from './pages/legal/PrivacyNotice';
 import CookieTerms from './pages/legal/CookieTerms';
 import EcotourismNotice from './pages/legal/EcotourismNotice';
 import WildlifeProtection from './pages/legal/WildlifeProtection';
+import TermsConditions from './pages/legal/TermsConditions';
+import Disclaimer from './pages/legal/Disclaimer';
+import RefundPolicy from './pages/legal/RefundPolicy';
 
 import '../css/app.css';
 
@@ -91,6 +94,9 @@ const App = () => {
                     <Route path="/legal/cookie-policy" element={<CookieTerms />} />
                     <Route path="/legal/ecotourism-policy" element={<EcotourismNotice />} />
                     <Route path="/legal/wildlife-protection" element={<WildlifeProtection />} />
+                    <Route path="/legal/terms-conditions" element={<TermsConditions />} />
+                    <Route path="/legal/disclaimer" element={<Disclaimer />} />
+                    <Route path="/legal/refund-policy" element={<RefundPolicy />} />
                 </Route>
 
                 {/* Standalone full-page routes */}

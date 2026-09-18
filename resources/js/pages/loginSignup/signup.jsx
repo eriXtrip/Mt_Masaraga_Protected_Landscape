@@ -7,7 +7,6 @@ import Mountain from '../../components/icons/Mountain';
 import MtmasaragaVanishingfalls from '../../../../public/images/loginSignup/mtmasaragaVanishingfalls.jpg'
 import { Button } from "@/components/ui/button";
 import {
-
     ArrowRight,
     ArrowLeft,
     Send,
@@ -119,8 +118,13 @@ export default function Signup() {
 
     return (
         <div ref={sectionRef} className="flex min-h-screen w-full flex-col bg-surface text-on-surface lg:flex-row overflow-hidden">
-            {/* Left Side: Hero Image Background */}
-            <div className="hidden w-full shrink-0 bg-cover bg-center bg-surface-variant lg:flex lg:w-[42%] xl:w-[40%] relative flex-col justify-end p-12">
+            {/* Left Side: Hero Image Background (Slides in from Left) */}
+            <div
+                className={`hidden w-full shrink-0 bg-cover bg-center bg-surface-variant lg:flex lg:w-[42%] xl:w-[40%] relative flex-col justify-end p-12 transition-all duration-1000 ease-out ${isInView
+                    ? 'opacity-100 translate-x-0'
+                    : 'opacity-0 -translate-x-16 lg:-translate-x-24'
+                    }`}
+            >
                 <img
                     src={MtmasaragaVanishingfalls}
                     alt="Mt. Masaraga Vanishingfalls"
@@ -152,8 +156,14 @@ export default function Signup() {
                 </div>
             </div>
 
-            {/* Right Side: Multi-Step Registration Wizard */}
-            <div className={`flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%] transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            {/* Right Side: Multi-Step Registration Wizard (Slides in from Right) */}
+            <div
+                style={{ transitionDelay: '150ms' }}
+                className={`flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%] transition-all duration-1000 ease-out ${isInView
+                    ? 'opacity-100 translate-x-0'
+                    : 'opacity-0 translate-x-16 lg:translate-x-24'
+                    }`}
+            >
                 <div className="max-w-md w-full mx-auto pt-5 pb-12">
                     {/* Header + Mobile Logo */}
                     <div className="flex items-center gap-2 text-primary lg:hidden">
@@ -161,7 +171,7 @@ export default function Signup() {
                         <span className="text-headline-md font-bold">Mt. Masaraga PL</span>
                     </div>
                     <div className="mb-12 text-center md:text-left">
-                        <h2 className="text-headline-lg-mobile font-bold text-on-surface md:text-headline-lg">
+                        <h2 className="text-2xl font-bold text-on-surface">
                             Join the Community
                         </h2>
                         <p className="font-body-md text-body-md text-on-surface-variant">
@@ -597,38 +607,48 @@ export default function Signup() {
                                     </div>
 
                                     {/* Password Strength Meter */}
-                                    <div className="flex flex-col gap-2.5 rounded-xl border border-outline-variant/60 bg-surface-container-low p-3.5">
-                                        <div className="flex items-center justify-between text-xs">
+                                    <div className="flex flex-col gap-1.5 rounded-lg border border-outline-variant/60 bg-surface-container-low p-2.5">
+                                        <div className="flex items-center justify-between text-[11px]">
                                             <span className="font-medium text-on-surface-variant">Password Strength:</span>
                                             <span className={`flex items-center gap-1 font-bold ${strength > 0 ? strengthColors[strength - 1] : 'text-outline'}`}>
-                                                <ShieldCheck className="h-3.75 w-3.75" />
                                                 {strength > 0 ? strengthLabels[strength - 1] : '—'}
                                             </span>
                                         </div>
-                                        <div className="flex h-1.5 w-full overflow-hidden gap-1 rounded-full bg-surface-container-highest">
+
+                                        <div className="flex h-1 w-full overflow-hidden gap-1 rounded-full bg-surface-container-highest">
                                             {[0, 1, 2, 3].map((i) => (
                                                 <div
                                                     key={i}
-                                                    className={`h-full flex-1 rounded-full transition-colors ${i < strength ? 'bg-primary' : ''
-                                                        }`}
+                                                    className={`h-full flex-1 rounded-full transition-colors ${i < strength ? 'bg-primary' : ''}`}
                                                 />
                                             ))}
                                         </div>
-                                        <div className="grid grid-cols-2 gap-2 pt-1 text-xs">
-                                            {[
-                                                { label: 'Uppercase (A-Z)', test: /[A-Z]/ },
-                                                { label: 'Lowercase (a-z)', test: /[a-z]/ },
-                                                { label: 'Number (0-9)', test: /[0-9]/ },
-                                                { label: 'Special character (!@#$)', test: /[^A-Za-z0-9]/ },
-                                            ].map(({ label, test }) => (
-                                                <div
-                                                    key={label}
-                                                    className={`flex items-center gap-1.5 ${form.password && test.test(form.password) ? 'text-primary' : 'text-outline'}`}
-                                                >
-                                                    <CheckCircle2 className="h-4 w-4" />
-                                                    <span>{label}</span>
-                                                </div>
-                                            ))}
+
+                                        <div className="pt-0.5 text-[11px]">
+                                            {(() => {
+                                                const rules = [
+                                                    { label: 'uppercase letter', test: /[A-Z]/ },
+                                                    { label: 'lowercase letter', test: /[a-z]/ },
+                                                    { label: 'number', test: /[0-9]/ },
+                                                    { label: 'special character', test: /[^A-Za-z0-9]/ },
+                                                ];
+                                                const missing = rules.filter(r => !form.password || !r.test.test(form.password));
+
+                                                if (missing.length === 0) {
+                                                    return (
+                                                        <div className="flex items-center gap-1 text-primary font-medium">
+                                                            <CheckCircle2 className="h-3 w-3 shrink-0" />
+                                                            <span>All password requirements met</span>
+                                                        </div>
+                                                    );
+                                                }
+
+                                                return (
+                                                    <p className="text-on-surface-variant/80 text-[10px]">
+                                                        Must include: <span className="text-outline font-medium">{missing.map(m => m.label).join(', ')}</span>
+                                                    </p>
+                                                );
+                                            })()}
                                         </div>
                                     </div>
 
@@ -646,14 +666,24 @@ export default function Signup() {
                                             className="cursor-pointer select-none text-body-sm text-on-surface-variant"
                                             htmlFor="terms"
                                         >
-                                            I agree to the mandatory{' '}
-                                            <a href="#" className="font-medium text-primary hover:underline">
-                                                Terms &amp; Policies
+                                            I agree to the{' '}
+                                            <a
+                                                href="/legal/terms-conditions"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="font-medium text-primary hover:underline"
+                                            >
+                                                Terms &amp; Conditions
                                             </a>{' '}
-                                            and Mt. Masaraga{' '}
-                                            <a href="#" className="font-medium text-primary hover:underline">
-                                                Permit &amp; Conservation Guidelines
-                                            </a>.
+                                            and{' '}
+                                            <a
+                                                href="/legal/privacy-policy"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="font-medium text-primary hover:underline"
+                                            >
+                                                Privacy Policy
+                                            </a>
                                         </label>
                                     </div>
                                 </div>

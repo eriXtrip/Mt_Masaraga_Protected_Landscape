@@ -66,8 +66,13 @@ export default function Login() {
                 onConfirm={handleAdminConfirm}
             />
 
-            {/* Left Side: Hero Image */}
-            <div className="hidden w-full shrink-0 bg-cover bg-center bg-surface-variant lg:flex lg:w-[42%] xl:w-[40%] relative flex-col justify-end p-12">
+            {/* Left Side: Hero Image (Slides in from Left) */}
+            <div
+                className={`hidden w-full shrink-0 bg-cover bg-center bg-surface-variant lg:flex lg:w-[42%] xl:w-[40%] relative flex-col justify-end p-12 transition-all duration-1000 ease-out ${isInView
+                    ? 'opacity-100 translate-x-0'
+                    : 'opacity-0 -translate-x-16 lg:-translate-x-24'
+                    }`}
+            >
                 <img
                     src={MtMasaraga}
                     alt="Mt. Masaraga covered in lush green rainforest piercing through morning mist"
@@ -97,8 +102,14 @@ export default function Login() {
                 </div>
             </div>
 
-            {/* Right Side: Login Form */}
-            <div className={`flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%] transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            {/* Right Side: Login Form (Slides in from Right) */}
+            <div
+                style={{ transitionDelay: '150ms' }}
+                className={`flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%] transition-all duration-1000 ease-out ${isInView
+                    ? 'opacity-100 translate-x-0'
+                    : 'opacity-0 translate-x-16 lg:translate-x-24'
+                    }`}
+            >
                 <div className="max-w-md w-full mx-auto pt-5 pb-12">
                     {/* Header + Mobile Logo */}
                     <div className="flex items-center gap-2 text-primary lg:hidden mb-6">
@@ -106,7 +117,7 @@ export default function Login() {
                         <span className="text-headline-md font-bold">Mt. Masaraga PL</span>
                     </div>
                     <div className="mb-8 text-center md:text-left">
-                        <h2 className="text-headline-lg-mobile font-bold text-on-surface md:text-headline-lg">
+                        <h2 className="text-2xl font-bold text-on-surface">
                             Welcome Back
                         </h2>
                         <p className="font-body-md text-body-md text-on-surface-variant">

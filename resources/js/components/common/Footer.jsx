@@ -21,6 +21,9 @@ const LEGAL_LINKS = [
     { label: 'Cookie Policy', to: '/legal/cookie-policy' },
     { label: 'Ecotourism Policy (Leave No Trace)', to: '/legal/ecotourism-policy' },
     { label: 'Wildlife Protection', to: '/legal/wildlife-protection' },
+    { label: 'Terms and Conditions', to: '/legal/terms-conditions' },
+    { label: 'Disclaimer', to: '/legal/disclaimer' },
+    { label: 'Refund and Return Policy', to: '/legal/refund-policy' },
 ];
 
 export default function Footer() {
