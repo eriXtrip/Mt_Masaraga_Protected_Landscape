@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminBooking from './pages/admin/AdminBooking';
 import AdminSection from './pages/admin/AdminSection';
 import { ADMIN_SECTIONS } from './admin/navConfig';
 
 import '../css/app.css';
 
 const ADMIN_ROUTE_PATHS = Object.keys(ADMIN_SECTIONS);
+const GENERIC_SECTION_PATHS = (path) => path !== '/admin/dashboard' && path !== '/admin/bookings';
 
 const AdminApp = () => (
     <BrowserRouter>
@@ -16,7 +18,8 @@ const AdminApp = () => (
             <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
             <Route element={<AdminLayout />}>
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                {ADMIN_ROUTE_PATHS.filter((path) => path !== '/admin/dashboard').map((path) => (
+                <Route path="/admin/bookings" element={<AdminBooking />} />
+                {ADMIN_ROUTE_PATHS.filter(GENERIC_SECTION_PATHS).map((path) => (
                     <Route key={path} path={path} element={<AdminSection />} />
                 ))}
                 <Route path="/admin/*" element={<AdminSection />} />

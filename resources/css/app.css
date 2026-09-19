@@ -196,6 +196,33 @@
   background-color: rgba(255, 255, 255, 0.4);
 }
 
+/* Custom Global Page Scrollbar */
+html {
+  /* Firefox support */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary, #39670d) var(--color-surface, #f8faf5);
+}
+
+/* Chrome, Edge, Safari, and Brave support */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface, #f8faf5);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary, #39670d);
+  border-radius: 9999px;
+  border: 2px solid var(--color-surface, #f8faf5);
+  /* Creates padding inside track */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-surface-tint, #2d520a);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

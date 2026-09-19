@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { LogOut, ShieldCheck, ExternalLink } from 'lucide-react';
 import { ADMIN_NAV_GROUPS } from '../../admin/navConfig';
@@ -13,21 +14,50 @@ const getInitials = (name) => {
 };
 
 export default function AdminSidebar({ open, onClose }) {
+    const [closing, setClosing] = useState(false);
+    const closeTimerRef = useRef(null);
+    const prevOpenRef = useRef(open);
+
+    useEffect(() => {
+        const wasOpen = prevOpenRef.current;
+        prevOpenRef.current = open;
+
+        if (open) {
+            if (closeTimerRef.current) {
+                window.clearTimeout(closeTimerRef.current);
+                closeTimerRef.current = null;
+            }
+            setClosing(false);
+            return;
+        }
+
+        if (wasOpen) {
+            setClosing(true);
+            closeTimerRef.current = window.setTimeout(() => setClosing(false), 300);
+        }
+    }, [open]);
+
+    useEffect(() => () => {
+        if (closeTimerRef.current) {
+            window.clearTimeout(closeTimerRef.current);
+        }
+    }, []);
+
     return (
         <>
-            {open && (
+            {(open || closing) && (
                 <button
                     type="button"
                     aria-label="Close navigation menu"
                     onClick={onClose}
-                    className="fixed inset-0 z-30 cursor-pointer bg-inverse-surface/60 lg:hidden"
+                    className={`fixed inset-0 z-30 cursor-pointer bg-inverse-surface/60 lg:hidden ${closing ? 'animate-out fade-out animation-duration-300' : 'animate-in fade-in animation-duration-300'} motion-reduce:animate-none`}
                 />
             )}
 
             <aside
                 id="admin-sidebar"
                 aria-label="Admin navigation"
-                className={`fixed inset-y-4 z-40 flex w-72 max-w-[calc(100vw-2rem)] flex-col rounded-r-2xl bg-secondary text-on-secondary shadow-sm transition-transform duration-200 ease-out lg:translate-x-0 ${open
+                className={`fixed inset-y-4 z-40 flex w-72 max-w-[calc(100vw-2rem)] flex-col rounded-r-2xl bg-secondary text-on-secondary shadow-sm transition-transform duration-300 ease-out lg:translate-x-0 ${open
                     ? 'translate-x-0'
                     : '-translate-x-[calc(100%+1rem)]'
                     }`}

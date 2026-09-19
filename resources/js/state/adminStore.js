@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react';
-import { ADMIN_BOOKINGS, ADMIN_DAILY_QUOTA, ADMIN_USERS } from '../mockData';
+import { ADMIN_BOOKINGS, ADMIN_DAILY_QUOTA, ADMIN_SCHEDULES, ADMIN_USERS } from '../mockData';
 
 const STORAGE_KEY = 'masaraga_admin_store_v1';
 const ADMIN = ADMIN_USERS.find((user) => user.role === 1) || ADMIN_USERS[0] || {};
@@ -14,6 +14,7 @@ function createSeed() {
         },
         bookings: ADMIN_BOOKINGS,
         quota: ADMIN_DAILY_QUOTA,
+        schedules: ADMIN_SCHEDULES,
         users: ADMIN_USERS,
     };
 }
@@ -66,6 +67,33 @@ export function updateBookingStatus(bookingId, status) {
         bookings: current.bookings.map((booking) =>
             booking.id === bookingId ? { ...booking, status } : booking
         ),
+    }));
+}
+
+export function cancelBooking(bookingId) {
+    updateBookingStatus(bookingId, 'Cancelled');
+}
+
+export function rescheduleBooking(bookingId, date) {
+    setState((current) => ({
+        ...current,
+        bookings: current.bookings.map((booking) =>
+            booking.id === bookingId ? { ...booking, date } : booking
+        ),
+    }));
+}
+
+export function refundBooking(bookingId) {
+    updateBookingStatus(bookingId, 'Refunded');
+}
+
+export function createSchedule(schedule) {
+    setState((current) => ({
+        ...current,
+        schedules: [
+            ...current.schedules,
+            { booked: 0, status: 'Available', ...schedule },
+        ],
     }));
 }
 

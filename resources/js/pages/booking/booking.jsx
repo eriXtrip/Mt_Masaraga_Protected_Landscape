@@ -11,19 +11,20 @@ import BookingConfirmation from './BookingConfirmation';
 import PaymentOverlay from '@/components/features/PaymentOverlay';
 
 import QR from '../../../../public/images/QR_Code_Example.svg.webp';
-import { BOOKING_DETAILS, TRAILS } from '../../mockData';
+import { BOOKING_DETAILS, TRAILS, ADMIN_SCHEDULES } from '../../mockData';
 
 const STEPS = ['Select Date', 'Hikers Details', 'Checklist', 'Payment'];
 
-// Mock data for available slots per date (YYYY-MM-DD format)
-export const SLOTS = {
-    "2026-10-05": 12,
-    "2026-10-06": 8,
-    "2026-10-07": 0, // Fully booked
-    "2026-10-08": 2, // Limited space
-    "2026-10-09": 15,
-    "2026-10-10": 0,
-};
+// Dates the park has scheduled for this trail, from admin-published schedules.
+// Maps an ISO date key to the number of slots still open on that date.
+function getScheduledSlots(trailId) {
+    return ADMIN_SCHEDULES.reduce((map, schedule) => {
+        if (schedule.trailId === trailId) {
+            map[schedule.dateKey] = Math.max(0, schedule.capacity - schedule.booked);
+        }
+        return map;
+    }, {});
+}
 
 export default function Booking() {
     const navigate = useNavigate();
@@ -34,6 +35,7 @@ export default function Booking() {
     const trailId = id && TRAILS[id] ? id : 'amtic';
     const trail = TRAILS[trailId];
     const trailBookingDetails = BOOKING_DETAILS[trailId] || BOOKING_DETAILS.amtic;
+    const trailSlots = getScheduledSlots(trailId);
 
     const [currentStep, setCurrentStep] = useState(1);
     const [date, setDate] = useState(undefined);
@@ -179,7 +181,7 @@ export default function Booking() {
                                             mode="single"
                                             selected={date}
                                             onSelect={setDate}
-                                            slots={SLOTS}
+                                            slots={trailSlots}
                                         />
                                     </div>
                                     <div className="lg:col-span-4 lg:sticky lg:top-6">

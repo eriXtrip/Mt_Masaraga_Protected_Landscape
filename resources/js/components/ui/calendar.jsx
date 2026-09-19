@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils"
 import { DayPicker, getDefaultClassNames } from "react-day-picker"
 import { ChevronLeftIcon, ChevronRightIcon, CheckCircle2 } from "lucide-react"
 
+const SlotContext = React.createContext({ provided: false, map: {} })
+
 function Calendar({
   className,
   classNames,
@@ -15,6 +17,11 @@ function Calendar({
   ...props
 }) {
   const defaultClassNames = getDefaultClassNames()
+
+  const slotContext = React.useMemo(
+    () => ({ provided: slots !== undefined, map: slots || {} }),
+    [slots]
+  )
 
   // Get current date and start of current month
   const today = React.useMemo(() => new Date(), [])
@@ -31,6 +38,7 @@ function Calendar({
 
   return (
     <div className="w-full relative">
+      <SlotContext.Provider value={slotContext}>
       <DayPicker
         // 1. Prevents navigating back to previous months
         fromMonth={fromMonth ?? startOfCurrentMonth}
@@ -93,6 +101,7 @@ function Calendar({
         }}
         {...props}
       />
+      </SlotContext.Provider>
     </div>
   )
 }
@@ -103,15 +112,19 @@ function CalendarDayButton({ day, modifiers, className, ...props }) {
   const isToday = modifiers.today;
   const isDisabled = modifiers.disabled;
 
-  // Format the current date to YYYY-MM-DD for looking up in the const
+  // Format the current date to YYYY-MM-DD for looking up in the slots map
   const dateKey = day.date.toLocaleDateString('en-CA'); // 'en-CA' outputs YYYY-MM-DD natively
 
-  // Lookup slots from the const. Default to a high number (e.g. 20) if not explicitly defined in MOCK_SLOTS_DATA
-  const slots = typeof MOCK_SLOTS_DATA !== "undefined" && MOCK_SLOTS_DATA[dateKey] !== undefined ? MOCK_SLOTS_DATA[dateKey] : 20;
+  const slotContext = React.useContext(SlotContext);
+  // When a slots map is provided, dates without one are treated as closed (0).
+  // Without a map, every future date stays open.
+  const slotCount = slotContext.provided
+    ? slotContext.map[dateKey] !== undefined ? slotContext.map[dateKey] : 0
+    : 20;
 
   const dayNum = day.date.getDate();
-  const isLimited = slots > 0 && slots <= 3;
-  const isFullyBooked = slots === 0;
+  const isLimited = slotCount > 0 && slotCount <= 3;
+  const isFullyBooked = slotCount === 0;
 
   let dayWrapperClass = "bg-surface-container-lowest p-2 h-28 border-t border-l border-outline-variant/10 relative transition-colors group ";
 
@@ -158,11 +171,11 @@ function CalendarDayButton({ day, modifiers, className, ...props }) {
               </div>
             ) : isLimited ? (
               <div className="bg-[#fef08a]/30 text-[#854d0e] text-[10px] py-1 px-2 rounded text-center truncate group-hover:bg-[#fef08a] transition-colors">
-                {slots} slots left
+                {slotCount} slots left
               </div>
             ) : (
               <div className="bg-primary/10 text-primary text-[10px] py-1 px-2 rounded text-center truncate group-hover:bg-primary group-hover:text-on-primary transition-colors">
-                {slots} slots open
+                {slotCount} slots open
               </div>
             )}
           </div>
