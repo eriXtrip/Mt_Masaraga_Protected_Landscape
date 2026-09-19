@@ -909,6 +909,139 @@ export const DEFAULT_BOOKING_SUMMARY = {
     totalAmount: 1850.0,
 };
 
+// Admin mock database: powers the Admin Console. Amounts and slot counts below
+// are this app's seeded data (mirrored by adminStore.js), matching the names,
+// trails, and dates already used across the public booking datasets.
+export const ADMIN_USERS = [
+    {
+        id: 'user_admin',
+        name: 'Juan Dela Cruz',
+        email: 'admin@masaraga.gov.ph',
+        role: 1,
+        subtitle: 'System Administrator',
+        status: 'Active',
+    },
+    {
+        id: 'user_staff',
+        name: 'Maria Santos',
+        email: 'staff@masaraga.gov.ph',
+        role: 2,
+        subtitle: 'Park Staff / Guide',
+        status: 'Active',
+    },
+    {
+        id: 'user_hiker',
+        name: 'Jon Eric Tripulca',
+        email: 'hiker@example.com',
+        role: 3,
+        subtitle: 'Hiker',
+        status: 'Active',
+    },
+    {
+        id: 'user_jane',
+        name: 'Jane Doe',
+        email: 'jane.doe@example.com',
+        role: 3,
+        subtitle: 'Hiker',
+        status: 'Active',
+    },
+    {
+        id: 'user_marcus',
+        name: 'Marcus Chen',
+        email: 'marcus.chen@example.com',
+        role: 3,
+        subtitle: 'Hiker',
+        status: 'Active',
+    },
+    {
+        id: 'user_elena',
+        name: 'Elena Santos',
+        email: 'elena.santos@example.com',
+        role: 3,
+        subtitle: 'Hiker',
+        status: 'Active',
+    },
+];
+
+export const ADMIN_BOOKINGS = [
+    {
+        id: 'BK-2026-1024-01',
+        reference: 'TXN-2026-0928',
+        leadHiker: 'Jane Doe',
+        trail: 'Amtic Trail (or Sabluyon Trail)',
+        date: 'Oct 24, 2026',
+        participants: 2,
+        totalPaid: 1850,
+        paymentMethod: 'GCash',
+        status: 'Pending',
+    },
+    {
+        id: 'BK-2026-1024-02',
+        reference: 'TXN-2026-0930',
+        leadHiker: 'Marcus Chen',
+        trail: 'Amtic Trail (or Sabluyon Trail)',
+        date: 'Oct 24, 2026',
+        participants: 5,
+        totalPaid: 2000,
+        paymentMethod: 'Maya',
+        status: 'Pending',
+    },
+    {
+        id: 'BK-2026-1024-03',
+        reference: 'TXN-2026-1002',
+        leadHiker: 'Elena Santos',
+        trail: 'Balogo Trail',
+        date: 'Oct 24, 2026',
+        participants: 3,
+        totalPaid: 1700,
+        paymentMethod: 'Bank Transfer',
+        status: 'Pending',
+    },
+    {
+        id: 'BK-2026-1024-04',
+        reference: 'TXN-2026-1024',
+        leadHiker: 'Jane Doe',
+        trail: 'Amtic Trail (or Sabluyon Trail)',
+        date: 'Oct 24, 2026',
+        participants: 2,
+        totalPaid: 1850,
+        paymentMethod: 'GCash',
+        status: 'Confirmed',
+        guide: 'R. Villanueva',
+    },
+    {
+        id: 'BK-2026-0812-01',
+        reference: 'TXN-2026-0812',
+        leadHiker: 'Elena Santos',
+        trail: 'Balogo Trail',
+        date: 'Aug 12, 2026',
+        participants: 1,
+        totalPaid: 650,
+        paymentMethod: 'Maya',
+        status: 'Completed',
+        guide: 'M. Santos',
+    },
+];
+
+export const ADMIN_DAILY_QUOTA = [
+    {
+        trailId: 'amtic',
+        trail: 'Amtic Trail (or Sabluyon Trail)',
+        date: 'Oct 24, 2026',
+        booked: 44,
+        capacity: 50,
+        status: 'Limited',
+    },
+    {
+        trailId: 'ligao',
+        trail: 'Balogo Trail',
+        date: 'Oct 24, 2026',
+        booked: 11,
+        capacity: 30,
+        status: 'Available',
+    },
+];
+
 
 
 

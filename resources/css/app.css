@@ -173,6 +173,29 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Custom Sidebar Scrollbar */
+.custom-sidebar-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.custom-sidebar-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-sidebar-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-sidebar-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+}
+
+.custom-sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

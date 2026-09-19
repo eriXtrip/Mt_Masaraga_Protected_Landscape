@@ -52,6 +52,10 @@ export default function Login() {
 
     const completeLogin = (user) => {
         console.log('Login Successful:', user || form);
+        if (user?.role === 1) {
+            window.location.assign('/admin/dashboard');
+            return;
+        }
         navigate('/');
     };
 
