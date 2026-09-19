@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { CheckCircle2, X } from 'lucide-react';
+import { useInView } from '@/hooks/useInView';
 import {
     useAdminStore,
     cancelBooking,
-    rescheduleBooking,
     refundBooking,
     createSchedule,
+    rescheduleSchedule,
+    changeScheduleGuide,
 } from '../../state/adminStore';
 import BookingSummary from '../../components/admin/booking/BookingSummary';
 import ScheduleList from '../../components/admin/booking/ScheduleList';
@@ -13,15 +15,17 @@ import CreateSchedule from '../../components/admin/booking/CreateSchedule';
 import BookingFilters from '../../components/admin/booking/BookingFilters';
 import BookingList from '../../components/admin/booking/BookingList';
 import BookingDetail from '../../components/admin/booking/BookingDetail';
-import RescheduleBookingModal from '../../components/admin/booking/RescheduleBookingModal';
+import RescheduleScheduleModal from '../../components/admin/booking/RescheduleScheduleModal';
 import CancelBookingModal from '../../components/admin/booking/CancelBookingModal';
 import RefundBookingModal from '../../components/admin/booking/RefundBookingModal';
 
 export default function AdminBooking() {
     const { bookings, schedules, quota, users } = useAdminStore();
+    const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
 
     const [activeScheduleId, setActiveScheduleId] = useState(null);
     const [showCreateSchedule, setshowCreateSchedule] = useState(false);
+    const [scheduleReschedule, setScheduleReschedule] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
     const [selectedId, setSelectedId] = useState(null);
@@ -49,6 +53,7 @@ export default function AdminBooking() {
         const matchesSearch =
             !term ||
             booking.leadHiker.toLowerCase().includes(term) ||
+            booking.hikers?.some((hiker) => hiker.fullName.toLowerCase().includes(term)) ||
             booking.reference.toLowerCase().includes(term) ||
             booking.trail.toLowerCase().includes(term);
         const matchesStatus = statusFilter === 'All' || booking.status === statusFilter;
@@ -58,6 +63,9 @@ export default function AdminBooking() {
     const scheduleLabel = activeSchedule ? `${activeSchedule.trail} · ${activeSchedule.date}` : null;
 
     const selectedBooking = selectedId ? bookings.find((b) => b.id === selectedId) ?? null : null;
+    const selectedSchedule = selectedBooking
+        ? schedules.find((s) => s.id === selectedBooking.scheduleId) ?? null
+        : null;
 
     const resetAll = () => {
         setActiveScheduleId(null);
@@ -71,13 +79,6 @@ export default function AdminBooking() {
     };
 
     const closeActionModal = () => setAction(null);
-
-    const handleReschedule = (date) => {
-        rescheduleBooking(selectedBooking.id, date);
-        setNotice({ message: `${selectedBooking.reference} rescheduled to ${date}.` });
-        closeActionModal();
-        setSelectedId(null);
-    };
 
     const handleCancel = () => {
         cancelBooking(selectedBooking.id);
@@ -104,10 +105,24 @@ export default function AdminBooking() {
         });
     };
 
+    const handleRescheduleSchedule = (schedule, { dateKey, date, guide }) => {
+        rescheduleSchedule(schedule.id, dateKey, date);
+        if (guide !== schedule.guide) {
+            changeScheduleGuide(schedule.id, guide);
+        }
+        setNotice({ message: `${schedule.trail} rescheduled to ${date} · guide ${guide}.` });
+    };
+
     return (
         <>
-            <div className="space-y-6 md:space-y-8">
-                <header className="max-w-2xl space-y-1.5">
+            <div ref={sectionRef} className="space-y-6 md:space-y-8">
+                <header
+                    style={{ transitionDelay: '0ms' }}
+                    className={`max-w-2xl space-y-1.5 transition-all duration-700 ease-out ${isInView
+                        ? 'opacity-100 translate-y-0 scale-100'
+                        : 'opacity-0 translate-y-8 scale-95'
+                        }`}
+                >
                     <p className="text-[11px] font-bold uppercase tracking-widest text-primary">
                         Admin Console · Bookings
                     </p>
@@ -120,7 +135,13 @@ export default function AdminBooking() {
                 </header>
 
                 {notice && (
-                    <div className="flex items-center gap-2 rounded-2xl bg-emerald-500/10 px-5 py-4 text-sm text-emerald-700">
+                    <div
+                        style={{ transitionDelay: '100ms' }}
+                        className={`flex items-center gap-2 rounded-2xl bg-emerald-500/10 px-5 py-4 text-sm text-emerald-700 transition-all duration-700 ease-out ${isInView
+                            ? 'opacity-100 translate-y-0 scale-100'
+                            : 'opacity-0 translate-y-8 scale-95'
+                            }`}
+                    >
                         <CheckCircle2 className="h-4 w-4 shrink-0" />
                         <p className="min-w-0 flex-1">{notice.message}</p>
                         <button
@@ -134,9 +155,23 @@ export default function AdminBooking() {
                     </div>
                 )}
 
-                <BookingSummary bookings={bookings} quota={quota} />
+                <div
+                    style={{ transitionDelay: '150ms' }}
+                    className={`transition-all duration-700 ease-out ${isInView
+                        ? 'opacity-100 translate-y-0 scale-100'
+                        : 'opacity-0 translate-y-8 scale-95'
+                        }`}
+                >
+                    <BookingSummary bookings={bookings} quota={quota} />
+                </div>
 
-                <div className="flex flex-col lg:flex-row gap-6 w-full">
+                <div
+                    style={{ transitionDelay: '250ms' }}
+                    className={`flex flex-col lg:flex-row gap-6 w-full transition-all duration-700 ease-out ${isInView
+                        ? 'opacity-100 translate-y-0 scale-100'
+                        : 'opacity-0 translate-y-8 scale-95'
+                        }`}
+                >
                     {/* Schedule List: Full width on mobile/tablet, 1/3 width on large screens */}
                     <div className="w-full lg:w-1/3 shrink-0">
                         <ScheduleList
@@ -145,6 +180,7 @@ export default function AdminBooking() {
                             activeScheduleId={activeScheduleId}
                             onSelect={setActiveScheduleId}
                             onCreate={() => setshowCreateSchedule(true)}
+                            onReschedule={setScheduleReschedule}
                         />
                     </div>
 
@@ -175,16 +211,9 @@ export default function AdminBooking() {
                 <BookingDetail
                     booking={selectedBooking}
                     guideOptions={guideOptions}
+                    scheduleGuide={selectedSchedule?.guide}
                     onAction={runAction}
                     onClose={() => setSelectedId(null)}
-                />
-            )}
-
-            {action === 'reschedule' && selectedBooking && (
-                <RescheduleBookingModal
-                    booking={selectedBooking}
-                    onConfirm={handleReschedule}
-                    onClose={closeActionModal}
                 />
             )}
 
@@ -210,6 +239,16 @@ export default function AdminBooking() {
                     guides={guideOptions}
                     onConfirm={handleCreateSchedule}
                     onClose={() => setshowCreateSchedule(false)}
+                />
+            )}
+
+            {scheduleReschedule && (
+                <RescheduleScheduleModal
+                    schedule={scheduleReschedule}
+                    schedules={schedules}
+                    guides={guideOptions}
+                    onConfirm={handleRescheduleSchedule}
+                    onClose={() => setScheduleReschedule(null)}
                 />
             )}
         </>

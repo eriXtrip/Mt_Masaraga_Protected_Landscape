@@ -1,9 +1,13 @@
 import { useEffect, useRef } from 'react';
-import { X, Mail, CalendarClock, Users, MapPin, Receipt, ShieldCheck, RotateCcw, Undo2, CircleOff } from 'lucide-react';
+import {
+    X, Mail, CalendarClock, Users, MapPin, Receipt, ShieldCheck,
+    Undo2, CircleOff, User, PhoneCall, Calendar, Heart
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDrawerTransition } from '@/hooks/useDrawerTransition';
 import StatusPill from './StatusPill';
 import { getInitials, formatter } from './bookingUtils';
+import { HEALTH_QUESTIONS } from '../../../mockData';
 
 function DetailSection({ title, children }) {
     return (
@@ -24,6 +28,74 @@ function DetailRow({ icon: Icon, label, value }) {
     );
 }
 
+/* Redesigned Card-Style Block to Fix Crowded Layout in Side Drawers */
+function InfoCard({ icon: Icon, label, value, className = "" }) {
+    return (
+        <div className={`flex items-start gap-2.5 rounded-xl border border-outline-variant/30 bg-surface-container-low/50 p-3 transition-colors hover:bg-surface-container-low ${className}`}>
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <Icon className="h-3.5 w-3.5" />
+            </div>
+            <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
+                    {label}
+                </p>
+                <p className="mt-0.5 text-xs font-semibold leading-snug text-on-surface break-words">
+                    {value || 'Not provided'}
+                </p>
+            </div>
+        </div>
+    );
+}
+
+function HikerDetail({ hiker, index }) {
+    return (
+        <section className="rounded-2xl border border-outline-variant/40 p-4 bg-surface-container-lowest shadow-xs">
+            {/* Header */}
+            <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                        Hiker {index + 1}
+                    </p>
+                    <h3 className="mt-0.5 truncate text-sm font-bold text-on-surface">{hiker.fullName}</h3>
+                </div>
+                <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${hiker.agreeWaiver
+                        ? 'bg-primary/10 text-primary'
+                        : 'bg-surface-container-high text-on-surface-variant'
+                    }`}>
+                    {hiker.agreeWaiver ? 'Waiver agreed' : 'Waiver missing'}
+                </span>
+            </div>
+
+            {/* Structured Card Grid */}
+            <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                <InfoCard icon={Calendar} label="Date of birth" value={hiker.dateOfBirth} />
+                <InfoCard icon={MapPin} label="Complete address" value={hiker.address} />
+                <InfoCard icon={User} label="Emergency contact" value={hiker.emergencyName} />
+                <InfoCard icon={Heart} label="Relationship" value={hiker.emergencyRelationship} />
+                <InfoCard icon={PhoneCall} label="Contact number" value={hiker.emergencyContact} className="sm:col-span-2" />
+            </div>
+
+            {/* Health Declaration */}
+            <div className="mt-4 border-t border-outline-variant/20 pt-3">
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Health declaration</h4>
+                <div className="mt-2 space-y-1.5">
+                    {HEALTH_QUESTIONS.map((question) => {
+                        const answer = hiker.healthAnswers?.[question.id];
+                        return (
+                            <div key={question.id} className="flex items-center justify-between gap-3 rounded-lg bg-surface-container-low/60 px-3 py-2 text-xs">
+                                <p className="leading-snug text-on-surface-variant">{question.question}</p>
+                                <span className="shrink-0 font-bold capitalize text-primary">
+                                    {answer || 'Not answered'}
+                                </span>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </section>
+    );
+}
+
 function ActionButton({ icon: Icon, label, variant = 'outline', onClick }) {
     return (
         <Button variant={variant} onClick={onClick} className="w-full gap-2 cursor-pointer">
@@ -33,7 +105,7 @@ function ActionButton({ icon: Icon, label, variant = 'outline', onClick }) {
     );
 }
 
-export default function BookingDetail({ booking, guideOptions, onAction, onClose }) {
+export default function BookingDetail({ booking, guideOptions, scheduleGuide, onAction, onClose }) {
     const closeButtonRef = useRef(null);
     const { closing, requestClose, handleAnimationEnd } = useDrawerTransition(onClose);
 
@@ -51,11 +123,16 @@ export default function BookingDetail({ booking, guideOptions, onAction, onClose
     }, [requestClose]);
 
     const actions = [];
+
     if (booking.status === 'Pending' || booking.status === 'Confirmed') {
         actions.push(
-            { key: 'reschedule', label: 'Reschedule', variant: 'outline', icon: RotateCcw, action: () => onAction('reschedule') },
-            { key: 'refund', label: 'Process refund', variant: 'outline', icon: Undo2, action: () => onAction('refund') },
-            { key: 'cancel', label: 'Cancel booking', variant: 'outline', icon: CircleOff, action: () => onAction('cancel') },
+            { key: 'cancel', label: 'Cancel booking', variant: 'outline', icon: CircleOff, action: () => onAction('cancel') }
+        );
+    }
+
+    if (booking.status === 'Cancelled' || booking.status === 'Cancel') {
+        actions.push(
+            { key: 'refund', label: 'Process refund', variant: 'outline', icon: Undo2, action: () => onAction('refund') }
         );
     }
 
@@ -102,7 +179,17 @@ export default function BookingDetail({ booking, guideOptions, onAction, onClose
                     <DetailSection title="Lead hiker">
                         <div className="space-y-2">
                             <DetailRow icon={Mail} label="Contact" value={booking.contact} />
-                            <DetailRow icon={ShieldCheck} label="Guide" value={booking.guide || 'Not assigned'} />
+                            <DetailRow icon={ShieldCheck} label="Guide" value={scheduleGuide || booking.guide || 'Not assigned'} />
+                        </div>
+                    </DetailSection>
+
+                    <DetailSection title="Hikers">
+                        <div className="space-y-3">
+                            {booking.hikers?.length ? booking.hikers.map((hiker, index) => (
+                                <HikerDetail key={hiker.fullName} hiker={hiker} index={index} />
+                            )) : (
+                                <p className="text-xs text-on-surface-variant">No hiker details available.</p>
+                            )}
                         </div>
                     </DetailSection>
 
@@ -151,7 +238,7 @@ export default function BookingDetail({ booking, guideOptions, onAction, onClose
 
                 <div className="border-t border-outline-variant/20 px-5 py-4">
                     {actions.length > 0 ? (
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className={`grid gap-3 ${actions.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
                             {actions.map((action) => (
                                 <ActionButton key={action.key} icon={action.icon} label={action.label} variant={action.variant} onClick={action.action} />
                             ))}
@@ -159,6 +246,10 @@ export default function BookingDetail({ booking, guideOptions, onAction, onClose
                     ) : booking.status === 'Completed' ? (
                         <p className="text-center text-xs text-on-surface-variant">
                             This booking has completed its climb.
+                        </p>
+                    ) : booking.status === 'Refunded' ? (
+                        <p className="text-center text-xs text-on-surface-variant">
+                            This booking has been refunded.
                         </p>
                     ) : (
                         <p className="text-center text-xs text-on-surface-variant">

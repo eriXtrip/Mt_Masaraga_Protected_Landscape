@@ -60,6 +60,10 @@ export default function CreateSchedule({ schedules, guides, onConfirm, onClose }
             ? schedules.some((s) => s.trailId === trailId && s.dateKey === dateKey)
             : false;
     const trailSchedules = trailId ? schedules.filter((s) => s.trailId === trailId) : [];
+  const trailScheduleSlots = trailSchedules.reduce((map, s) => {
+    map[s.dateKey] = Math.max(0, (s.capacity ?? 0) - (s.booked ?? 0));
+    return map;
+  }, {});
 
     const canPublish = Boolean(trailId && date && !duplicate && Number(capacity) > 0 && guide);
 
@@ -124,7 +128,7 @@ export default function CreateSchedule({ schedules, guides, onConfirm, onClose }
                     <div>
                         <FieldLabel>Date</FieldLabel>
                         <div className="mt-3 inline-block rounded-md border border-outline-variant/40 p-2">
-                            <Calendar mode="single" selected={date} onSelect={setDate} />
+                            <Calendar mode="single" selected={date} onSelect={setDate} slots={trailScheduleSlots} allowUnscheduled disableScheduled />
                         </div>
                         {duplicate && (
                             <p className="mt-2 text-xs font-semibold text-red-600">

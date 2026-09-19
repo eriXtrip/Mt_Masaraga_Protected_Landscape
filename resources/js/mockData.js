@@ -28,7 +28,7 @@ export const MOCK_USERS = [
         subtitle: 'Park Staff / Guide',
         password: 'STAFF1',
 
-    },    
+    },
     {
         id: 'user_admin',
         name: 'Juan Dela Cruz',
@@ -38,7 +38,7 @@ export const MOCK_USERS = [
         password: 'ADmin1',
         secondaryPin: '123456'
     },
-    
+
 ];
 
 export const AWARDS = [
@@ -987,6 +987,32 @@ export const ADMIN_BOOKINGS = [
             { id: 'barangay_clearance', title: 'Barangay Clearance / Community Tax Certificate', status: 'Complete' },
             { id: 'health_declaration', title: 'Health Declaration', status: 'Missing' },
         ],
+        hikers: [
+            {
+                fullName: 'Jane Doe',
+                dateOfBirth: '1994-05-12',
+                address: 'Ligao City, Albay',
+                emergencyName: 'Maria Doe',
+                emergencyRelationship: 'Mother',
+                emergencyContact: '+63 900 123 4567',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
+            {
+                fullName: 'John Smith',
+                dateOfBirth: '1991-08-23',
+                address: 'Ragay, Albay',
+                emergencyName: 'Michael Smith',
+                emergencyRelationship: 'Brother',
+                emergencyContact: '+63 900 765 4321',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
+        ],
     },
     {
         id: 'BK-2026-1024-02',
@@ -1011,6 +1037,68 @@ export const ADMIN_BOOKINGS = [
             { id: 'health_declaration', title: 'Health Declaration', status: 'Complete' },
             { id: 'barangay_clearance', title: 'Barangay Clearance / Community Tax Certificate', status: 'Missing' },
         ],
+        hikers: [
+            {
+                fullName: 'Marcus Chen',
+                dateOfBirth: '1989-02-14',
+                address: 'Ligao City, Albay',
+                emergencyName: 'Linda Chen',
+                emergencyRelationship: 'Mother',
+                emergencyContact: '+63 900 234 5678',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
+            {
+                fullName: 'Ana Reyes',
+                dateOfBirth: '1996-11-03',
+                address: 'Bacoor, Cavite',
+                emergencyName: 'Jose Reyes',
+                emergencyRelationship: 'Father',
+                emergencyContact: '+63 900 345 6789',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
+            {
+                fullName: 'Luis Santos',
+                dateOfBirth: '1993-07-19',
+                address: 'Daet, Camarines Norte',
+                emergencyName: 'Rosa Santos',
+                emergencyRelationship: 'Sister',
+                emergencyContact: '+63 900 456 7890',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
+            {
+                fullName: 'Carla Gomez',
+                dateOfBirth: '2000-01-27',
+                address: 'Manila',
+                emergencyName: 'Pedro Gomez',
+                emergencyRelationship: 'Father',
+                emergencyContact: '+63 900 567 8901',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
+            {
+                fullName: 'Paolo Cruz',
+                dateOfBirth: '1998-09-08',
+                address: 'Naga City',
+                emergencyName: 'Teresa Cruz',
+                emergencyRelationship: 'Mother',
+                emergencyContact: '+63 900 678 9012',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
+        ],
     },
     {
         id: 'BK-2026-1024-03',
@@ -1034,6 +1122,44 @@ export const ADMIN_BOOKINGS = [
             { id: 'booking_ticket', title: 'Booking Ticket Copy', status: 'Complete' },
             { id: 'barangay_clearance', title: 'Barangay Clearance / Community Tax Certificate', status: 'Complete' },
             { id: 'health_declaration', title: 'Health Declaration', status: 'Complete' },
+        ],
+        hikers: [
+            {
+                fullName: 'Elena Santos',
+                dateOfBirth: '1995-04-16',
+                address: 'Ligao City, Albay',
+                emergencyName: 'Jose Santos',
+                emergencyRelationship: 'Father',
+                emergencyContact: '+63 900 789 0123',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
+            {
+                fullName: 'Diego Ramos',
+                dateOfBirth: '1992-12-05',
+                address: 'Irosin, Sorsogon',
+                emergencyName: 'Carmen Ramos',
+                emergencyRelationship: 'Mother',
+                emergencyContact: '+63 900 890 1234',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
+            {
+                fullName: 'Nina Villanueva',
+                dateOfBirth: '1999-06-30',
+                address: 'Polangui, Albay',
+                emergencyName: 'Carlos Villanueva',
+                emergencyRelationship: 'Brother',
+                emergencyContact: '+63 900 901 2345',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
         ],
     },
     {
@@ -1060,6 +1186,32 @@ export const ADMIN_BOOKINGS = [
             { id: 'barangay_clearance', title: 'Barangay Clearance / Community Tax Certificate', status: 'Complete' },
             { id: 'health_declaration', title: 'Health Declaration', status: 'Complete' },
         ],
+        hikers: [
+            {
+                fullName: 'Jane Doe',
+                dateOfBirth: '1994-05-12',
+                address: 'Ligao City, Albay',
+                emergencyName: 'Maria Doe',
+                emergencyRelationship: 'Mother',
+                emergencyContact: '+63 900 123 4567',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
+            {
+                fullName: 'John Smith',
+                dateOfBirth: '1991-08-23',
+                address: 'Ragay, Albay',
+                emergencyName: 'Michael Smith',
+                emergencyRelationship: 'Brother',
+                emergencyContact: '+63 900 765 4321',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
+        ],
     },
     {
         id: 'BK-2026-0812-01',
@@ -1084,6 +1236,20 @@ export const ADMIN_BOOKINGS = [
             { id: 'booking_ticket', title: 'Booking Ticket Copy', status: 'Complete' },
             { id: 'barangay_clearance', title: 'Barangay Clearance / Community Tax Certificate', status: 'Complete' },
             { id: 'health_declaration', title: 'Health Declaration', status: 'Complete' },
+        ],
+        hikers: [
+            {
+                fullName: 'Elena Santos',
+                dateOfBirth: '1995-04-16',
+                address: 'Ligao City, Albay',
+                emergencyName: 'Jose Santos',
+                emergencyRelationship: 'Father',
+                emergencyContact: '+63 900 789 0123',
+                healthAnswers: {
+                    health1: 'no', health2: 'yes', health3: 'no', health4: 'no', health5: 'no', health6: 'no',
+                },
+                agreeWaiver: true,
+            },
         ],
     },
 ];

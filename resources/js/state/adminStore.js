@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 import { ADMIN_BOOKINGS, ADMIN_DAILY_QUOTA, ADMIN_SCHEDULES, ADMIN_USERS } from '../mockData';
 
-const STORAGE_KEY = 'masaraga_admin_store_v1';
+const STORAGE_KEY = 'masaraga_admin_store_v2';
 const ADMIN = ADMIN_USERS.find((user) => user.role === 1) || ADMIN_USERS[0] || {};
 
 function createSeed() {
@@ -61,6 +61,22 @@ function getState() {
     return state;
 }
 
+export function createBooking(booking) {
+    setState((current) => ({
+        ...current,
+        bookings: [
+            {
+                ...booking,
+                id: booking.id ?? `BK-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 89999)}`,
+                reference: booking.reference ?? `TXN-${new Date().getFullYear()}-${Math.floor(10000 + Math.random() * 89999)}`,
+                hikers: booking.hikers ?? [],
+                status: booking.status ?? 'Pending',
+            },
+            ...current.bookings,
+        ],
+    }));
+}
+
 export function updateBookingStatus(bookingId, status) {
     setState((current) => ({
         ...current,
@@ -94,6 +110,24 @@ export function createSchedule(schedule) {
             ...current.schedules,
             { booked: 0, status: 'Available', ...schedule },
         ],
+    }));
+}
+
+export function rescheduleSchedule(scheduleId, dateKey, date) {
+    setState((current) => ({
+        ...current,
+        schedules: current.schedules.map((schedule) =>
+            schedule.id === scheduleId ? { ...schedule, dateKey, date } : schedule
+        ),
+    }));
+}
+
+export function changeScheduleGuide(scheduleId, guide) {
+    setState((current) => ({
+        ...current,
+        schedules: current.schedules.map((schedule) =>
+            schedule.id === scheduleId ? { ...schedule, guide } : schedule
+        ),
     }));
 }
 

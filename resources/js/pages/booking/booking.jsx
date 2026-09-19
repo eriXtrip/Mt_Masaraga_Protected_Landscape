@@ -9,11 +9,16 @@ import DocumentChecklistForm from '@/components/forms/DocumentChecklistForm';
 import PaymentForm from '@/components/forms/PaymentForm';
 import BookingConfirmation from './BookingConfirmation';
 import PaymentOverlay from '@/components/features/PaymentOverlay';
+import { createBooking } from '../../state/adminStore';
 
 import QR from '../../../../public/images/QR_Code_Example.svg.webp';
 import { BOOKING_DETAILS, TRAILS, ADMIN_SCHEDULES } from '../../mockData';
 
 const STEPS = ['Select Date', 'Hikers Details', 'Checklist', 'Payment'];
+
+function getDateKey(date) {
+    return date.toLocaleDateString('en-CA');
+}
 
 // Dates the park has scheduled for this trail, from admin-published schedules.
 // Maps an ISO date key to the number of slots still open on that date.
@@ -65,6 +70,39 @@ export default function Booking() {
         setCurrentStep(step);
     };
 
+    const handlePaymentComplete = () => {
+        if (!hikerData?.length || !paymentData || !date || !selectedSchedule) return;
+
+        createBooking({
+            scheduleId: selectedSchedule.id,
+            leadHiker: hikerData[0].fullName,
+            contact: hikerData[0].emergencyContact,
+            trail: selectedSchedule.trail,
+            date: formattedSelectedDate,
+            participants: hikerData.length,
+            totalPaid: paymentData.totalAmount,
+            paymentMethod: paymentData.paymentMethod,
+            status: 'Confirmed',
+            feeBreakdown: [
+                { label: `Base Fee (${hikerData.length} x ₱${baseFee})`, amount: totalBaseFee },
+                { label: 'Processing fee', amount: processingFee },
+            ],
+            hikers: hikerData.map((hiker) => ({
+                fullName: hiker.fullName,
+                dateOfBirth: hiker.dateOfBirth,
+                address: hiker.address,
+                emergencyName: hiker.emergencyName,
+                emergencyRelationship: hiker.emergencyRelationship,
+                emergencyContact: hiker.emergencyContact,
+                healthAnswers: { ...hiker.healthAnswers },
+                agreeWaiver: hiker.agreeWaiver,
+            })),
+        });
+
+        setShowPaymentOverlay(false);
+        handleNextStep();
+    };
+
     const handleNextStep = () => {
         setCurrentStep((prev) => prev + 1);
     };
@@ -77,6 +115,12 @@ export default function Booking() {
         })
         : 'Please select a date';
 
+    const selectedSchedule = date
+        ? ADMIN_SCHEDULES.find((schedule) => schedule.trailId === trailId && schedule.dateKey === getDateKey(date))
+        : null;
+
+    const leadHiker = hikerData?.[0]?.fullName || '';
+
     // Dynamic Passes Data generated for Confirmation view
     const passesData = hikerData
         ? hikerData.map((hiker, index) => ({
@@ -85,7 +129,7 @@ export default function Booking() {
             status: 'Valid',
             date: formattedSelectedDate,
             trail: trailBookingDetails.selectedTrail,
-            leadHiker: 'Assigned by Admin',
+            leadHiker,
             hikerName: hiker.fullName,
         }))
         : undefined;
@@ -263,10 +307,7 @@ export default function Booking() {
                 paymentMethod={paymentData?.paymentMethod || 'GCash'}
                 amount={bookingSummary.totalAmount}
                 onClose={() => setShowPaymentOverlay(false)}
-                onComplete={() => {
-                    setShowPaymentOverlay(false);
-                    handleNextStep();
-                }}
+                onComplete={handlePaymentComplete}
             />
         </div>
     );

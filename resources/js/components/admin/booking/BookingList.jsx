@@ -4,6 +4,8 @@ import StatusPill from './StatusPill';
 import { getInitials, formatter } from './bookingUtils';
 
 function BookingRow({ booking, onSelect }) {
+    const hikerNames = booking.hikers?.map((hiker) => hiker.fullName).filter(Boolean) || [];
+
     return (
         <button
             type="button"
@@ -11,12 +13,19 @@ function BookingRow({ booking, onSelect }) {
             className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-surface-container-low focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary md:px-6 cursor-pointer"
         >
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                {getInitials(booking.leadHiker)}
+                {getInitials(hikerNames.length > 0 ? hikerNames[0] : booking.leadHiker)}
             </span>
 
             <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                    <p className="truncate text-sm font-bold text-on-surface">{booking.leadHiker}</p>
+                    <p className="truncate text-sm font-bold text-on-surface">
+                        {hikerNames.length > 0 ? hikerNames.join(', ') : booking.leadHiker}
+                    </p>
+                    {booking.hikers?.some((hiker) => hiker.emergencyContact) && (
+                        <p className="mt-1 text-xs text-on-surface-variant">
+                            Emergency contacts available
+                        </p>
+                    )}
                     <span className="hidden text-xs font-medium text-on-surface-variant sm:inline">
                         · {booking.reference}
                     </span>

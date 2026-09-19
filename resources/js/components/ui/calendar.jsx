@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils"
 import { DayPicker, getDefaultClassNames } from "react-day-picker"
 import { ChevronLeftIcon, ChevronRightIcon, CheckCircle2 } from "lucide-react"
 
-const SlotContext = React.createContext({ provided: false, map: {} })
+const SlotContext = React.createContext({ provided: false, map: {}, allowUnscheduled: false, disableScheduled: false })
 
 function Calendar({
   className,
@@ -11,16 +11,17 @@ function Calendar({
   showOutsideDays = true,
   captionLayout = "label",
   locale,
-  fromMonth,
   disabled,
   slots,
+  allowUnscheduled = false,
+  disableScheduled = false,
   ...props
 }) {
   const defaultClassNames = getDefaultClassNames()
 
   const slotContext = React.useMemo(
-    () => ({ provided: slots !== undefined, map: slots || {} }),
-    [slots]
+    () => ({ provided: slots !== undefined, map: slots || {}, allowUnscheduled, disableScheduled }),
+    [slots, allowUnscheduled, disableScheduled]
   )
 
   // Get current date and start of current month
@@ -40,9 +41,8 @@ function Calendar({
     <div className="w-full relative">
       <SlotContext.Provider value={slotContext}>
       <DayPicker
-        // 1. Prevents navigating back to previous months
-        fromMonth={fromMonth ?? startOfCurrentMonth}
-        startMonth={fromMonth ?? startOfCurrentMonth} // For react-day-picker v9 compatibility
+        // Prevents navigating to months before the current one.
+        startMonth={startOfCurrentMonth}
         // 2. Disables selecting past dates AND today (anything before tomorrow)
         disabled={disabled ?? { before: tomorrow }}
         showOutsideDays={showOutsideDays}
@@ -116,21 +116,26 @@ function CalendarDayButton({ day, modifiers, className, ...props }) {
   const dateKey = day.date.toLocaleDateString('en-CA'); // 'en-CA' outputs YYYY-MM-DD natively
 
   const slotContext = React.useContext(SlotContext);
-  // When a slots map is provided, dates without one are treated as closed (0).
-  // Without a map, every future date stays open.
-  const slotCount = slotContext.provided
-    ? slotContext.map[dateKey] !== undefined ? slotContext.map[dateKey] : 0
-    : 20;
+  const { provided: hasSlotInfo, map: slotMap, allowUnscheduled, disableScheduled } = slotContext;
+
+  // A slots map treats its keys as "dates that have a schedule". The value is the
+  // number of slots still open. Dates missing from the map have no schedule at all
+  // (distinct from a date that IS scheduled but fully booked).
+  const hasSchedule = hasSlotInfo && slotMap[dateKey] !== undefined;
+  const slotCount = hasSchedule ? slotMap[dateKey] : null;
 
   const dayNum = day.date.getDate();
-  const isLimited = slotCount > 0 && slotCount <= 3;
-  const isFullyBooked = slotCount === 0;
+  const isLimited = hasSchedule && slotCount > 0 && slotCount <= 3;
+  const isFullyBooked = hasSchedule && slotCount === 0;
+  const isUnscheduled = hasSlotInfo && !hasSchedule;
+  const isScheduledBlocked = hasSchedule && (isFullyBooked || disableScheduled);
+  const isBlocked = isOutside || isDisabled || isScheduledBlocked || (isUnscheduled && !allowUnscheduled);
 
   let dayWrapperClass = "bg-surface-container-lowest p-2 h-28 border-t border-l border-outline-variant/10 relative transition-colors group ";
 
   if (isSelected) {
     dayWrapperClass = "bg-primary/5 p-2 h-28 border-t border-l border-primary/30 relative cursor-pointer ring-inset ring-2 ring-primary transition-all z-10 ";
-  } else if (isOutside || isDisabled || isFullyBooked) {
+  } else if (isBlocked) {
     dayWrapperClass += "opacity-50 bg-surface-variant/30 cursor-not-allowed ";
   } else {
     dayWrapperClass += "hover:bg-surface-container cursor-pointer ";
@@ -138,10 +143,10 @@ function CalendarDayButton({ day, modifiers, className, ...props }) {
 
   return (
     <button
+      {...props}
       className={cn("w-full h-full text-left outline-none block appearance-none", className)}
       type="button"
-      disabled={isFullyBooked || isDisabled || isOutside}
-      {...props}
+      disabled={isBlocked}
     >
       <div className={dayWrapperClass}>
         {/* Day Number Badge */}
@@ -156,7 +161,7 @@ function CalendarDayButton({ day, modifiers, className, ...props }) {
         </div>
 
         {/* Availability Badge */}
-        {(!isOutside && !isDisabled) && (
+        {(!isOutside && !isDisabled && hasSlotInfo) && (
           <div className="absolute bottom-2 left-2 right-2">
             {isSelected ? (
               <div className="flex justify-between items-end">
@@ -165,6 +170,12 @@ function CalendarDayButton({ day, modifiers, className, ...props }) {
                   Selected
                 </div>
               </div>
+            ) : isUnscheduled ? (
+              allowUnscheduled ? null : (
+                <div className="text-on-surface-variant/60 text-[10px] py-1 px-2 text-center bg-surface-variant/50 rounded">
+                  No schedule
+                </div>
+              )
             ) : isFullyBooked ? (
               <div className="text-on-surface-variant text-[10px] py-1 px-2 text-center bg-surface-variant/50 rounded">
                 Fully Booked

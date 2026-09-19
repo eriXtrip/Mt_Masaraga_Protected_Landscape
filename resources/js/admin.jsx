@@ -5,6 +5,7 @@ import AdminLayout from './components/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminBooking from './pages/admin/AdminBooking';
 import AdminSection from './pages/admin/AdminSection';
+import ScrollToTop from './components/common/ScrollToTop';
 import { ADMIN_SECTIONS } from './admin/navConfig';
 
 import '../css/app.css';
@@ -14,6 +15,7 @@ const GENERIC_SECTION_PATHS = (path) => path !== '/admin/dashboard' && path !== 
 
 const AdminApp = () => (
     <BrowserRouter>
+        <ScrollToTop />
         <Routes>
             <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
             <Route element={<AdminLayout />}>
