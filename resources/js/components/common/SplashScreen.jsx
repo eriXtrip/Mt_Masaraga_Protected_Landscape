@@ -53,7 +53,7 @@ export default function SplashScreen({ onComplete }) {
                <img
                         src="/assets/logo/MT. MASARAGA Logo Center.svg"
                         alt="Mt. Masaraga Protected Landscape"
-                        className="h-20 w-auto object-contain lg:h-60"
+                        className="h-40 w-auto object-contain lg:h-60"
                     />
                 <p className="text-white/80 font-medium tracking-widest uppercase text-sm mt-2 drop-shadow-sm">
                     Eco-Tourism Portal   
