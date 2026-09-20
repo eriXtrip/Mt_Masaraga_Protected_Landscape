@@ -136,7 +136,7 @@ export default function AdminContent() {
 
     const handleSaveHero = (data) => {
         updateAboutHero(data);
-        toast.add({ type: 'success', title: 'Hero updated', description: 'The About hero section has been updated.' });
+        toast.add({ type: 'success', title: 'About section updated', description: 'The About section has been updated.' });
         setFormOpen(false);
         setEditingItem(null);
         setAboutFormType(null);

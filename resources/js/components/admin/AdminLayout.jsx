@@ -71,6 +71,7 @@ export default function AdminLayout() {
                         </span>
                         <a
                             href="/"
+                            target="_blank"
                             className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                         >
                             <ExternalLink className="h-3.5 w-3.5" />
