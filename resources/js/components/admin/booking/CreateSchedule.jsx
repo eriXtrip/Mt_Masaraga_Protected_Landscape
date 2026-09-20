@@ -93,7 +93,7 @@ export default function CreateSchedule({ schedules, guides, onConfirm, onClose }
                 aria-modal="true"
                 aria-label="New trail schedule"
                 onAnimationEnd={closing ? handleAnimationEnd : undefined}
-                className={`absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-surface-container-lowest shadow-xl ${closing ? 'animate-out slide-out-to-right animation-duration-300' : 'animate-in slide-in-from-right animation-duration-300'} motion-reduce:animate-none`}
+                className={`absolute inset-y-0 left-0 flex w-full max-w-md flex-col bg-surface-container-lowest shadow-xl ${closing ? 'animate-out slide-out-to-left animation-duration-300' : 'animate-in slide-in-from-left animation-duration-300'} motion-reduce:animate-none`}
             >
                 <div className="flex items-start justify-between gap-4 border-b border-outline-variant/20 px-5 py-4">
                     <div className="min-w-0">
