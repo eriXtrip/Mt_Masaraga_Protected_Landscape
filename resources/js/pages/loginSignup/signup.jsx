@@ -24,6 +24,7 @@ import {
     Mars,
     Venus
 } from 'lucide-react';
+import { toast } from '../../components/ui/toast';
 
 const TOTAL_STEPS = 6;
 
@@ -74,6 +75,7 @@ export default function Signup() {
     const handleSendCode = () => {
         setCodeSent(true);
         setCodeCountdown(54);
+        toast.add({ type: 'success', title: 'Verification code sent', description: 'Check your email for the 6-digit code.' });
         const timer = setInterval(() => {
             setCodeCountdown((prev) => {
                 if (prev <= 1) {
@@ -701,7 +703,10 @@ export default function Signup() {
                                         type="button"
                                         variant='default'
                                         size='lg'
-                                        onClick={() => goToStep(6)}
+                                        onClick={() => {
+                                            toast.add({ type: 'success', title: 'Account created!', description: 'Welcome to Mt. Masaraga PL.' });
+                                            goToStep(6);
+                                        }}
                                     >
                                         <span>Create Account</span>
                                         <Check />

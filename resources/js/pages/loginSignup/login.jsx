@@ -8,6 +8,7 @@ import MtMasaraga from '../../../../public/images/loginSignup/mt-masaraga-hero.j
 import { Button } from "@/components/ui/button";
 import AdminAuthModal from '../../components/features/AdminAuthModal';
 import { MOCK_USERS } from '../../mockData';
+import { toast } from '../../components/ui/toast';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -45,19 +46,20 @@ export default function Login() {
     };
 
     const handleAdminConfirm = (secondaryPin) => {
-        console.log('Verified secondary PIN:', secondaryPin);
         setShowAdminModal(false);
-        completeLogin(pendingUser);
+        toast.add({ type: 'success', title: 'Admin verified. Redirecting to dashboard...' });
+        setTimeout(() => completeLogin(pendingUser), 500);
     };
 
-    const completeLogin = (user) => {
-        console.log('Login Successful:', user || form);
-        if (user?.role === 1) {
-            window.location.assign('/admin/dashboard');
-            return;
-        }
-        navigate('/');
-    };
+     const completeLogin = (user) => {
+         if (user?.role === 1) {
+             window.location.assign('/admin/dashboard');
+             return;
+         }
+         toast.add({ type: 'success', title: 'Login successful', description: 'Welcome back!' });
+         localStorage.setItem('currentUser', JSON.stringify(user));
+         navigate('/');
+     };
 
     return (
         <div ref={sectionRef} className="relative flex min-h-screen w-full flex-col bg-surface text-on-surface lg:flex-row overflow-hidden">

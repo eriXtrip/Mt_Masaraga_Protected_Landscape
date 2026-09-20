@@ -62,16 +62,17 @@ function getState() {
     return state;
 }
 
-export function cancelBooking(transactionId) {
+export function cancelBooking(transactionId, reason) {
     setState((current) => ({
         ...current,
         transactions: current.transactions.map((txn) =>
             txn.transactionId === transactionId
                 ? {
-                      ...txn,
-                      status: 'Cancelled',
-                      passesData: txn.passesData.map((pass) => ({ ...pass, status: 'Cancelled' })),
-                  }
+                       ...txn,
+                       status: 'Cancelled',
+                       cancellationReason: reason || null,
+                       passesData: txn.passesData.map((pass) => ({ ...pass, status: 'Cancelled' })),
+                   }
                 : txn
         ),
     }));

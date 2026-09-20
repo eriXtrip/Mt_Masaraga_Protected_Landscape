@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { CheckCircle2, X } from 'lucide-react';
 import { useInView } from '@/hooks/useInView';
 import {
     useAdminStore,
@@ -18,6 +17,7 @@ import BookingDetail from '../../components/admin/booking/BookingDetail';
 import RescheduleScheduleModal from '../../components/admin/booking/RescheduleScheduleModal';
 import CancelBookingModal from '../../components/admin/booking/CancelBookingModal';
 import RefundBookingModal from '../../components/admin/booking/RefundBookingModal';
+import { toast } from '../../components/ui/toast';
 
 export default function AdminBooking() {
     const { bookings, schedules, quota, users } = useAdminStore();
@@ -30,7 +30,6 @@ export default function AdminBooking() {
     const [statusFilter, setStatusFilter] = useState('All');
     const [selectedId, setSelectedId] = useState(null);
     const [action, setAction] = useState(null);
-    const [notice, setNotice] = useState(null);
 
     const guideOptions = [
         ...new Set([
@@ -82,14 +81,14 @@ export default function AdminBooking() {
 
     const handleCancel = () => {
         cancelBooking(selectedBooking.id);
-        setNotice({ message: `${selectedBooking.reference} cancelled. Refunds follow the Refund and Return Policy.` });
+        toast.add({ type: 'success', title: 'Booking cancelled', description: `${selectedBooking.reference} cancelled. Refunds follow the Refund and Return Policy.` });
         closeActionModal();
         setSelectedId(null);
     };
 
     const handleRefund = () => {
         refundBooking(selectedBooking.id);
-        setNotice({ message: `Refund processed for ${selectedBooking.reference}.` });
+        toast.add({ type: 'success', title: 'Refund processed', description: `Refund processed for ${selectedBooking.reference}.` });
         closeActionModal();
         setSelectedId(null);
     };
@@ -100,17 +99,21 @@ export default function AdminBooking() {
         setActiveScheduleId(schedule.id);
         setSearchTerm('');
         setStatusFilter('All');
-        setNotice({
-            message: `${schedule.trail} opened for ${schedule.date} with ${schedule.capacity} slots, guide ${schedule.guide}.`,
+        toast.add({
+            type: 'success',
+            title: 'Schedule created',
+            description: `${schedule.trail} opened for ${schedule.date} with ${schedule.capacity} slots, guide ${schedule.guide}.`,
         });
     };
 
-    const handleRescheduleSchedule = (schedule, { dateKey, date, guide }) => {
-        rescheduleSchedule(schedule.id, dateKey, date);
-        if (guide !== schedule.guide) {
-            changeScheduleGuide(schedule.id, guide);
+    const handleRescheduleSchedule = ({ dateKey, date, guide }) => {
+        if (!scheduleReschedule) return;
+        rescheduleSchedule(scheduleReschedule.id, dateKey, date);
+        if (guide !== scheduleReschedule.guide) {
+            changeScheduleGuide(scheduleReschedule.id, guide);
         }
-        setNotice({ message: `${schedule.trail} rescheduled to ${date} · guide ${guide}.` });
+        toast.add({ type: 'success', title: 'Schedule rescheduled', description: `${scheduleReschedule.trail} rescheduled to ${date} · guide ${guide}.` });
+        setScheduleReschedule(null);
     };
 
     return (
@@ -133,27 +136,6 @@ export default function AdminBooking() {
                         Open climb dates by schedule, then manage the bookings that land on each one.
                     </p>
                 </header>
-
-                {notice && (
-                    <div
-                        style={{ transitionDelay: '100ms' }}
-                        className={`flex items-center gap-2 rounded-2xl bg-emerald-500/10 px-5 py-4 text-sm text-emerald-700 transition-all duration-700 ease-out ${isInView
-                            ? 'opacity-100 translate-y-0 scale-100'
-                            : 'opacity-0 translate-y-8 scale-95'
-                            }`}
-                    >
-                        <CheckCircle2 className="h-4 w-4 shrink-0" />
-                        <p className="min-w-0 flex-1">{notice.message}</p>
-                        <button
-                            type="button"
-                            onClick={() => setNotice(null)}
-                            aria-label="Dismiss notification"
-                            className="rounded-lg p-1 text-emerald-700 transition-colors hover:bg-emerald-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 cursor-pointer"
-                        >
-                            <X className="h-4 w-4" />
-                        </button>
-                    </div>
-                )}
 
                 <div
                     style={{ transitionDelay: '150ms' }}

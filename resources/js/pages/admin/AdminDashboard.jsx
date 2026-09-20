@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { NEWS } from '../../mockData';
 import { useAdminStore } from '../../state/adminStore';
 import KeyFigures from '../../components/admin/dashboard/KeyFigures';
-import PendingApprovals from '../../components/admin/dashboard/PendingApprovals';
+import UpcomingBookings from '../../components/admin/dashboard/PendingApprovals';
 import DailySlotQuota from '../../components/admin/dashboard/DailySlotQuota';
 import ParkAdvisories from '../../components/admin/dashboard/ParkAdvisories';
 
@@ -27,7 +27,7 @@ export default function AdminDashboard() {
     const hikeDay = scheduledDates[0] || null;
     const hikeDayBookings = hikeDay ? bookings.filter((b) => b.date === hikeDay && b.status !== 'Completed') : [];
 
-    const pending = bookings.filter((b) => b.status === 'Pending');
+    const upcomingCount = bookings.filter((b) => b.status === 'Upcoming').length;
     const collected = bookings.filter((b) => b.status === 'Confirmed' || b.status === 'Completed');
     const revenueCollected = collected.reduce((sum, b) => sum + b.totalPaid, 0);
 
@@ -53,7 +53,7 @@ export default function AdminDashboard() {
             icon: CalendarCheck,
             value: String(hikeDayBookings.length),
             label: 'Hike-day bookings',
-            sub: hikeDay ? `${hikeDay} · ${pending.length} pending` : 'No bookings yet',
+            sub: hikeDay ? `${hikeDay} · ${upcomingCount} upcoming` : 'No bookings yet',
         },
         {
             icon: Wallet,
@@ -82,8 +82,8 @@ export default function AdminDashboard() {
             <header
                 style={{ transitionDelay: '0ms' }}
                 className={`flex flex-col gap-3 md:flex-row md:items-end md:justify-between transition-all duration-700 ease-out ${isInView
-                        ? 'opacity-100 translate-y-0 scale-100'
-                        : 'opacity-0 translate-y-8 scale-95'
+                    ? 'opacity-100 translate-y-0 scale-100'
+                    : 'opacity-0 translate-y-8 scale-95'
                     }`}
             >
                 <div>
@@ -100,7 +100,7 @@ export default function AdminDashboard() {
                 <Button
                     variant="default"
                     size="lg"
-                    className="h-11! shrink-0 gap-2 cursor-pointer"
+                    className="h-11! shrink-0 gap-2"
                     onClick={() => navigate('/admin/bookings')}
                 >
                     <CalendarCheck className="h-4 w-4" />
@@ -111,8 +111,8 @@ export default function AdminDashboard() {
             <div
                 style={{ transitionDelay: '150ms' }}
                 className={`transition-all duration-700 ease-out ${isInView
-                        ? 'opacity-100 translate-y-0 scale-100'
-                        : 'opacity-0 translate-y-8 scale-95'
+                    ? 'opacity-100 translate-y-0 scale-100'
+                    : 'opacity-0 translate-y-8 scale-95'
                     }`}
             >
                 <KeyFigures kpis={kpis} />
@@ -121,18 +121,18 @@ export default function AdminDashboard() {
             <div
                 style={{ transitionDelay: '300ms' }}
                 className={`transition-all duration-700 ease-out ${isInView
-                        ? 'opacity-100 translate-y-0 scale-100'
-                        : 'opacity-0 translate-y-8 scale-95'
+                    ? 'opacity-100 translate-y-0 scale-100'
+                    : 'opacity-0 translate-y-8 scale-95'
                     }`}
             >
-                <PendingApprovals pending={pending} />
+                <UpcomingBookings bookings={bookings} />
             </div>
 
             <div
                 style={{ transitionDelay: '450ms' }}
                 className={`grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2 transition-all duration-700 ease-out ${isInView
-                        ? 'opacity-100 translate-y-0 scale-100'
-                        : 'opacity-0 translate-y-8 scale-95'
+                    ? 'opacity-100 translate-y-0 scale-100'
+                    : 'opacity-0 translate-y-8 scale-95'
                     }`}
             >
                 <DailySlotQuota quota={quota} hikeDay={hikeDay} />

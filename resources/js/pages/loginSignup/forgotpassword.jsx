@@ -20,6 +20,7 @@ import {
     KeyRound,
     Info,
 } from 'lucide-react';
+import { toast } from '../../components/ui/toast';
 
 const TOTAL_STEPS = 3;
 
@@ -61,6 +62,7 @@ export default function ForgotPassword() {
     const handleSendCode = () => {
         setCodeSent(true);
         setCodeCountdown(60);
+        toast.add({ type: 'success', title: 'Reset code sent', description: 'Check your email for the 6-digit code.' });
         const timer = setInterval(() => {
             setCodeCountdown((prev) => {
                 if (prev <= 1) {
@@ -461,7 +463,10 @@ export default function ForgotPassword() {
                                         type="button"
                                         variant='default'
                                         size='lg'
-                                        onClick={() => setResetSuccess(true)}
+                                        onClick={() => {
+                                            toast.add({ type: 'success', title: 'Password updated', description: 'You can now sign in with your new credentials.' });
+                                            setResetSuccess(true);
+                                        }}
                                     >
                                         <span>Reset Password</span>
                                         <Check />

@@ -1,4 +1,4 @@
-export const STATUS_OPTIONS = ['All', 'Pending', 'Confirmed', 'Completed', 'Cancelled', 'Refunded'];
+export const STATUS_OPTIONS = ['All', 'Upcoming', 'Completed', 'Cancelled', 'Refunded'];
 
 export const SCHEDULE_STATUS_BADGE = {
     Available: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -7,8 +7,7 @@ export const SCHEDULE_STATUS_BADGE = {
 };
 
 export const STATUS_CONFIG = {
-    Pending: { label: 'Pending', text: 'text-amber-700', bg: 'bg-amber-50', dot: 'bg-amber-500' },
-    Confirmed: { label: 'Confirmed', text: 'text-emerald-700', bg: 'bg-emerald-50', dot: 'bg-emerald-500' },
+    Upcoming: { label: 'Upcoming', text: 'text-amber-700', bg: 'bg-amber-50', dot: 'bg-amber-500' },
     Completed: { label: 'Completed', text: 'text-on-surface-variant', bg: 'bg-surface-container-high', dot: 'bg-on-surface-variant/40' },
     Cancelled: { label: 'Cancelled', text: 'text-red-700', bg: 'bg-red-50', dot: 'bg-red-500' },
     Refunded: { label: 'Refunded', text: 'text-red-700', bg: 'bg-red-50', dot: 'bg-red-500' },

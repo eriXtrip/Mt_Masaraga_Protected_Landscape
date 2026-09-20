@@ -13,6 +13,7 @@ import {
     HeartPulse,
 } from 'lucide-react';
 import { useHikerStore, updateProfile } from '../../state/hikerStore';
+import { toast } from '../../components/ui/toast';
 
 const getInitials = (name) => {
     if (!name) return 'U';
@@ -70,8 +71,6 @@ export default function Profile() {
     });
 
     const [password, setPassword] = useState({ newPassword: '', confirmPassword: '' });
-    const [saveStatus, setSaveStatus] = useState(null);
-    const [passwordStatus, setPasswordStatus] = useState(null);
 
     const setField = (key) => (event) =>
         setForm((current) => ({ ...current, [key]: event.target.value }));
@@ -88,23 +87,21 @@ export default function Profile() {
                 mobile: form.emergencyMobile.trim(),
             },
         });
-        setSaveStatus('saved');
-        window.setTimeout(() => setSaveStatus(null), 4000);
+        toast.add({ type: 'success', title: 'Profile updated', description: 'Your details have been saved.' });
     };
 
     const handlePasswordSubmit = (event) => {
         event.preventDefault();
         if (password.newPassword.length < 8) {
-            setPasswordStatus({ type: 'error', text: 'New password must be at least 8 characters.' });
+            toast.add({ type: 'error', title: 'Password too short', description: 'New password must be at least 8 characters.' });
             return;
         }
         if (password.newPassword !== password.confirmPassword) {
-            setPasswordStatus({ type: 'error', text: 'The new password and confirmation do not match.' });
+            toast.add({ type: 'error', title: 'Passwords do not match', description: 'The new password and confirmation do not match.' });
             return;
         }
-        setPasswordStatus({ type: 'success', text: 'Your password has been updated.' });
+        toast.add({ type: 'success', title: 'Password updated', description: 'Your password has been changed successfully.' });
         setPassword({ newPassword: '', confirmPassword: '' });
-        window.setTimeout(() => setPasswordStatus(null), 4000);
     };
 
     return (
@@ -164,13 +161,6 @@ export default function Profile() {
                             title="Personal Information"
                             subtitle="Used to issue your digital passes and receipts."
                         >
-                            {saveStatus === 'saved' && (
-                                <div className="flex items-center gap-2 bg-emerald-500/10 text-emerald-700 text-sm rounded-xl px-4 py-3">
-                                    <CheckCircle2 className="h-4 w-4 shrink-0" />
-                                    Your details have been saved.
-                                </div>
-                            )}
-
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Field label="Full Name">
                                     <Input
@@ -249,20 +239,6 @@ export default function Profile() {
                             title="Change Password"
                             subtitle="Use at least 8 characters with a combination of letters and numbers."
                         >
-                            {passwordStatus && (
-                                <div className={`flex items-center gap-2 text-sm rounded-xl px-4 py-3 ${passwordStatus.type === 'success'
-                                    ? 'bg-emerald-500/10 text-emerald-700'
-                                    : 'bg-red-500/10 text-red-700'}`}
-                                >
-                                    {passwordStatus.type === 'success' ? (
-                                        <CheckCircle2 className="h-4 w-4 shrink-0" />
-                                    ) : (
-                                        <BadgeAlert className="h-4 w-4 shrink-0" />
-                                    )}
-                                    {passwordStatus.text}
-                                </div>
-                            )}
-
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Field label="New Password">
                                     <div className="relative">

@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Clock3, ChevronRight } from 'lucide-react';
+import { CalendarCheck, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const STATUS_CONFIG = {
-    Pending: { label: 'Pending', text: 'text-amber-700', bg: 'bg-amber-50', dot: 'bg-amber-500' },
+    Upcoming: { label: 'Upcoming', text: 'text-blue-700', bg: 'bg-blue-50', dot: 'bg-blue-500' },
     Confirmed: { label: 'Confirmed', text: 'text-emerald-700', bg: 'bg-emerald-50', dot: 'bg-emerald-500' },
     Completed: { label: 'Completed', text: 'text-on-surface-variant', bg: 'bg-surface-container-high', dot: 'bg-on-surface-variant/40' },
 };
@@ -25,31 +25,33 @@ function StatusPill({ status }) {
     );
 }
 
-export default function PendingApprovals({ pending }) {
+export default function UpcomingBookings({ bookings }) {
     const navigate = useNavigate();
 
+    const upcoming = bookings.filter((b) => b.status === 'Upcoming');
+
     return (
-        <section aria-labelledby="pending-heading" className="overflow-hidden rounded-2xl border border-outline-variant/40 bg-surface-container-lowest shadow-xs">
+        <section aria-labelledby="upcoming-heading" className="overflow-hidden rounded-2xl border border-outline-variant/40 bg-surface-container-lowest shadow-xs">
             <div className="flex items-center justify-between gap-3 px-5 py-4 md:px-6">
                 <div className="flex items-center gap-2">
-                    <p id="pending-heading" className="text-sm font-bold uppercase tracking-widest text-on-surface-variant">
-                        Pending approvals
+                    <p id="upcoming-heading" className="text-sm font-bold uppercase tracking-widest text-on-surface-variant">
+                        Upcoming bookings
                     </p>
-                    <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-bold text-amber-700">
-                        {pending.length}
+                    <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-bold text-blue-700">
+                        {upcoming.length}
                     </span>
                 </div>
                 <Link
                     to="/admin/bookings"
                     className="rounded-lg px-2 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary/10 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
-                    Open bookings
+                    View all
                 </Link>
             </div>
 
-            {pending.length > 0 ? (
+            {upcoming.length > 0 ? (
                 <div className="divide-y divide-outline-variant/20">
-                    {pending.map((booking) => (
+                    {upcoming.map((booking) => (
                         <Link
                             key={booking.id}
                             to="/admin/bookings"
@@ -77,11 +79,11 @@ export default function PendingApprovals({ pending }) {
             ) : (
                 <div className="px-5 py-10 text-center md:px-6">
                     <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Clock3 className="h-6 w-6" />
+                        <CalendarCheck className="h-6 w-6" />
                     </span>
-                    <p className="mt-4 text-sm font-semibold text-on-surface">No pending approvals</p>
+                    <p className="mt-4 text-sm font-semibold text-on-surface">No upcoming bookings</p>
                     <p className="mx-auto mt-1 max-w-sm text-xs leading-relaxed text-on-surface-variant">
-                        New permit applications appear here for review as soon as a hiker submits one.
+                        Confirmed climb schedules will appear here as hikers complete their bookings.
                     </p>
                     <Button
                         variant="outline"
@@ -89,7 +91,7 @@ export default function PendingApprovals({ pending }) {
                         className="mt-5 h-11! cursor-pointer"
                         onClick={() => navigate('/admin/bookings')}
                     >
-                        Open bookings
+                        View bookings
                     </Button>
                 </div>
             )}

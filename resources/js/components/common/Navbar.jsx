@@ -44,6 +44,18 @@ export default function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(true);
     const [currentUserIndex, setCurrentUserIndex] = useState(0);
 
+    useEffect(() => {
+        const stored = localStorage.getItem('currentUser');
+        if (stored) {
+            const user = JSON.parse(stored);
+            const index = MOCK_USERS.findIndex((u) => u.id === user.id);
+            if (index !== -1) {
+                setIsLoggedIn(true);
+                setCurrentUserIndex(index);
+            }
+        }
+    }, []);
+
     // Current active user from array
     const currentUser = MOCK_USERS[currentUserIndex] || MOCK_USERS[0];
 
@@ -83,6 +95,7 @@ export default function Navbar() {
 
     const handleLogout = () => {
         setIsLoggedIn(false);
+        localStorage.removeItem('currentUser');
         closeAll();
         navigate('/');
     };
@@ -148,7 +161,7 @@ export default function Navbar() {
 
                             {/* User Menu Dropdown */}
                             {userDropdownOpen && (
-                                <div className="absolute right-0 top-full mt-2 w-60 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+                                <div className="absolute right-0 top-full w-60 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
 
                                     {/* User Header Info */}
                                     <div className="px-3 py-2 border-b border-outline-variant/20 mb-1">
@@ -175,32 +188,6 @@ export default function Navbar() {
                                                 </Link>
                                             );
                                         })}
-                                    </div>
-
-                                    {/* Role Switcher (For testing mock users) */}
-                                    <div className="px-2 py-1.5 mb-1 bg-surface-container-low rounded-xl">
-                                        <span className="text-[9px] font-bold text-outline uppercase tracking-wider block mb-1 px-1">
-                                            Switch User Role
-                                        </span>
-                                        <div className="space-y-1">
-                                            {MOCK_USERS.map((usr, idx) => (
-                                                <button
-                                                    key={usr.id}
-                                                    type="button"
-                                                    onClick={() => {
-                                                        setCurrentUserIndex(idx);
-                                                        setUserDropdownOpen(false);
-                                                    }}
-                                                    className={`w-full text-left px-2 py-1 text-[11px] rounded-lg font-medium flex items-center justify-between cursor-pointer ${idx === currentUserIndex
-                                                        ? 'bg-primary/10 text-primary font-bold'
-                                                        : 'text-on-surface-variant hover:bg-surface-variant/40'
-                                                        }`}
-                                                >
-                                                    <span>{usr.name}</span>
-                                                    <span className="text-[9px] opacity-75">Role {usr.role}</span>
-                                                </button>
-                                            ))}
-                                        </div>
                                     </div>
 
                                     {/* Logout Button */}
@@ -292,7 +279,7 @@ export default function Navbar() {
 
                     {/* Logged In Hiker Quick Links */}
                     {isLoggedIn && (
-                        <li className="border-t border-outline-variant/30 pt-2 mt-1">
+                        <li className="border-t border-outline-variant/30 pt-2">
                             <span className="px-4 text-xs font-bold text-outline uppercase tracking-wider block mb-1">
                                 Hiker Account
                             </span>
@@ -319,7 +306,7 @@ export default function Navbar() {
                     )}
 
                     {/* Auth Action Buttons */}
-                    <li className="mt-3 flex flex-col gap-3 border-t border-outline-variant pt-4">
+                    <li className="flex flex-col gap-3 border-t border-outline-variant pt-4">
                         {isLoggedIn ? (
                             <Button
                                 variant="outline"

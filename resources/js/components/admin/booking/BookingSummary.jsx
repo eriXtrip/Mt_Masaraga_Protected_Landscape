@@ -3,7 +3,7 @@ import KeyFigures from '../dashboard/KeyFigures';
 import { formatter } from './bookingUtils';
 
 export default function BookingSummary({ bookings, quota }) {
-    const pending = bookings.filter((b) => b.status === 'Pending').length;
+    const pending = bookings.filter((b) => b.status === 'Upcoming').length;
     const confirmed = bookings.filter((b) => b.status === 'Confirmed').length;
     const revenueCollected = bookings
         .filter((b) => b.status === 'Confirmed' || b.status === 'Completed')
@@ -29,8 +29,8 @@ export default function BookingSummary({ bookings, quota }) {
         {
             icon: CalendarCheck,
             value: String(pending),
-            label: 'Pending approvals',
-            sub: pending ? 'Awaiting your review' : 'Nothing to review',
+            label: 'Upcoming hikes',
+            sub: pending ? 'Ready to be hiked' : 'No upcoming hikes',
         },
         {
             icon: BadgeCheck,

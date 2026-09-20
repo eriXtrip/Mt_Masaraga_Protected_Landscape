@@ -10,6 +10,7 @@ import PaymentForm from '@/components/forms/PaymentForm';
 import BookingConfirmation from './BookingConfirmation';
 import PaymentOverlay from '@/components/features/PaymentOverlay';
 import { createBooking } from '../../state/adminStore';
+import { toast } from '../../components/ui/toast';
 
 import QR from '../../../../public/images/QR_Code_Example.svg.webp';
 import { BOOKING_DETAILS, TRAILS, ADMIN_SCHEDULES } from '../../mockData';
@@ -100,6 +101,7 @@ export default function Booking() {
         });
 
         setShowPaymentOverlay(false);
+        toast.add({ type: 'success', title: 'Booking confirmed!', description: 'Your e-passes are ready.' });
         handleNextStep();
     };
 
@@ -287,10 +289,10 @@ export default function Booking() {
                         passesData={passesData}
                         receiptData={receiptData}
                         onDownloadPdf={() => {
-                            console.log('Downloading PDF Pass...');
+                            toast.add({ type: 'info', title: 'Download started', description: 'Your PDF passes are being downloaded.' });
                         }}
                         onSendEmail={() => {
-                            console.log('Sending pass to email...');
+                            toast.add({ type: 'info', title: 'Email sent', description: 'Passes sent to your email.' });
                         }}
                         onJoinGroupChat={() => {
                             navigate('/hiker/messages');

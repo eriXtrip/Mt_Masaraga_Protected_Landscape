@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { useDrawerTransition } from '@/hooks/useDrawerTransition';
 
-export default function BookingModal({ title, subtitle, onClose, children }) {
+export default function BookingModal({ title, subtitle, onClose, side = 'left', children }) {
     const closeButtonRef = useRef(null);
     const { closing, requestClose, handleAnimationEnd } = useDrawerTransition(onClose);
 
@@ -21,13 +21,15 @@ export default function BookingModal({ title, subtitle, onClose, children }) {
 
     const content = typeof children === 'function' ? children({ requestClose }) : children;
 
+    const isRight = side === 'right';
+
     return (
         <aside
             role="dialog"
             aria-modal="true"
             aria-label={title}
             onAnimationEnd={closing ? handleAnimationEnd : undefined}
-            className={`fixed inset-y-0 left-0 z-40 flex w-full max-w-md flex-col bg-surface-container-lowest shadow-xl ${closing ? 'animate-out slide-out-to-left animation-duration-300' : 'animate-in slide-in-from-left animation-duration-300'} motion-reduce:animate-none`}
+            className={`fixed inset-y-0 ${isRight ? 'right-0' : 'left-0'} z-40 flex w-full max-w-md flex-col bg-surface-container-lowest shadow-xl ${closing ? `animate-out ${isRight ? 'slide-out-to-right' : 'slide-out-to-left'} animation-duration-300` : `animate-in ${isRight ? 'slide-in-from-right' : 'slide-in-from-left'} animation-duration-300`} motion-reduce:animate-none`}
         >
             <div className="flex items-start justify-between gap-4 border-b border-outline-variant/20 px-5 py-4">
                 <div className="min-w-0">

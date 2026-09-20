@@ -9,7 +9,7 @@ export default function Cta() {
     const [containerRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
 
     return (
-        <section className="relative flex min-h-[85vh] lg:min-h-screen w-full items-stretch justify-start overflow-hidden bg-surface-container-highest">
+        <section className="relative flex min-h-screen lg:min-h-screen w-full items-stretch justify-start overflow-hidden bg-surface-container-highest">
             {/* Background Image & Scrim Overlay */}
             <div className="absolute inset-0 z-0">
                 <img
@@ -31,16 +31,16 @@ export default function Cta() {
                 <div className="mt-15 lg:mt-0">
                     <h1
                         className={`mb-6 text-5xl font-black tracking-tight leading-none text-white sm:text-6xl md:text-7xl lg:text-8xl transition-all duration-700 ease-out ${isInView
-                                ? 'opacity-100 translate-y-0'
-                                : 'opacity-0 translate-y-8'
+                            ? 'opacity-100 translate-y-0'
+                            : 'opacity-0 translate-y-8'
                             }`}
                     >
                         MT. MASARAGA
                         <span
                             style={{ transitionDelay: '150ms' }}
                             className={`mt-2 block text-2xl font-bold tracking-normal text-white/90 sm:text-4xl md:text-5xl transition-all duration-700 ease-out ${isInView
-                                    ? 'opacity-100 translate-y-0'
-                                    : 'opacity-0 translate-y-6'
+                                ? 'opacity-100 translate-y-0'
+                                : 'opacity-0 translate-y-6'
                                 }`}
                         >
                             Your Trek Begins Here
@@ -50,8 +50,8 @@ export default function Cta() {
                     <p
                         style={{ transitionDelay: '300ms' }}
                         className={`max-w-xl text-base leading-relaxed text-white/80 sm:text-lg transition-all duration-700 ease-out ${isInView
-                                ? 'opacity-100 translate-y-0'
-                                : 'opacity-0 translate-y-6'
+                            ? 'opacity-100 translate-y-0'
+                            : 'opacity-0 translate-y-6'
                             }`}
                     >
                         Experience the lush summit trails and untouched rainforests of Ligao, Albay. Secure your official permit and trek guide today.
@@ -62,8 +62,8 @@ export default function Cta() {
                 <div
                     style={{ transitionDelay: '450ms' }}
                     className={`mt-12 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 lg:mt-8 transition-all duration-700 ease-out ${isInView
-                            ? 'opacity-100 translate-y-0'
-                            : 'opacity-0 translate-y-6'
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 translate-y-6'
                         }`}
                 >
                     <Button

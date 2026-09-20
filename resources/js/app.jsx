@@ -5,6 +5,7 @@ import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
 import SplashScreen from './components/common/SplashScreen';
+import { Toaster } from './components/ui/toast';
 
 import Home from './pages/home/home';
 import About from './pages/about/about';
@@ -75,6 +76,7 @@ const App = () => {
                 <SplashScreen onComplete={handleSplashComplete} />
             )}
             <ScrollToTop />
+            <Toaster />
             <Routes>
                 {/* Routes wrapped with Navbar and Footer */}
                 <Route element={<MainLayout />}>

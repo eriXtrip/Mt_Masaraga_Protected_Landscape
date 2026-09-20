@@ -975,7 +975,7 @@ export const ADMIN_BOOKINGS = [
         participants: 2,
         totalPaid: 1850,
         paymentMethod: 'GCash',
-        status: 'Pending',
+        status: 'Upcoming',
         feeBreakdown: [
             { label: 'Environmental fee (2 pax)', amount: 500 },
             { label: 'Guide fee', amount: 1300 },
@@ -1025,7 +1025,7 @@ export const ADMIN_BOOKINGS = [
         participants: 5,
         totalPaid: 2000,
         paymentMethod: 'Maya',
-        status: 'Pending',
+        status: 'Upcoming',
         feeBreakdown: [
             { label: 'Environmental fee (5 pax)', amount: 1250 },
             { label: 'Guide fee', amount: 700 },
@@ -1111,7 +1111,7 @@ export const ADMIN_BOOKINGS = [
         participants: 3,
         totalPaid: 1700,
         paymentMethod: 'Bank Transfer',
-        status: 'Pending',
+        status: 'Upcoming',
         feeBreakdown: [
             { label: 'Environmental fee (3 pax)', amount: 750 },
             { label: 'Guide fee', amount: 900 },

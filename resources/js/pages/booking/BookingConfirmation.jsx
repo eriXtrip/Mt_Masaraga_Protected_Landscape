@@ -22,6 +22,7 @@ import {
     Send,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from '../../components/ui/toast';
 
 const DEFAULT_BOOKING_PASSES = [
     {
@@ -115,6 +116,7 @@ export default function BookingConfirmation({
 
     const handleDownload = (e, url, fileName) => {
         e.preventDefault();
+        toast.add({ type: 'info', title: 'Download started', description: `Downloading ${fileName}` });
         const link = document.createElement('a');
         link.href = url;
         link.download = fileName;
@@ -140,6 +142,7 @@ export default function BookingConfirmation({
         setTimeout(() => {
             setIsSending(false);
             setIsSentSuccess(true);
+            toast.add({ type: 'success', title: 'Email sent', description: `E-passes delivered to ${emailInput}.` });
             if (onSendEmail) onSendEmail(emailInput);
         }, 1500);
     };

@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useInView } from '@/hooks/useInView';
 import BookingConfirmation from '../booking/BookingConfirmation';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import {
     ScrollText,
@@ -14,15 +13,15 @@ import {
     Search,
     Filter,
     ArrowLeft,
-    Receipt,
     CalendarClock,
     XCircle,
-    X,
     CheckCircle2,
     LayoutDashboard,
     Wallet,
 } from 'lucide-react';
 import { useHikerStore, cancelBooking, rescheduleBooking } from '../../state/hikerStore';
+import CancelBookingModal from '../../components/admin/booking/CancelBookingModal';
+import { toast } from '../../components/ui/toast';
 
 const STATUS_OPTIONS = ['All', 'Confirmed', 'Completed', 'Cancelled'];
 
@@ -31,23 +30,6 @@ const STATUS_CONFIG = {
     Completed: { label: 'Completed', dot: 'bg-on-surface-variant/40', text: 'text-on-surface-variant' },
     Cancelled: { label: 'Cancelled', dot: 'bg-red-600', text: 'text-red-700' },
 };
-
-const formatDateLabel = (date) =>
-    new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
-function getRefundNotice(hikeDate) {
-    const climb = new Date(hikeDate);
-    if (!Number.isNaN(climb.getTime())) {
-        const daysUntil = Math.ceil((climb.getTime() - Date.now()) / (24 * 60 * 60 * 1000));
-        if (daysUntil >= 2) {
-            return 'Refund of the full base fee, minus the non-refundable ₱50 processing fee.';
-        }
-        if (daysUntil === 1) {
-            return 'Refund of 50% of the base fee, minus the non-refundable ₱50 processing fee.';
-        }
-    }
-    return 'No refund applies less than 24 hours before the scheduled climb.';
-}
 
 function StatusPill({ status }) {
     const config = STATUS_CONFIG[status] || { label: status, dot: 'bg-on-surface-variant/40', text: 'text-on-surface-variant' };
@@ -59,43 +41,6 @@ function StatusPill({ status }) {
     );
 }
 
-function Modal({ title, subtitle, onClose, children }) {
-    useEffect(() => {
-        const onKeyDown = (event) => {
-            if (event.key === 'Escape') onClose();
-        };
-        window.addEventListener('keydown', onKeyDown);
-        return () => window.removeEventListener('keydown', onKeyDown);
-    }, [onClose]);
-
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
-            <div
-                className="bg-surface-container-lowest border border-outline-variant/40 rounded-3xl shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto"
-                role="dialog"
-                aria-modal="true"
-                aria-label={title}
-            >
-                <div className="flex items-start justify-between gap-4 p-5 md:p-6 border-b border-outline-variant/20">
-                    <div>
-                        <h2 className="text-lg font-bold text-on-surface">{title}</h2>
-                        {subtitle && <p className="text-sm text-on-surface-variant mt-1">{subtitle}</p>}
-                    </div>
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        aria-label="Close dialog"
-                        className="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none cursor-pointer"
-                    >
-                        <X className="h-5 w-5" />
-                    </button>
-                </div>
-                <div className="p-5 md:p-6">{children}</div>
-            </div>
-        </div>
-    );
-}
-
 export default function Transaction() {
     const navigate = useNavigate();
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
@@ -104,12 +49,7 @@ export default function Transaction() {
     const [statusFilter, setStatusFilter] = useState('All');
     const [selectedTransaction, setSelectedTransaction] = useState(null);
 
-    const [rescheduleOpen, setRescheduleOpen] = useState(false);
-    const [newHikeDate, setNewHikeDate] = useState(null);
-    const [rescheduleSaved, setRescheduleSaved] = useState(false);
-
     const [cancelOpen, setCancelOpen] = useState(false);
-    const [cancelled, setCancelled] = useState(false);
 
     const filteredTransactions = transactions.filter((txn) => {
         const matchesSearch =
@@ -123,31 +63,21 @@ export default function Transaction() {
         return matchesSearch && matchesStatus;
     });
 
-    const openReschedule = (txn) => {
-        setSelectedTransaction(txn);
-        setNewHikeDate(null);
-        setRescheduleSaved(false);
-        setRescheduleOpen(true);
-    };
-
-    const confirmReschedule = () => {
-        if (!selectedTransaction || !newHikeDate) return;
-        const label = formatDateLabel(newHikeDate);
-        rescheduleBooking(selectedTransaction.transactionId, label);
-        setSelectedTransaction((current) => (current ? { ...current, hikeDate: label } : current));
-        setRescheduleSaved(true);
-        setRescheduleOpen(false);
-    };
-
-    const confirmCancel = () => {
+    const confirmCancel = (reason) => {
         if (!selectedTransaction) return;
-        cancelBooking(selectedTransaction.transactionId);
+        cancelBooking(selectedTransaction.transactionId, reason);
         setSelectedTransaction((current) => (current ? { ...current, status: 'Cancelled' } : current));
-        setCancelled(true);
+        toast.add({ type: 'success', title: 'Booking cancelled', description: 'Refunds follow the Refund and Return Policy.' });
         setCancelOpen(false);
     };
 
+    const parseCurrency = (val) => {
+        const num = parseFloat(String(val).replace(/[₱,\s]/g, ''));
+        return Number.isNaN(num) ? 0 : num;
+    };
+
     const downloadAllQrs = (txn) => {
+        toast.add({ type: 'info', title: 'Download started', description: 'Downloading QR passes...' });
         txn.passesData.forEach((pass) => {
             const link = document.createElement('a');
             link.href = pass.qrCodeUrl;
@@ -167,8 +97,6 @@ export default function Transaction() {
                             variant="ghost"
                             onClick={() => {
                                 setSelectedTransaction(null);
-                                setCancelled(false);
-                                setRescheduleSaved(false);
                             }}
                             className="gap-2 cursor-pointer text-on-surface-variant hover:text-on-surface"
                         >
@@ -200,26 +128,14 @@ export default function Transaction() {
                         <StatusPill status={selectedTransaction.status} />
                     </div>
 
-                    {cancelled && (
-                        <div className="flex items-center gap-2 bg-red-500/10 text-red-700 text-sm rounded-2xl px-5 py-4">
-                            <CheckCircle2 className="h-4 w-4 shrink-0" />
-                            This booking has been cancelled. Refunds follow the Refund and Return Policy.
-                        </div>
-                    )}
-
-                    {rescheduleSaved && (
-                        <div className="flex items-center gap-2 bg-emerald-500/10 text-emerald-700 text-sm rounded-2xl px-5 py-4">
-                            <CheckCircle2 className="h-4 w-4 shrink-0" />
-                            Your climb date has been updated to {selectedTransaction.hikeDate}.
-                        </div>
-                    )}
-
                     <BookingConfirmation
                         selectedDate={selectedTransaction.hikeDate}
                         passesData={selectedTransaction.passesData}
                         receiptData={selectedTransaction.receiptData}
                         onDownloadPdf={() => downloadAllQrs(selectedTransaction)}
-                        onSendEmail={(email) => console.log(`Sending to ${email}`)}
+                        onSendEmail={(email) => {
+                            toast.add({ type: 'info', title: 'Email sent', description: `Passes sent to ${email}.` });
+                        }}
                         onJoinGroupChat={() => navigate('/hiker/messages')}
                         onGoToChecklist={() => navigate('/')}
                     />
@@ -240,18 +156,6 @@ export default function Transaction() {
                                 </div>
                                 <div className="flex items-center gap-3 shrink-0">
                                     <Button
-                                        variant="outline"
-                                        className="gap-2 cursor-pointer"
-                                        onClick={() => {
-                                            setNewHikeDate(null);
-                                            setRescheduleSaved(false);
-                                            setRescheduleOpen(true);
-                                        }}
-                                    >
-                                        <CalendarClock className="h-4 w-4" />
-                                        Reschedule Date
-                                    </Button>
-                                    <Button
                                         variant="destructive"
                                         className="gap-2 cursor-pointer"
                                         onClick={() => setCancelOpen(true)}
@@ -265,88 +169,23 @@ export default function Transaction() {
                     )}
                 </div>
 
-                {rescheduleOpen && (
-                    <Modal
-                        title="Reschedule Climb Date"
-                        subtitle={`${selectedTransaction.trail} · current climb date ${selectedTransaction.hikeDate}`}
-                        onClose={() => setRescheduleOpen(false)}
-                    >
-                        <div className="space-y-5">
-                            <Calendar
-                                mode="single"
-                                selected={newHikeDate}
-                                onSelect={setNewHikeDate}
+                {cancelOpen && selectedTransaction && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+                        <div className="w-full max-w-lg">
+                            <CancelBookingModal
+                                booking={{
+                                    reference: selectedTransaction.transactionId,
+                                    trail: selectedTransaction.trail,
+                                    date: selectedTransaction.hikeDate,
+                                    participants: selectedTransaction.participantCount,
+                                    totalPaid: parseCurrency(selectedTransaction.totalPaid),
+                                    feeBreakdown: selectedTransaction.receiptData?.breakdown,
+                                }}
+                                onConfirm={confirmCancel}
+                                onClose={() => setCancelOpen(false)}
                             />
-                            <div className="flex items-center justify-end gap-3 pt-2 border-t border-outline-variant/20">
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => setRescheduleOpen(false)}
-                                    className="cursor-pointer"
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    variant="default"
-                                    disabled={!newHikeDate}
-                                    onClick={confirmReschedule}
-                                    className="cursor-pointer"
-                                >
-                                    Confirm New Date
-                                </Button>
-                            </div>
                         </div>
-                    </Modal>
-                )}
-
-                {cancelOpen && (
-                    <Modal
-                        title="Cancel Booking"
-                        subtitle={`${selectedTransaction.transactionId} · ${selectedTransaction.trail}`}
-                        onClose={() => setCancelOpen(false)}
-                    >
-                        <div className="space-y-4">
-                            <div className="bg-surface-container-low rounded-xl p-4 space-y-1.5 text-sm">
-                                <p className="flex items-center gap-2 text-on-surface-variant">
-                                    <CalendarIcon className="h-4 w-4 text-primary" />
-                                    Climb date: <strong className="text-on-surface">{selectedTransaction.hikeDate}</strong>
-                                </p>
-                                <p className="flex items-center gap-2 text-on-surface-variant">
-                                    <Users className="h-4 w-4 text-primary" />
-                                    {selectedTransaction.participantCount} participant(s)
-                                </p>
-                                <p className="flex items-center gap-2 text-on-surface-variant">
-                                    <Receipt className="h-4 w-4 text-primary" />
-                                    Amount paid: <strong className="text-on-surface">{selectedTransaction.totalPaid}</strong>
-                                </p>
-                            </div>
-
-                            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-                                <p className="font-semibold">Refund estimate</p>
-                                <p className="mt-1">{getRefundNotice(selectedTransaction.hikeDate)}</p>
-                            </div>
-
-                            <p className="text-xs text-on-surface-variant">
-                                Refunds are processed within 7 to 14 banking days after your cancellation is confirmed, per the Refund and Return Policy.
-                            </p>
-
-                            <div className="flex items-center justify-end gap-3 pt-2 border-t border-outline-variant/20">
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => setCancelOpen(false)}
-                                    className="cursor-pointer"
-                                >
-                                    Keep Booking
-                                </Button>
-                                <Button
-                                    variant="destructive"
-                                    onClick={confirmCancel}
-                                    className="cursor-pointer"
-                                >
-                                    Cancel Booking
-                                </Button>
-                            </div>
-                        </div>
-                    </Modal>
+                    </div>
                 )}
             </div>
         );

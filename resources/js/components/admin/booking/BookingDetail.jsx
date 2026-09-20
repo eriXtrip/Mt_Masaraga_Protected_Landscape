@@ -39,7 +39,7 @@ function InfoCard({ icon: Icon, label, value, className = "" }) {
                 <p className="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
                     {label}
                 </p>
-                <p className="mt-0.5 text-xs font-semibold leading-snug text-on-surface break-words">
+                <p className="mt-0.5 text-xs font-semibold leading-snug text-on-surface wrap-break-word">
                     {value || 'Not provided'}
                 </p>
             </div>
@@ -59,8 +59,8 @@ function HikerDetail({ hiker, index }) {
                     <h3 className="mt-0.5 truncate text-sm font-bold text-on-surface">{hiker.fullName}</h3>
                 </div>
                 <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${hiker.agreeWaiver
-                        ? 'bg-primary/10 text-primary'
-                        : 'bg-surface-container-high text-on-surface-variant'
+                    ? 'bg-primary/10 text-primary'
+                    : 'bg-surface-container-high text-on-surface-variant'
                     }`}>
                     {hiker.agreeWaiver ? 'Waiver agreed' : 'Waiver missing'}
                 </span>
@@ -124,7 +124,7 @@ export default function BookingDetail({ booking, guideOptions, scheduleGuide, on
 
     const actions = [];
 
-    if (booking.status === 'Pending' || booking.status === 'Confirmed') {
+    if (booking.status === 'Upcoming') {
         actions.push(
             { key: 'cancel', label: 'Cancel booking', variant: 'outline', icon: CircleOff, action: () => onAction('cancel') }
         );
