@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useInView } from '@/hooks/useInView';
 import { MessageSquareText } from 'lucide-react';
-import ConversationList from '../../components/features/ConversationList';
-import Conversation from '../../components/features/Conversation';
-import GCMember from '../../components/features/GCmember';
+import ConversationList from '../../components/hiker/groupchat/ConversationList';
+import Conversation from '../../components/hiker/groupchat/Conversation';
+import GCMember from '../../components/hiker/groupchat/GCmember';
 
 export default function GroupChat() {
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });

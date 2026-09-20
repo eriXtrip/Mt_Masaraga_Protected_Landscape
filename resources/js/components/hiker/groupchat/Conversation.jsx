@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { Mountain, Users, MessageCircleQuestion } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import SendGCMessage from "../../components/forms/SendGCMsgForm";
-import { DEFAULT_MESSAGES, DEFAULT_MEMBERS } from '../../mockData';
+import SendGCMessage from "../../forms/SendGCMsgForm";
+import { DEFAULT_MESSAGES, DEFAULT_MEMBERS } from '../../../mockData';
 
 export default function Conversation({
     trailName = 'Masaraga Summit Trail',

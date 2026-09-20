@@ -3,7 +3,7 @@ import { ShieldCheck, Users, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 // Mock data based on the DEFAULT_MESSAGES senders
-import { DEFAULT_MEMBERS } from '../../mockData';
+import { DEFAULT_MEMBERS } from '../../../mockData';
 
 export default function GCMember({
     members = DEFAULT_MEMBERS,

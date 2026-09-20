@@ -1,7 +1,7 @@
 import React from 'react';
 import { MessageSquare, ChevronRight } from 'lucide-react';
 
-import { DEFAULT_CONVERSATIONS } from '../../mockData';
+import { DEFAULT_CONVERSATIONS } from '../../../mockData';
 
 export default function ConversationList({
     conversations = DEFAULT_CONVERSATIONS,
