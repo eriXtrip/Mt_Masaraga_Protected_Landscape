@@ -1,59 +1,15 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useInView } from '@/hooks/useInView';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {
-    UserRound,
-    ShieldCheck,
-    CheckCircle2,
-    BadgeAlert,
-    Ticket,
-    ScrollText,
-    HeartPulse,
-} from 'lucide-react';
 import { useHikerStore, updateProfile } from '../../state/hikerStore';
 import { toast } from '../../components/ui/toast';
-
-const getInitials = (name) => {
-    if (!name) return 'U';
-    const parts = name.trim().split(' ');
-    if (parts.length === 1) return parts[0][0].toUpperCase();
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-};
-
-function Field({ label, hint, children }) {
-    return (
-        <div>
-            <label className="block text-xs font-semibold text-on-surface-variant uppercase tracking-wide mb-1.5">
-                {label}
-            </label>
-            {children}
-            {hint && <p className="text-[11px] text-on-surface-variant mt-1.5">{hint}</p>}
-        </div>
-    );
-}
-
-function SectionCard({ icon: Icon, title, subtitle, children, footer }) {
-    return (
-        <section className="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl shadow-sm overflow-hidden">
-            <div className="flex items-center gap-3 px-6 pt-5 pb-4 border-b border-outline-variant/20">
-                <span className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <Icon className="h-5 w-5" />
-                </span>
-                <div>
-                    <h2 className="text-base font-bold text-on-surface">{title}</h2>
-                    {subtitle && <p className="text-xs text-on-surface-variant mt-0.5">{subtitle}</p>}
-                </div>
-            </div>
-            <div className="px-6 py-5 space-y-5">{children}</div>
-            {footer}
-        </section>
-    );
-}
+import {
+    ProfileSidebar,
+    PersonalInfoForm,
+    EmergencyContactForm,
+    ChangePasswordForm,
+} from '../../components/hiker/profile';
 
 export default function Profile() {
-    const navigate = useNavigate();
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const { profile, transactions } = useHikerStore();
 
@@ -90,6 +46,10 @@ export default function Profile() {
         toast.add({ type: 'success', title: 'Profile updated', description: 'Your details have been saved.' });
     };
 
+    const handlePasswordFieldChange = (key, value) => {
+        setPassword((current) => ({ ...current, [key]: value }));
+    };
+
     const handlePasswordSubmit = (event) => {
         event.preventDefault();
         if (password.newPassword.length < 8) {
@@ -117,161 +77,30 @@ export default function Profile() {
                 </header>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                    <aside className="lg:sticky lg:top-20 space-y-4">
-                        <div className="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-6 text-center shadow-sm">
-                            <span className="h-16 w-16 mx-auto rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-                                <span className="text-2xl font-bold">{getInitials(form.name)}</span>
-                            </span>
-                            <h2 className="text-lg font-bold text-on-surface mt-4">{form.name || 'Hiker'}</h2>
-                            <p className="text-sm text-on-surface-variant break-all">{form.email || 'No email set'}</p>
-                            <span className="inline-block mt-3 text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
-                                Hiker
-                            </span>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3">
-                            <button
-                                type="button"
-                                onClick={() => navigate('/hiker/transactions')}
-                                className="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-4 text-left shadow-xs transition-all hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none cursor-pointer"
-                            >
-                                <span className="h-9 w-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                                    <ScrollText className="h-4 w-4" />
-                                </span>
-                                <p className="text-xl font-bold text-on-surface mt-3">{transactions.length}</p>
-                                <p className="text-xs text-on-surface-variant">Bookings</p>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => navigate('/hiker/passes')}
-                                className="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-4 text-left shadow-xs transition-all hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none cursor-pointer"
-                            >
-                                <span className="h-9 w-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                                    <Ticket className="h-4 w-4" />
-                                </span>
-                                <p className="text-xl font-bold text-on-surface mt-3">{activePassCount}</p>
-                                <p className="text-xs text-on-surface-variant">Active passes</p>
-                            </button>
-                        </div>
-                    </aside>
+                    <ProfileSidebar
+                        name={form.name}
+                        email={form.email}
+                        transactionCount={transactions.length}
+                        activePassCount={activePassCount}
+                    />
 
                     <div className="lg:col-span-2 space-y-6">
-                        <SectionCard
-                            icon={UserRound}
-                            title="Personal Information"
-                            subtitle="Used to issue your digital passes and receipts."
-                        >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <Field label="Full Name">
-                                    <Input
-                                        value={form.name}
-                                        onChange={setField('name')}
-                                        placeholder="Your full name"
-                                        required
-                                    />
-                                </Field>
-                                <Field label="Email Address">
-                                    <Input
-                                        type="email"
-                                        value={form.email}
-                                        onChange={setField('email')}
-                                        placeholder="you@example.com"
-                                        required
-                                    />
-                                </Field>
-                            </div>
+                        <PersonalInfoForm
+                            form={form}
+                            onFieldChange={setField}
+                        />
 
-                            <Field label="Mobile Number" hint="Enter with your country code, e.g. +63.">
-                                <Input
-                                    type="tel"
-                                    value={form.mobile}
-                                    onChange={setField('mobile')}
-                                    placeholder="+63 917 000 0000"
-                                />
-                            </Field>
+                        <EmergencyContactForm
+                            form={form}
+                            onFieldChange={setField}
+                            onSave={handleSave}
+                        />
 
-                            <div className="flex justify-end pt-2">
-                                <Button type="submit" variant="default" className="gap-2 cursor-pointer">
-                                    Save Changes
-                                </Button>
-                            </div>
-                        </SectionCard>
-
-                        <SectionCard
-                            icon={HeartPulse}
-                            title="Emergency Contact"
-                            subtitle="Who the trailhead station should reach in case of an incident."
-                        >
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <Field label="Full Name">
-                                    <Input
-                                        value={form.emergencyName}
-                                        onChange={setField('emergencyName')}
-                                        placeholder="Emergency contact name"
-                                    />
-                                </Field>
-                                <Field label="Relation">
-                                    <Input
-                                        value={form.emergencyRelation}
-                                        onChange={setField('emergencyRelation')}
-                                        placeholder="e.g. Parent, Sibling"
-                                    />
-                                </Field>
-                                <Field label="Mobile Number">
-                                    <Input
-                                        type="tel"
-                                        value={form.emergencyMobile}
-                                        onChange={setField('emergencyMobile')}
-                                        placeholder="+63 917 000 0000"
-                                    />
-                                </Field>
-                            </div>
-
-                            <div className="flex justify-end pt-2">
-                                <Button type="submit" variant="default" className="gap-2 cursor-pointer" onClick={handleSave}>
-                                    Save Changes
-                                </Button>
-                            </div>
-                        </SectionCard>
-
-                        <SectionCard
-                            icon={ShieldCheck}
-                            title="Change Password"
-                            subtitle="Use at least 8 characters with a combination of letters and numbers."
-                        >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <Field label="New Password">
-                                    <div className="relative">
-                                        <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-outline" />
-                                        <Input
-                                            type="password"
-                                            value={password.newPassword}
-                                            onChange={(e) => setPassword((c) => ({ ...c, newPassword: e.target.value }))}
-                                            placeholder="Enter new password"
-                                            className="pl-9"
-                                        />
-                                    </div>
-                                </Field>
-                                <Field label="Confirm New Password">
-                                    <div className="relative">
-                                        <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-outline" />
-                                        <Input
-                                            type="password"
-                                            value={password.confirmPassword}
-                                            onChange={(e) => setPassword((c) => ({ ...c, confirmPassword: e.target.value }))}
-                                            placeholder="Repeat new password"
-                                            className="pl-9"
-                                        />
-                                    </div>
-                                </Field>
-                            </div>
-
-                            <div className="flex justify-end pt-2">
-                                <Button type="submit" variant="default" className="gap-2 cursor-pointer" onClick={handlePasswordSubmit}>
-                                    Update Password
-                                </Button>
-                            </div>
-                        </SectionCard>
+                        <ChangePasswordForm
+                            password={password}
+                            onPasswordFieldChange={handlePasswordFieldChange}
+                            onSubmit={handlePasswordSubmit}
+                        />
                     </div>
                 </div>
             </div>
