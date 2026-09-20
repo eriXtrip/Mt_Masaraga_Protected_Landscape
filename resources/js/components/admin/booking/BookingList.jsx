@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import StatusPill from './StatusPill';
 import { getInitials, formatter } from './bookingUtils';
 
-function BookingRow({ booking, onSelect }) {
+function BookingCard({ booking, onSelect }) {
     const hikerNames = booking.hikers?.map((hiker) => hiker.fullName).filter(Boolean) || [];
 
     return (
@@ -81,16 +81,29 @@ function EmptyState({ hasAnyBookings, onClearFilters }) {
     );
 }
 
-export default function BookingList({ bookings, onSelect, hasAnyBookings, onClearFilters }) {
+export default function BookingList({
+    bookings,
+    onSelect,
+    hasAnyBookings,
+    onClearFilters,
+    resultCount,
+    totalCount,
+}) {
     if (bookings.length === 0) {
         return <EmptyState hasAnyBookings={hasAnyBookings} onClearFilters={onClearFilters} />;
     }
 
     return (
-        <div className="overflow-hidden rounded-2xl border border-outline-variant/40 bg-surface-container-lowest shadow-xs">
-            <div className="divide-y divide-outline-variant/20">
+        <div className="space-y-4">
+            {/* Result Count Indicator */}
+            <p className="text-xs text-on-surface-variant whitespace-nowrap">
+                Showing <strong className="text-on-surface font-bold">{resultCount ?? bookings.length}</strong> of {totalCount ?? bookings.length} bookings
+            </p>
+
+            {/* 1 Column for Small screens, 2 Columns for Medium+ screens */}
+            <div className="grid grid-cols-1 gap-1 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest shadow-xs">
                 {bookings.map((booking) => (
-                    <BookingRow key={booking.id} booking={booking} onSelect={onSelect} />
+                    <BookingCard key={booking.id} booking={booking} onSelect={onSelect} />
                 ))}
             </div>
         </div>

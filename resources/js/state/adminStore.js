@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react';
-import { ADMIN_BOOKINGS, ADMIN_DAILY_QUOTA, ADMIN_SCHEDULES, ADMIN_USERS, TRAILS } from '../mockData';
+import { ADMIN_BOOKINGS, ADMIN_DAILY_QUOTA, ADMIN_SCHEDULES, ADMIN_USERS, TRAILS, ADMIN_GUIDES } from '../mockData';
 
 const STORAGE_KEY = 'masaraga_admin_store_v2';
 const ADMIN = ADMIN_USERS.find((user) => user.role === 1) || ADMIN_USERS[0] || {};
@@ -24,6 +24,7 @@ function createSeed() {
         schedules: ADMIN_SCHEDULES,
         users: ADMIN_USERS,
         trails: TRAILS_ARRAY,
+        guides: ADMIN_GUIDES,
     };
 }
 
@@ -176,6 +177,38 @@ export function toggleTrailFeatured(trailId) {
         trails: current.trails.map((trail) =>
             trail.id === trailId ? { ...trail, featured: !trail.featured } : trail
         ),
+    }));
+}
+
+export function createGuide(guide) {
+    setState((current) => ({
+        ...current,
+        guides: [
+            {
+                ...guide,
+                id: guide.id || `guide-${Date.now()}`,
+                status: guide.status || 'Active',
+                totalClimbs: guide.totalClimbs || 0,
+                rating: guide.rating || 0,
+            },
+            ...current.guides,
+        ],
+    }));
+}
+
+export function updateGuide(guideId, updates) {
+    setState((current) => ({
+        ...current,
+        guides: current.guides.map((guide) =>
+            guide.id === guideId ? { ...guide, ...updates } : guide
+        ),
+    }));
+}
+
+export function deleteGuide(guideId) {
+    setState((current) => ({
+        ...current,
+        guides: current.guides.filter((guide) => guide.id !== guideId),
     }));
 }
 

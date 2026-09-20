@@ -72,7 +72,7 @@ function ScheduleRow({ schedule, label, detail, bookingCount, active, onClick, o
                         {schedule && (
                             <>
                                 <span className="text-outline/50">•</span>
-                                <span className="inline-flex items-center gap-1 truncate max-w-[110px] sm:max-w-none">
+                                <span className="inline-flex items-center gap-1 truncate max-w-27.5 sm:max-w-none">
                                     <UserCog className="h-3 w-3 shrink-0 text-primary/80" />
                                     <span className="truncate">{schedule.guide}</span>
                                 </span>

@@ -5,20 +5,18 @@ import { STATUS_OPTIONS } from './bookingUtils';
 export default function BookingFilters({
     searchTerm,
     statusFilter,
-    resultCount,
-    totalCount,
     onSearch,
     onStatus,
     scheduleLabel,
     onClearSchedule,
 }) {
     return (
-        <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4 shadow-xs flex flex-col gap-3">
-            {/* Top Row: Search Input & Active Tags / Counter */}
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4 shadow-xs flex flex-col sm:flex-row gap-3">
+            {/* Top Row: Search Input & Active Tags */}
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:w-1/3">
                 {/* Search Bar */}
-                <div className="relative w-full sm:max-w-xs">
-                    <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-outline" />
+                <div className="relative w-full sm:max-w-sm">
+                    <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-outline pointer-events-none" />
                     <Input
                         aria-label="Search bookings"
                         placeholder="Search by name, reference, trail..."
@@ -28,11 +26,11 @@ export default function BookingFilters({
                     />
                 </div>
 
-                {/* Right Meta Info: Active Filter Tag & Result Count */}
-                <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2 text-xs">
-                    {scheduleLabel && (
+                {/* Right Meta Info: Active Filter Tag */}
+                {scheduleLabel && (
+                    <div className="flex items-center justify-start sm:justify-end gap-1 text-xs">
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 py-1 pl-3 pr-1.5 text-xs font-semibold text-primary">
-                            <span className="truncate max-w-[160px] sm:max-w-xs">{scheduleLabel}</span>
+                            <span className="truncate max-w-30 sm:max-w-xs">{scheduleLabel}</span>
                             <button
                                 type="button"
                                 onClick={onClearSchedule}
@@ -42,11 +40,8 @@ export default function BookingFilters({
                                 <X className="h-3.5 w-3.5" />
                             </button>
                         </span>
-                    )}
-                    <p className="text-xs text-on-surface-variant whitespace-nowrap">
-                        Showing <strong className="text-on-surface font-bold">{resultCount}</strong> of {totalCount} bookings
-                    </p>
-                </div>
+                    </div>
+                )}
             </div>
 
             {/* Bottom Row: Status Filter Controls */}
@@ -76,7 +71,7 @@ export default function BookingFilters({
                 </div>
 
                 {/* Tablet / Desktop Chip Bar (>= sm breakpoint) */}
-                <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-2">
+                <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-1 px-2 py-1.5">
                     <Filter className="h-4 w-4 text-outline shrink-0 mr-1" />
                     {STATUS_OPTIONS.map((status) => (
                         <button
