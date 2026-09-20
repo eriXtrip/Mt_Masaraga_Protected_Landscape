@@ -189,18 +189,13 @@ export const TRAILS = {
             'The primary and most established route up Mt. Masaraga, starting at Sitio Sabluyon, Brgy. Amtic, Ligao City. Known for its relentless steep inclines, dense jungle canopy, and technical rope-assisted ridge assault leading to the summit.',
         statIcon: 'height',
         stats: [
-            { icon: MapPin, value: "1,328m", label: "Elevation" },
-            { icon: TrendingUp, value: "7/9", label: "Difficulty" },
-            { icon: Clock, value: "8-10h", label: "Duration" },
-            { icon: Map, value: "9.2km", label: "Distance" }
+            { id: 'elevation', value: "1,328m" },
+            { id: 'difficulty', value: "7/9" },
+            { id: 'duration', value: "8-10h" },
+            { id: 'distance', value: "9.2km" }
         ],
         image: SabluyonRoute,
         subtitle: 'Continuous steep assault through tropical rain forest and technical mossy ridgelines.',
-        difficultyRating: '7/9',
-        difficultyLabel: 'Major Climb',
-        duration: '1-2 Days',
-        trailClass: 'Class 3-4',
-        technicality: 'High (Fixed Ropes)',
         waypoints: [
             { name: 'Sitio Sabluyon Jump-off', description: 'Registration, guide assignment & safety briefing', icon: 'start' },
             { name: 'Camp 1 (Bamboos)', description: 'First rest area near lower stream', icon: 'camp' },
@@ -246,18 +241,13 @@ export const TRAILS = {
             'A scenic alternative route initiating near Brgy. Balogo East. This path winds through quiet agricultural farmlands and open cogon grasslands before merging into the forested upper slopes of Mt. Masaraga.',
         statIcon: 'nature',
         stats: [
-            { icon: MapPin, value: "1,328m", label: "Elevation" },
-            { icon: TrendingUp, value: "5/9", label: "Difficulty" },
-            { icon: Clock, value: "7-9h", label: "Duration" },
-            { icon: Map, value: "8.1km", label: "Distance" }
+            { id: 'elevation', value: "1,328m" },
+            { id: 'difficulty', value: "5/9" },
+            { id: 'duration', value: "7-9h" },
+            { id: 'distance', value: "8.1km" }
         ],
         image: BalogoRoute,
         subtitle: 'A balanced route blending agricultural countryside paths with forested ridgelines.',
-        difficultyRating: '5/9',
-        difficultyLabel: 'Moderate Climb',
-        duration: '1 Day',
-        trailClass: 'Class 1-3',
-        technicality: 'Moderate (Scrambling)',
         waypoints: [
             { name: 'Brgy. Balogo Jump-off', description: 'Logbook sign-in & guide briefing', icon: 'start' },
             { name: 'Coconut Plantation Gate', description: 'Gentle incline through local farmlands', icon: 'camp' },
