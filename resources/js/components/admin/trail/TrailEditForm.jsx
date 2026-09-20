@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { X, Save, Mountain, Plus, Trash2, Upload, Image, Star, Check, MapPin, TrendingUp, Clock, Map } from 'lucide-react';
+import { X, Save, Mountain, Plus, Trash2, Upload, Image, Star, Check } from 'lucide-react';
+import { TRAIL_STATS } from '@/lib/trailStats';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useDrawerTransition } from '@/hooks/useDrawerTransition';
@@ -43,11 +44,10 @@ function PillSelector({ options, value, onChange }) {
                     key={opt}
                     type="button"
                     onClick={() => onChange(opt)}
-                    className={`px-3 py-1.5 text-xs font-semibold rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none cursor-pointer ${
-                        value === opt
-                            ? 'bg-primary text-white'
-                            : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest'
-                    }`}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none cursor-pointer ${value === opt
+                        ? 'bg-primary text-white'
+                        : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest'
+                        }`}
                 >
                     {opt}
                 </button>
@@ -84,11 +84,10 @@ function DynamicList({ items, onAdd, onRemove, onUpdate, fields, label }) {
                                                 key={opt}
                                                 type="button"
                                                 onClick={() => onUpdate(idx, field.key, opt)}
-                                                className={`px-2 py-1 text-[10px] font-semibold rounded-lg transition-colors cursor-pointer ${
-                                                    item[field.key] === opt
-                                                        ? 'bg-primary text-white'
-                                                        : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-highest'
-                                                }`}
+                                                className={`px-2 py-1 text-[10px] font-semibold rounded-lg transition-colors cursor-pointer ${item[field.key] === opt
+                                                    ? 'bg-primary text-white'
+                                                    : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-highest'
+                                                    }`}
                                             >
                                                 {opt}
                                             </button>
@@ -141,12 +140,17 @@ function ParagraphList({ paragraphs, onChange }) {
                     <textarea
                         rows={3}
                         value={text}
-                        onChange={(e) => {
-                            const updated = [...paragraphs];
-                            updated[idx] = e.target.value;
-                            onChange(updated);
+                        ref={(node) => {
+                            if (node) {
+                                node.style.height = 'auto';
+                                node.style.height = `${node.scrollHeight}px`;
+                            }
                         }}
-                        className="w-full rounded-xl border border-outline-variant/40 bg-surface-container-low px-3.5 py-2.5 text-sm text-on-surface placeholder:text-outline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        onInput={(e) => {
+                            e.target.style.height = 'auto';
+                            e.target.style.height = `${e.target.scrollHeight}px`;
+                        }}
+                        className="w-full rounded-xl border border-outline-variant/40 bg-surface-container-low px-3.5 py-2.5 text-sm text-on-surface placeholder:text-outline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary resize-none"
                     />
                 </div>
             ))}
@@ -220,7 +224,7 @@ function ImageDropZone({ label, image, onDrop, onRemove }) {
                     )}
                 </div>
                 {image.title && (
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                    <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-2">
                         <p className="text-[10px] font-bold text-white truncate">{image.title}</p>
                         {image.subtitle && <p className="text-[9px] text-white/80 truncate">{image.subtitle}</p>}
                     </div>
@@ -242,11 +246,10 @@ function ImageDropZone({ label, image, onDrop, onRemove }) {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             onClick={() => inputRef.current?.click()}
-            className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-6 transition-colors cursor-pointer ${
-                isDragOver
-                    ? 'border-primary bg-primary/5'
-                    : 'border-outline-variant/40 hover:border-primary/40 hover:bg-surface-container-high'
-            }`}
+            className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-6 transition-colors cursor-pointer ${isDragOver
+                ? 'border-primary bg-primary/5'
+                : 'border-outline-variant/40 hover:border-primary/40 hover:bg-surface-container-high'
+                }`}
         >
             <span className={`h-10 w-10 rounded-xl flex items-center justify-center ${isDragOver ? 'bg-primary/10 text-primary' : 'bg-surface-container-high text-on-surface-variant'}`}>
                 <Upload className="h-5 w-5" />
@@ -324,7 +327,7 @@ function GalleryDropZone({ images, onAdd, onRemove }) {
                                 <Trash2 className="h-3 w-3" />
                             </button>
                             {img.title && (
-                                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-1.5">
+                                <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-1.5">
                                     <p className="text-[9px] font-bold text-white truncate">{img.title}</p>
                                 </div>
                             )}
@@ -337,11 +340,10 @@ function GalleryDropZone({ images, onAdd, onRemove }) {
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={() => inputRef.current?.click()}
-                className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-4 transition-colors cursor-pointer ${
-                    isDragOver
-                        ? 'border-primary bg-primary/5'
-                        : 'border-outline-variant/40 hover:border-primary/40 hover:bg-surface-container-high'
-                }`}
+                className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-4 transition-colors cursor-pointer ${isDragOver
+                    ? 'border-primary bg-primary/5'
+                    : 'border-outline-variant/40 hover:border-primary/40 hover:bg-surface-container-high'
+                    }`}
             >
                 <span className={`h-8 w-8 rounded-lg flex items-center justify-center ${isDragOver ? 'bg-primary/10 text-primary' : 'bg-surface-container-high text-on-surface-variant'}`}>
                     <Image className="h-4 w-4" />
@@ -377,16 +379,14 @@ function ReviewPicker({ selectedReviews, onToggle }) {
                         key={review.id}
                         type="button"
                         onClick={() => onToggle(review)}
-                        className={`w-full text-left rounded-xl border p-3 transition-all cursor-pointer ${
-                            isSelected
-                                ? 'border-primary bg-primary/5 ring-1 ring-primary/20'
-                                : 'border-outline-variant/20 bg-surface-container-high hover:border-outline-variant/40'
-                        }`}
+                        className={`w-full text-left rounded-xl border p-3 transition-all cursor-pointer ${isSelected
+                            ? 'border-primary bg-primary/5 ring-1 ring-primary/20'
+                            : 'border-outline-variant/20 bg-surface-container-high hover:border-outline-variant/40'
+                            }`}
                     >
                         <div className="flex items-start gap-3">
-                            <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
-                                isSelected ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant'
-                            }`}>
+                            <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${isSelected ? 'bg-primary text-white' : 'bg-surface-container text-on-surface-variant'
+                                }`}>
                                 {isSelected ? <Check className="h-4 w-4" /> : review.initials}
                             </span>
                             <div className="min-w-0 flex-1">
@@ -421,12 +421,6 @@ export default function TrailEditForm({ trail, onClose, onSave }) {
     const [form, setForm] = useState({
         name: '',
         subtitle: '',
-        difficulty: 'Major Climb',
-        difficultyLabel: 'Moderate',
-        difficultyRating: '5/9',
-        trailClass: 'Class 1-3',
-        technicality: 'Moderate (Scrambling)',
-        duration: '1 Day',
         description: '',
         status: 'Active',
         featured: false,
@@ -451,12 +445,6 @@ export default function TrailEditForm({ trail, onClose, onSave }) {
             setForm({
                 name: trail.name || '',
                 subtitle: trail.subtitle || '',
-                difficulty: trail.difficulty || 'Major Climb',
-                difficultyLabel: trail.difficultyLabel || 'Moderate',
-                difficultyRating: trail.difficultyRating || '5/9',
-                trailClass: trail.trailClass || 'Class 1-3',
-                technicality: trail.technicality || 'Moderate (Scrambling)',
-                duration: trail.duration || '1 Day',
                 description: trail.description || '',
                 status: trail.status || 'Active',
                 featured: trail.featured || false,
@@ -469,10 +457,10 @@ export default function TrailEditForm({ trail, onClose, onSave }) {
             setHeroImage(trail.image ? { src: trail.image, alt: trail.name } : null);
             setGalleryImages(trail.gallery || []);
             setStats({
-                elevation: trail.stats?.[0]?.value || '',
-                difficulty: trail.stats?.[1]?.value || '',
-                duration: trail.stats?.[2]?.value || '',
-                distance: trail.stats?.[3]?.value || '',
+                elevation: trail.stats?.find((s) => s.id === 'elevation')?.value || '',
+                difficulty: trail.stats?.find((s) => s.id === 'difficulty')?.value || '',
+                duration: trail.stats?.find((s) => s.id === 'duration')?.value || '',
+                distance: trail.stats?.find((s) => s.id === 'distance')?.value || '',
             });
         }
     }, [trail]);
@@ -525,10 +513,10 @@ export default function TrailEditForm({ trail, onClose, onSave }) {
             ...form,
             image: heroImage?.src || trail?.image || null,
             stats: [
-                { icon: MapPin, value: stats.elevation, label: 'Elevation' },
-                { icon: TrendingUp, value: stats.difficulty, label: 'Difficulty' },
-                { icon: Clock, value: stats.duration, label: 'Duration' },
-                { icon: Map, value: stats.distance, label: 'Distance' },
+                { id: 'elevation', value: stats.elevation },
+                { id: 'difficulty', value: stats.difficulty },
+                { id: 'duration', value: stats.duration },
+                { id: 'distance', value: stats.distance },
             ],
             waypoints,
             paragraphs: paragraphs.filter((p) => p.trim()),
@@ -617,7 +605,17 @@ export default function TrailEditForm({ trail, onClose, onSave }) {
                             placeholder="Short description of the trail..."
                             value={form.description}
                             onChange={(e) => update('description', e.target.value)}
-                            className="w-full rounded-xl border border-outline-variant/40 bg-surface-container-low px-3.5 py-2.5 text-sm text-on-surface placeholder:text-outline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                            ref={(node) => {
+                                if (node) {
+                                    node.style.height = 'auto';
+                                    node.style.height = `${node.scrollHeight}px`;
+                                }
+                            }}
+                            onInput={(e) => {
+                                e.target.style.height = 'auto';
+                                e.target.style.height = `${e.target.scrollHeight}px`;
+                            }}
+                            className="w-full rounded-xl border border-outline-variant/40 bg-surface-container-low px-3.5 py-2.5 text-sm text-on-surface placeholder:text-outline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary resize-none"
                         />
                     </FormField>
 
@@ -626,8 +624,8 @@ export default function TrailEditForm({ trail, onClose, onSave }) {
                         <div className="grid grid-cols-2 gap-3">
                             <div className="rounded-xl border border-outline-variant/20 bg-surface-container-high p-3 space-y-1.5">
                                 <div className="flex items-center gap-1.5">
-                                    <MapPin className="h-3.5 w-3.5 text-primary" />
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Elevation</span>
+                                    <TRAIL_STATS.elevation.icon className="h-3.5 w-3.5 text-primary" />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">{TRAIL_STATS.elevation.label}</span>
                                 </div>
                                 <Input
                                     placeholder="e.g. 1,328m"
@@ -637,8 +635,8 @@ export default function TrailEditForm({ trail, onClose, onSave }) {
                             </div>
                             <div className="rounded-xl border border-outline-variant/20 bg-surface-container-high p-3 space-y-1.5">
                                 <div className="flex items-center gap-1.5">
-                                    <TrendingUp className="h-3.5 w-3.5 text-primary" />
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Difficulty</span>
+                                    <TRAIL_STATS.difficulty.icon className="h-3.5 w-3.5 text-primary" />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">{TRAIL_STATS.difficulty.label}</span>
                                 </div>
                                 <Input
                                     placeholder="e.g. 7/9"
@@ -648,8 +646,8 @@ export default function TrailEditForm({ trail, onClose, onSave }) {
                             </div>
                             <div className="rounded-xl border border-outline-variant/20 bg-surface-container-high p-3 space-y-1.5">
                                 <div className="flex items-center gap-1.5">
-                                    <Clock className="h-3.5 w-3.5 text-primary" />
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Duration</span>
+                                    <TRAIL_STATS.duration.icon className="h-3.5 w-3.5 text-primary" />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">{TRAIL_STATS.duration.label}</span>
                                 </div>
                                 <Input
                                     placeholder="e.g. 8-10h"
@@ -659,8 +657,8 @@ export default function TrailEditForm({ trail, onClose, onSave }) {
                             </div>
                             <div className="rounded-xl border border-outline-variant/20 bg-surface-container-high p-3 space-y-1.5">
                                 <div className="flex items-center gap-1.5">
-                                    <Map className="h-3.5 w-3.5 text-primary" />
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Distance</span>
+                                    <TRAIL_STATS.distance.icon className="h-3.5 w-3.5 text-primary" />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">{TRAIL_STATS.distance.label}</span>
                                 </div>
                                 <Input
                                     placeholder="e.g. 9.2km"
@@ -669,55 +667,6 @@ export default function TrailEditForm({ trail, onClose, onSave }) {
                                 />
                             </div>
                         </div>
-                    </FormField>
-
-                    {/* Difficulty Settings */}
-                    <FormField label="Difficulty Tag" required>
-                        <Input
-                            placeholder="e.g. Major Climb"
-                            value={form.difficulty}
-                            onChange={(e) => update('difficulty', e.target.value)}
-                        />
-                    </FormField>
-
-                    <FormField label="Difficulty Label" required>
-                        <PillSelector
-                            options={DIFFICULTY_OPTIONS}
-                            value={form.difficultyLabel}
-                            onChange={(v) => update('difficultyLabel', v)}
-                        />
-                    </FormField>
-
-                    <FormField label="Difficulty Rating" required>
-                        <Input
-                            placeholder="e.g. 7/9"
-                            value={form.difficultyRating}
-                            onChange={(e) => update('difficultyRating', e.target.value)}
-                        />
-                    </FormField>
-
-                    <FormField label="Trail Class" required>
-                        <PillSelector
-                            options={TRAIL_CLASS_OPTIONS}
-                            value={form.trailClass}
-                            onChange={(v) => update('trailClass', v)}
-                        />
-                    </FormField>
-
-                    <FormField label="Technicality" required>
-                        <PillSelector
-                            options={TECHNICALITY_OPTIONS}
-                            value={form.technicality}
-                            onChange={(v) => update('technicality', v)}
-                        />
-                    </FormField>
-
-                    <FormField label="Duration" required>
-                        <Input
-                            placeholder="e.g. 1-2 Days"
-                            value={form.duration}
-                            onChange={(e) => update('duration', e.target.value)}
-                        />
                     </FormField>
 
                     {/* Status & Featured */}
@@ -733,11 +682,10 @@ export default function TrailEditForm({ trail, onClose, onSave }) {
                         <button
                             type="button"
                             onClick={() => update('featured', !form.featured)}
-                            className={`flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none cursor-pointer ${
-                                form.featured
-                                    ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                                    : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest'
-                            }`}
+                            className={`flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none cursor-pointer ${form.featured
+                                ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                                : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest'
+                                }`}
                         >
                             <span className={`h-2 w-2 rounded-full ${form.featured ? 'bg-amber-500' : 'bg-outline'}`} />
                             {form.featured ? 'Featured' : 'Not featured'}

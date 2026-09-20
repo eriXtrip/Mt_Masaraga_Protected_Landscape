@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDrawerTransition } from '@/hooks/useDrawerTransition';
+import { TRAIL_STATS } from '@/lib/trailStats';
 
 function DetailSection({ title, children }) {
     return (
@@ -18,19 +19,9 @@ function DetailSection({ title, children }) {
 function DetailRow({ icon: Icon, label, value }) {
     return (
         <div className="flex items-center gap-2.5 text-sm">
-            <Icon className="h-4 w-4 shrink-0 text-primary" />
+            {Icon && <Icon className="h-4 w-4 shrink-0 text-primary" />}
             <span className="text-on-surface-variant">{label}</span>
             <span className="ml-auto text-right font-semibold text-on-surface">{value}</span>
-        </div>
-    );
-}
-
-function StatBadge({ icon: Icon, value, label }) {
-    return (
-        <div className="flex flex-col items-center gap-1 rounded-xl bg-surface-container-high p-3 text-center">
-            <Icon className="h-4 w-4 text-primary" />
-            <span className="text-sm font-bold text-on-surface">{value}</span>
-            <span className="text-[10px] font-semibold uppercase text-on-surface-variant">{label}</span>
         </div>
     );
 }
@@ -101,14 +92,6 @@ export default function TrailDetail({ trail, onClose, onEdit }) {
                         </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => { requestClose(); onEdit?.(trail); }}
-                            className="gap-2 cursor-pointer"
-                        >
-                            Edit
-                        </Button>
                         <button
                             ref={closeButtonRef}
                             type="button"
@@ -141,16 +124,37 @@ export default function TrailDetail({ trail, onClose, onEdit }) {
                         </p>
                     )}
 
-                    {/* Quick Stats */}
-                    <div className="grid grid-cols-4 gap-2">
-                        {trail.stats?.map((stat, idx) => (
-                            <StatBadge
-                                key={idx}
-                                icon={stat.icon}
-                                value={stat.value}
-                                label={stat.label}
-                            />
-                        ))}
+                    {/* Trail Stats Display */}
+                    <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-3">
+                            Trail Stats
+                        </p>
+                        <div className="grid grid-cols-2  gap-2">
+                            {Object.entries(TRAIL_STATS).map(([key, statConfig]) => {
+                                const Icon = statConfig.icon;
+
+                                // Find the stat item from trail.stats array by matching id with key
+                                const matchedStat = trail.stats?.find((s) => s.id === key);
+                                const statValue = matchedStat?.value || trail[key] || '—';
+
+                                return (
+                                    <div
+                                        key={key}
+                                        className="flex flex-col items-center gap-1 rounded-xl border border-outline-variant/20 bg-surface-container-high p-3 text-center"
+                                    >
+                                        <div className="flex items-center gap-1.5">
+                                            <Icon className="h-3.5 w-3.5 text-primary shrink-0" />
+                                            <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                                                {statConfig.label}
+                                            </span>
+                                        </div>
+                                        <span className="text-xs font-bold text-on-surface mt-0.5">
+                                            {statValue}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
 
                     {/* Description */}
@@ -158,20 +162,6 @@ export default function TrailDetail({ trail, onClose, onEdit }) {
                         <p className="text-sm leading-relaxed text-on-surface-variant">
                             {trail.description}
                         </p>
-                    </DetailSection>
-
-                    {/* Trail Info */}
-                    <DetailSection title="Trail Info">
-                        <div className="space-y-2">
-                            <DetailRow icon={TrendingUp} label="Difficulty Rating" value={trail.difficultyRating} />
-                            <DetailRow icon={MapPin} label="Difficulty Type" value={trail.difficultyLabel} />
-                            <DetailRow icon={Clock} label="Duration" value={trail.duration} />
-                            <DetailRow icon={Map} label="Trail Class" value={trail.trailClass} />
-                            <DetailRow icon={Shield} label="Technicality" value={trail.technicality} />
-                            {trail.difficulty && (
-                                <DetailRow icon={AlertTriangle} label="Difficulty Tag" value={trail.difficulty} />
-                            )}
-                        </div>
                     </DetailSection>
 
                     {/* Waypoints */}

@@ -1,6 +1,7 @@
-import { Clock, Mountain, ArrowUpRight } from 'lucide-react';
+import { Mountain, ArrowUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
+import { TRAIL_STATS } from '@/lib/trailStats';
 
 export default function TrailCard({ trail }) {
     const navigate = useNavigate();
@@ -44,23 +45,28 @@ export default function TrailCard({ trail }) {
 
                 {/* Stats Grid */}
                 <div className="mb-4 mt-auto grid grid-cols-2 lg:grid-cols-4 gap-2 rounded-2xl bg-surface-container-low/60 p-3 border border-outline-variant/20 text-xs font-bold text-on-surface">
-                    {trail.stats.map((stat, index) => (
+                    {trail.stats.map((stat, index) => {
+                        const config = TRAIL_STATS[stat.id];
+                        if (!config) return null;
+                        const Icon = config.icon;
+                        return (
                         <div
                             key={index}
                             className={`flex items-center gap-2.5 px-3 py-1.5 ${index !== 0 ? 'border-l border-outline-variant/20' : ''
                                 }`}
                         >
-                            <stat.icon className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
+                            <Icon className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
                             <div className="flex flex-col min-w-0">
                                 <span className="text-[10px] font-medium uppercase tracking-wider text-on-surface-variant leading-none mb-0.5">
-                                    {stat.label}
+                                    {config.label}
                                 </span>
                                 <span className="truncate font-extrabold text-on-surface leading-tight">
                                     {stat.value}
                                 </span>
                             </div>
                         </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 {/* Full Card CTA Button */}

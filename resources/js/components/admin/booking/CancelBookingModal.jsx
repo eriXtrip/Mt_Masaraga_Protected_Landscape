@@ -97,11 +97,11 @@ export default function CancelBookingModal({ booking, onConfirm, onClose }) {
                             <div className="mt-2.5 animate-in fade-in slide-in-from-top-2 duration-200">
                                 <textarea
                                     rows={3}
-                                    value={customReason}
                                     onInput={(e) => {
                                         e.target.style.height = 'auto';
                                         e.target.style.height = `${e.target.scrollHeight}px`;
                                     }}
+                                    value={customReason}
                                     onChange={(e) => setCustomReason(e.target.value)}
                                     placeholder="Please describe your reason for cancelling..."
                                     className="w-full resize-none overflow-hidden rounded-xl border border-outline-variant/60 bg-surface-container-lowest p-3 text-xs text-on-surface placeholder:text-muted-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"

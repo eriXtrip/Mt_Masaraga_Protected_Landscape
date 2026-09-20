@@ -1,5 +1,6 @@
 import { Mountain, ChevronRight, Star, Clock, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { TRAIL_STATS } from '@/lib/trailStats';
 
 const STATUS_CONFIG = {
     Active: { label: 'Active', text: 'text-emerald-700', bg: 'bg-emerald-50', dot: 'bg-emerald-500' },
@@ -47,42 +48,29 @@ export default function TrailList({ trails, onSelect, resultCount, totalCount })
             </div>
 
             {/* 1 Column for Small screens, 2 Columns for Medium+ screens */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {trails.map((trail) => (
                     <div
                         key={trail.id}
                         className="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-5 shadow-xs hover:border-primary/40 transition-all flex flex-col justify-between gap-4"
                     >
-                        <div className="flex items-center gap-4 min-w-0">
-                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                                <Mountain className="h-5 w-5" />
-                            </span>
-                            <div className="min-w-0 flex-1">
-                                <div className="flex items-center gap-2 flex-wrap">
+                        {/* Top Header */}
+                        <div className="flex items-start justify-between gap-4">
+                            <div className="flex items-start gap-3 min-w-0">
+                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                                    <Mountain className="h-5 w-5" />
+                                </span>
+                                <div className="min-w-0">
                                     <p className="truncate text-sm font-bold text-on-surface">{trail.name}</p>
-                                    <StatusPill status={trail.status} />
-                                    {trail.featured && (
-                                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 shrink-0">
-                                            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                                            Featured
-                                        </span>
-                                    )}
-                                </div>
-                                <p className="truncate text-xs text-on-surface-variant mt-0.5">
-                                    {trail.difficultyLabel} · {trail.trailClass} · {trail.duration}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center justify-between gap-2 border-t border-outline-variant/20 pt-3">
-                            <div className="flex items-center gap-3 text-xs text-on-surface-variant">
-                                <div className="flex items-center gap-1">
-                                    <TrendingUp className="h-3.5 w-3.5 shrink-0" />
-                                    <span className="font-semibold">{trail.difficultyRating}</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                    <Clock className="h-3.5 w-3.5 shrink-0" />
-                                    <span className="font-semibold">{trail.duration}</span>
+                                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                        <StatusPill status={trail.status} />
+                                        {trail.featured && (
+                                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 shrink-0">
+                                                <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                                                Featured
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
@@ -95,6 +83,24 @@ export default function TrailList({ trails, onSelect, resultCount, totalCount })
                                 <span>Details</span>
                                 <ChevronRight className="h-4 w-4" />
                             </Button>
+                        </div>
+
+                        {/* Bottom Stats Grid */}
+                        <div className="grid grid-cols-4 gap-2 border-t border-outline-variant/20 pt-3">
+                            {Object.entries(TRAIL_STATS).map(([key, statConfig]) => {
+                                const Icon = statConfig.icon;
+                                const matchedStat = trail.stats?.find((s) => s.id === key);
+                                const statValue = matchedStat?.value || trail[key] || '—';
+
+                                return (
+                                    <div key={key} className="flex flex-col items-center gap-0.5 text-center">
+                                        <Icon className="h-3.5 w-3.5 text-primary shrink-0" />
+                                        <span className="text-[11px] font-semibold text-on-surface truncate max-w-full">
+                                            {statValue}
+                                        </span>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 ))}
