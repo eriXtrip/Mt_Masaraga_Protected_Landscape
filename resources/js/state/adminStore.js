@@ -1,8 +1,15 @@
 import { useSyncExternalStore } from 'react';
-import { ADMIN_BOOKINGS, ADMIN_DAILY_QUOTA, ADMIN_SCHEDULES, ADMIN_USERS } from '../mockData';
+import { ADMIN_BOOKINGS, ADMIN_DAILY_QUOTA, ADMIN_SCHEDULES, ADMIN_USERS, TRAILS } from '../mockData';
 
 const STORAGE_KEY = 'masaraga_admin_store_v2';
 const ADMIN = ADMIN_USERS.find((user) => user.role === 1) || ADMIN_USERS[0] || {};
+
+const TRAILS_ARRAY = Object.entries(TRAILS).map(([id, trail]) => ({
+    ...trail,
+    id,
+    status: 'Active',
+    featured: id === 'amtic',
+}));
 
 function createSeed() {
     return {
@@ -16,6 +23,7 @@ function createSeed() {
         quota: ADMIN_DAILY_QUOTA,
         schedules: ADMIN_SCHEDULES,
         users: ADMIN_USERS,
+        trails: TRAILS_ARRAY,
     };
 }
 
@@ -127,6 +135,46 @@ export function changeScheduleGuide(scheduleId, guide) {
         ...current,
         schedules: current.schedules.map((schedule) =>
             schedule.id === scheduleId ? { ...schedule, guide } : schedule
+        ),
+    }));
+}
+
+export function createTrail(trail) {
+    setState((current) => ({
+        ...current,
+        trails: [
+            {
+                ...trail,
+                id: trail.id || `trail-${Date.now()}`,
+                status: trail.status || 'Draft',
+                featured: trail.featured || false,
+            },
+            ...current.trails,
+        ],
+    }));
+}
+
+export function updateTrail(trailId, updates) {
+    setState((current) => ({
+        ...current,
+        trails: current.trails.map((trail) =>
+            trail.id === trailId ? { ...trail, ...updates } : trail
+        ),
+    }));
+}
+
+export function deleteTrail(trailId) {
+    setState((current) => ({
+        ...current,
+        trails: current.trails.filter((trail) => trail.id !== trailId),
+    }));
+}
+
+export function toggleTrailFeatured(trailId) {
+    setState((current) => ({
+        ...current,
+        trails: current.trails.map((trail) =>
+            trail.id === trailId ? { ...trail, featured: !trail.featured } : trail
         ),
     }));
 }
