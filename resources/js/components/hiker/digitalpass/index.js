@@ -3,4 +3,4 @@ export { default as PassStats } from './PassStats';
 export { default as ActivePassCard } from './ActivePassCard';
 export { default as UsedCancelledPassItem } from './UsedCancelledPassItem';
 export { default as EmptyPassesState } from './EmptyPassesState';
-export { StatusPill, PASS_STATUS } from './helpers';
+export { StatusPill, PASS_STATUS } from './helpers.jsx';

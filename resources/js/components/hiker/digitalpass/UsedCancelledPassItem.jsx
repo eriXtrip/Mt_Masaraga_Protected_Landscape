@@ -1,6 +1,6 @@
 import React from 'react';
 import { Ticket } from 'lucide-react';
-import { StatusPill } from './helpers';
+import { StatusPill } from './helpers.jsx';
 
 export default function UsedCancelledPassItem({ pass }) {
     return (

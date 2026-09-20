@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
-import { StatusPill } from './helpers';
+import { StatusPill } from './helpers.jsx';
 
 export default function RecentBookings({ transactions }) {
     const navigate = useNavigate();

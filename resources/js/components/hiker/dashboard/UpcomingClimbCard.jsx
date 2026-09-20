@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Ticket, Calendar, Users, Wallet, MapPin, ChevronRight, Clock3 } from 'lucide-react';
-import { StatusPill } from './helpers';
+import { StatusPill } from './helpers.jsx';
 
 export default function UpcomingClimbCard({ climb, countdown }) {
     const navigate = useNavigate();

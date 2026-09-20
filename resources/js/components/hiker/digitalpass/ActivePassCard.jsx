@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Download, Eye, ChevronRight } from 'lucide-react';
 import HikerTicketPass from '@/components/features/HikerTicketPass';
-import { StatusPill } from './helpers';
+import { StatusPill } from './helpers.jsx';
 
 export default function ActivePassCard({ pass }) {
     const navigate = useNavigate();

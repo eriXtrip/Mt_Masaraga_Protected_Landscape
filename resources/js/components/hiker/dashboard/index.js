@@ -4,4 +4,4 @@ export { default as NoUpcomingClimbs } from './NoUpcomingClimbs';
 export { default as QuickActions } from './QuickActions';
 export { default as ParkAdvisories } from './ParkAdvisories';
 export { default as RecentBookings } from './RecentBookings';
-export { StatusPill, STATUS_CONFIG, toDateKey, daysUntilHike, countdownLabel } from './helpers';
+export { StatusPill, STATUS_CONFIG, toDateKey, daysUntilHike, countdownLabel } from './helpers.jsx';
