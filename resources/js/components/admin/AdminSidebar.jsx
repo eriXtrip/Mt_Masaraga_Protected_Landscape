@@ -64,13 +64,13 @@ export default function AdminSidebar({ open, onClose }) {
             <aside
                 id="admin-sidebar"
                 aria-label="Admin navigation"
-                className={`fixed inset-y-4 z-40 flex w-72 max-w-[calc(100vw-2rem)] flex-col rounded-r-2xl bg-secondary text-on-secondary shadow-sm transition-transform duration-300 ease-out ${entered
+                className={`fixed inset-y-4 z-40 flex w-72 max-w-[calc(100vw-2rem)] flex-col rounded-r-2xl bg-secondary text-on-secondary shadow-sm transition-transform duration-500 ease-out ${entered
                     ? 'lg:translate-x-0'
                     : 'lg:-translate-x-full'
                     } ${open
                         ? 'translate-x-0'
                         : '-translate-x-[calc(100%+1rem)]'
-                        }`}
+                    }`}
             >
                 {/* Brand */}
                 <div className="flex flex-col gap-1 items-start border-b border-white/10 px-5 py-4">

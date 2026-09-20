@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminBooking from './pages/admin/AdminBooking';
+import AdminPayment from './pages/admin/AdminPayment';
 import AdminSection from './pages/admin/AdminSection';
 import ScrollToTop from './components/common/ScrollToTop';
 import { ADMIN_SECTIONS } from './admin/navConfig';
@@ -12,7 +13,8 @@ import { Toaster } from './components/ui/toast';
 import '../css/app.css';
 
 const ADMIN_ROUTE_PATHS = Object.keys(ADMIN_SECTIONS);
-const GENERIC_SECTION_PATHS = (path) => path !== '/admin/dashboard' && path !== '/admin/bookings';
+const GENERIC_SECTION_PATHS = (path) =>
+    path !== '/admin/dashboard' && path !== '/admin/bookings' && path !== '/admin/payments';
 
 const AdminApp = () => (
     <BrowserRouter>
@@ -23,6 +25,7 @@ const AdminApp = () => (
             <Route element={<AdminLayout />}>
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
                 <Route path="/admin/bookings" element={<AdminBooking />} />
+                <Route path="/admin/payments" element={<AdminPayment />} />
                 {ADMIN_ROUTE_PATHS.filter(GENERIC_SECTION_PATHS).map((path) => (
                     <Route key={path} path={path} element={<AdminSection />} />
                 ))}
