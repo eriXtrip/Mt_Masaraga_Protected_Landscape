@@ -25,10 +25,10 @@ export default function NewsFilters({ searchTerm, categoryFilter, onSearch, onCa
                             value={categoryFilter}
                             onChange={(e) => onCategory(e.target.value)}
                             aria-label="Filter by category"
-                            className="w-full appearance-none rounded-xl bg-primary px-3.5 py-2 pr-9 text-xs font-semibold text-white transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 cursor-pointer"
+                            className="h-10 w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm font-medium text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none cursor-pointer"
                         >
                             {['All', ...NEWS_CATEGORIES].map((cat) => (
-                                <option key={cat} value={cat} className="bg-surface-container-high text-on-surface-variant py-1 text-xs font-semibold">
+                                <option key={cat} value={cat}>
                                     {cat}
                                 </option>
                             ))}

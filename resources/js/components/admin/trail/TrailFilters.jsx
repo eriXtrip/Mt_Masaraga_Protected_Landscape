@@ -37,13 +37,13 @@ export default function TrailFilters({
                         <select
                             value={difficultyFilter}
                             onChange={(e) => onDifficulty(e.target.value)}
-                            className="w-full rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary"
+                            className="h-10 w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm font-medium text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none cursor-pointer"
                         >
                             {DIFFICULTY_OPTIONS.map((diff) => (
                                 <option
                                     key={diff}
                                     value={diff}
-                                    className="bg-surface-container-high text-on-surface-variant py-1 text-xs font-semibold">
+                                >
                                     {diff}
                                 </option>
                             ))}
@@ -60,13 +60,12 @@ export default function TrailFilters({
                         <select
                             value={statusFilter}
                             onChange={(e) => onStatus(e.target.value)}
-                            className="w-full rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary"
+                            className="h-10 w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm font-medium text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none cursor-pointer"
                         >
                             {STATUS_OPTIONS.map((status) => (
                                 <option
                                     key={status}
                                     value={status}
-                                    className="bg-surface-container-high text-on-surface-variant py-1 text-xs font-semibold"
                                 >
                                     {status}
                                 </option>

@@ -17,7 +17,7 @@ export default function GuideFilters({
     return (
         <div className="flex flex-col gap-4 rounded-2xl border border-outline-variant/30 bg-surface-container-lowest p-4 shadow-xs xl:flex-row xl:items-center xl:justify-between">
             {/* Top Row: Search Input */}
-            <div className="relative w-full shrink-0 md:max-w-xs lg:max-w-sm">
+            <div className="relative flex-1 min-w-0">
                 <label htmlFor="guide-search" className="sr-only">
                     Search guides
                 </label>
@@ -45,13 +45,12 @@ export default function GuideFilters({
                             id="status-select"
                             value={statusFilter}
                             onChange={(e) => onStatus(e.target.value)}
-                            className="w-full rounded-xl bg-primary pl-3 pr-8 py-2 text-xs font-semibold text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+                            className="h-10 w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm font-medium text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none cursor-pointer"
                         >
                             {STATUS_OPTIONS.map((status) => (
                                 <option
                                     key={status}
                                     value={status}
-                                    className="bg-surface-container-high text-on-surface-variant py-1 text-xs font-semibold"
                                 >
                                     {status}
                                 </option>
@@ -73,13 +72,12 @@ export default function GuideFilters({
                             id="certification-select"
                             value={certificationFilter}
                             onChange={(e) => onCertification(e.target.value)}
-                            className="w-full rounded-xl bg-primary pl-3 pr-8 py-2 text-xs font-semibold text-white appearance-none focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+                            className="h-10 w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-sm font-medium text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none cursor-pointer"
                         >
                             {CERTIFICATION_OPTIONS.map((cert) => (
                                 <option
                                     key={cert}
                                     value={cert}
-                                    className="bg-surface-container-high text-on-surface-variant py-1 text-xs font-semibold"
                                 >
                                     {cert}
                                 </option>
