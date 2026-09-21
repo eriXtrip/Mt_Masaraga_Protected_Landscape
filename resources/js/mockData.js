@@ -1528,5 +1528,63 @@ export const ADMIN_GUIDES = [
     },
 ];
 
+export const ADMIN_ANNOUNCEMENTS = [
+    {
+        id: 'ANN-2026-1015-01',
+        title: 'Trail Maintenance Schedule - October 2026',
+        category: 'Advisory',
+        audience: 'all',
+        content: 'Please be advised that scheduled maintenance will be conducted on the Amtic Trail from October 28-30, 2026. During this period, the lower loop and wooden boardwalk sections will be temporarily closed for repairs. Hikers are advised to use the Ridge Trail connection as an alternative route. We apologize for any inconvenience and appreciate your understanding as we work to improve trail safety.',
+        status: 'sent',
+        createdAt: '2026-10-15T08:00:00.000Z',
+        sentAt: '2026-10-15T08:00:00.000Z',
+        author: 'Juan Dela Cruz',
+    },
+    {
+        id: 'ANN-2026-1020-02',
+        title: 'New Online Permit System Now Live',
+        category: 'Update',
+        audience: 'hikers',
+        content: 'We are excited to announce that our new Online Permit System is now live! Hikers can now book permits, receive digital QR passes, and make payments through GCash and Maya directly from our website. The system features instant approval for standard permits, downloadable e-passes, and integrated payment methods. Visit the booking page to experience the streamlined process.',
+        status: 'sent',
+        createdAt: '2026-10-20T10:30:00.000Z',
+        sentAt: '2026-10-20T10:30:00.000Z',
+        author: 'Juan Dela Cruz',
+    },
+    {
+        id: 'ANN-2026-1022-03',
+        title: 'Weather Advisory: Typhoon Kristine',
+        category: 'Weather',
+        audience: 'all',
+        content: 'PAGASA has raised Tropical Cyclone Wind Signal (TCWS) #1 for Albay Province due to Typhoon Kristine. As a precautionary measure, all trails in Mt. Masaraga Protected Landscape will be closed effective immediately until further notice. Affected bookings are eligible for free rescheduling within 6 months or a full refund. Please monitor official channels for updates.',
+        status: 'sent',
+        createdAt: '2026-10-22T14:00:00.000Z',
+        sentAt: '2026-10-22T14:00:00.000Z',
+        author: 'Juan Dela Cruz',
+    },
+    {
+        id: 'ANN-2026-1023-04',
+        title: 'Staff Meeting - Trail Safety Protocols',
+        category: 'Announcement',
+        audience: 'staff',
+        content: 'Reminder to all park staff and guides: Monthly safety protocol review meeting scheduled for October 25, 2026 at 9:00 AM at the Ranger Station. Agenda includes emergency response procedures, first aid refresher, and updated trail condition reporting. Attendance is mandatory for all active guides. Please bring your certification cards for verification.',
+        status: 'draft',
+        createdAt: '2026-10-23T09:00:00.000Z',
+        sentAt: null,
+        author: 'Maria Santos',
+    },
+    {
+        id: 'ANN-2026-1024-05',
+        title: 'Year-End Report Submission',
+        category: 'Announcement',
+        audience: 'admins',
+        content: 'All department heads are required to submit their year-end reports by November 15, 2026. Reports should include: visitor statistics, revenue breakdown, trail condition assessments, incident reports, and 2027 projections. Templates have been distributed via email. Please coordinate with the admin office for any clarifications.',
+        status: 'draft',
+        createdAt: '2026-10-24T11:00:00.000Z',
+        sentAt: null,
+        author: 'Juan Dela Cruz',
+    },
+];
+
 
 

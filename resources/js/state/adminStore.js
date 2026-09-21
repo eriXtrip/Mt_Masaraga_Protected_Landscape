@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react';
-import { ADMIN_BOOKINGS, ADMIN_DAILY_QUOTA, ADMIN_SCHEDULES, ADMIN_USERS, TRAILS, ADMIN_GUIDES } from '../mockData';
+import { ADMIN_BOOKINGS, ADMIN_DAILY_QUOTA, ADMIN_SCHEDULES, ADMIN_USERS, TRAILS, ADMIN_GUIDES, ADMIN_ANNOUNCEMENTS } from '../mockData';
 
 const STORAGE_KEY = 'masaraga_admin_store_v2';
 const ADMIN = ADMIN_USERS.find((user) => user.role === 1) || ADMIN_USERS[0] || {};
@@ -25,6 +25,7 @@ function createSeed() {
         users: ADMIN_USERS,
         trails: TRAILS_ARRAY,
         guides: ADMIN_GUIDES,
+        announcements: ADMIN_ANNOUNCEMENTS,
     };
 }
 
@@ -209,6 +210,47 @@ export function deleteGuide(guideId) {
     setState((current) => ({
         ...current,
         guides: current.guides.filter((guide) => guide.id !== guideId),
+    }));
+}
+
+export function createAnnouncement(announcement) {
+    setState((current) => ({
+        ...current,
+        announcements: [
+            {
+                ...announcement,
+                id: announcement.id ?? `ANN-${Date.now()}`,
+                createdAt: announcement.createdAt ?? new Date().toISOString(),
+            },
+            ...current.announcements,
+        ],
+    }));
+}
+
+export function updateAnnouncement(announcementId, updates) {
+    setState((current) => ({
+        ...current,
+        announcements: current.announcements.map((announcement) =>
+            announcement.id === announcementId ? { ...announcement, ...updates } : announcement
+        ),
+    }));
+}
+
+export function deleteAnnouncement(announcementId) {
+    setState((current) => ({
+        ...current,
+        announcements: current.announcements.filter((announcement) => announcement.id !== announcementId),
+    }));
+}
+
+export function sendAnnouncement(announcementId) {
+    setState((current) => ({
+        ...current,
+        announcements: current.announcements.map((announcement) =>
+            announcement.id === announcementId
+                ? { ...announcement, status: 'sent', sentAt: new Date().toISOString() }
+                : announcement
+        ),
     }));
 }
 

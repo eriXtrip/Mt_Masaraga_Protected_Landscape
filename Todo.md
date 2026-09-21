@@ -17,16 +17,16 @@
 
 ## Pages needed — Admin (role 1)
 Everything in Staff, plus:
-- [ ] `/admin/dashboard` — KPIs: bookings, revenue, daily quota usage, trail status, user counts
+- [-] `/admin/dashboard` — KPIs: bookings, revenue, daily quota usage, trail status, user counts
 - [ ] `/admin/users` — manage hikers & staff accounts, roles, activation
-- [ ] `/admin/bookings` — all bookings: approve/cancel/reschedule/refund
-- [ ] `/admin/payments` — payment tracking (GCash/Maya/card/bank, ref numbers), refunds, revenue view
-- [ ] `/admin/trails` — schedule & daily slot/quota management, booking calendar (reuse `Calendar`)
-- [ ] `/admin/guides` — accredited guide registry + assignments
-- [ ] `/admin/content` — create/edit News & Advisories (weather closures, advisories in mockData `NEWS`), awards/gallery
+- [-] `/admin/bookings` — all bookings: approve/cancel/reschedule/refund
+- [-] `/admin/payments` — payment tracking (GCash/Maya/card/bank, ref numbers), refunds, revenue view
+- [-] `/admin/trails` — schedule & daily slot/quota management, booking calendar (reuse `Calendar`)
+- [-] `/admin/guides` — accredited guide registry + assignments
+- [-] `/admin/content` — create/edit News & Advisories (weather closures, advisories in mockData `NEWS`), awards/gallery
 - [ ] `/admin/announcements` — broadcast to the `admin-announcements` channel
 - [ ] `/admin/reports` — revenue breakdown (env fee/guide fee/processing), fill rates
-- [ ] `/admin/settings` — fees, quotas, maintenance toggle (Maintenance page exists), audit
+- [ ] `/admin/settings` — fees, quotas, maintenance toggle (Maintenance page exists), audit, legal, contact
 
 ## Shared / foundation needed
 - [ ] Role-aware routing & nav: gate routes by role (1/2 get their own nav sections), redirect unauthenticated -> /login, unauthorized -> /access-denied (exists)
