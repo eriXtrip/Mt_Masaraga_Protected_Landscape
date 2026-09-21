@@ -9,6 +9,7 @@ import AdminTrail from './pages/admin/AdminTrail';
 import AdminGuides from './pages/admin/AdminGuides';
 import AdminContent from './pages/admin/AdminContent';
 import AdminAnnouncement from './pages/admin/AdminAnnouncement';
+import AdminReports from './pages/admin/AdminReports';
 import AdminSection from './pages/admin/AdminSection';
 import ScrollToTop from './components/common/ScrollToTop';
 import { ADMIN_SECTIONS } from './admin/navConfig';
@@ -18,7 +19,7 @@ import '../css/app.css';
 
 const ADMIN_ROUTE_PATHS = Object.keys(ADMIN_SECTIONS);
 const GENERIC_SECTION_PATHS = (path) =>
-    path !== '/admin/dashboard' && path !== '/admin/bookings' && path !== '/admin/payments' && path !== '/admin/trails' && path !== '/admin/guides' && path !== '/admin/content' && path !== '/admin/announcements';
+    path !== '/admin/dashboard' && path !== '/admin/bookings' && path !== '/admin/payments' && path !== '/admin/trails' && path !== '/admin/guides' && path !== '/admin/content' && path !== '/admin/announcements' && path !== '/admin/reports';
 
 const AdminApp = () => (
     <BrowserRouter>
@@ -34,6 +35,7 @@ const AdminApp = () => (
                 <Route path="/admin/guides" element={<AdminGuides />} />
                 <Route path="/admin/content" element={<AdminContent />} />
                 <Route path="/admin/announcements" element={<AdminAnnouncement />} />
+                <Route path="/admin/reports" element={<AdminReports />} />
                 {ADMIN_ROUTE_PATHS.filter(GENERIC_SECTION_PATHS).map((path) => (
                     <Route key={path} path={path} element={<AdminSection />} />
                 ))}
