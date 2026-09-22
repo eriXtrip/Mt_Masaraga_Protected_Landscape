@@ -1,20 +1,11 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { BarChart3, Download, Filter } from 'lucide-react';
+import { Download, Filter } from 'lucide-react';
 import { useInView } from '@/hooks/useInView';
 import { Button } from '@/components/ui/button';
 import { useAdminStore } from '../../state/adminStore';
 import { ReportsSummary, ReportsList, ReportsFilters, ReportsCard } from '../../components/admin/reports';
 
-const formatter = new Intl.NumberFormat('en-PH', {
-    style: 'currency',
-    currency: 'PHP',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-});
-
 export default function AdminReports() {
-    const navigate = useNavigate();
     const { bookings, schedules, quota, users } = useAdminStore();
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
 
@@ -24,13 +15,8 @@ export default function AdminReports() {
     const allTrails = useMemo(() => [...new Set(schedules.map((s) => s.trail))].sort(), [schedules]);
 
     const filteredBookings = useMemo(() => {
-        let result = bookings.filter((b) => b.status === 'Completed' || b.status === 'Confirmed');
-
-        if (selectedTrail !== 'all') {
-            result = result.filter((b) => b.trail === selectedTrail);
-        }
-
-        return result;
+        if (selectedTrail === 'all') return bookings;
+        return bookings.filter((b) => b.trail === selectedTrail);
     }, [bookings, selectedTrail]);
 
     const filteredSchedules = useMemo(() => {
@@ -48,9 +34,6 @@ export default function AdminReports() {
     const handleViewTrailDetails = (trail) => {
         setSelectedTrail(trail);
     };
-
-    const completedBookings = bookings.filter((b) => b.status === 'Completed' || b.status === 'Confirmed');
-    const totalRevenue = completedBookings.reduce((sum, b) => sum + (b.totalPaid || 0), 0);
 
     return (
         <div ref={sectionRef} className="space-y-6 md:space-y-8">
@@ -148,8 +131,6 @@ export default function AdminReports() {
                     selectedTrail={selectedTrail}
                 />
             </div>
-
-
         </div>
     );
 }

@@ -14,7 +14,7 @@ const getFillRateBadge = (rate) => {
 };
 
 export default function ReportsCard({ trail, bookings, schedules, onViewDetails }) {
-    const trailBookings = bookings.filter((b) => b.trail === trail && (b.status === 'Completed' || b.status === 'Confirmed'));
+    const trailBookings = bookings.filter((b) => b.trail === trail);
     const trailSchedules = schedules.filter((s) => s.trail === trail);
 
     const totalRevenue = trailBookings.reduce((sum, b) => sum + (b.totalPaid || 0), 0);

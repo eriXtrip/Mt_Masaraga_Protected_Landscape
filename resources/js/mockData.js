@@ -185,6 +185,8 @@ export const TRAILS = {
         name: 'Amtic Trail (or Sabluyon Trail)',
         difficulty: 'Major Climb',
         difficultyClass: 'bg-primary-container text-on-primary-container',
+        trailClass: 'Class 3 - Technical Scramble',
+        technicality: 'High (Rope sections, exposed ridges)',
         description:
             'The primary and most established route up Mt. Masaraga, starting at Sitio Sabluyon, Brgy. Amtic, Ligao City. Known for its relentless steep inclines, dense jungle canopy, and technical rope-assisted ridge assault leading to the summit.',
         statIcon: 'height',
@@ -237,6 +239,8 @@ export const TRAILS = {
         name: 'Balogo Trail',
         difficulty: 'Moderate-Major',
         difficultyClass: 'bg-primary text-white',
+        trailClass: 'Class 2 - Steep Hiking',
+        technicality: 'Moderate (Steep sections, some exposed roots)',
         description:
             'A scenic alternative route initiating near Brgy. Balogo East. This path winds through quiet agricultural farmlands and open cogon grasslands before merging into the forested upper slopes of Mt. Masaraga.',
         statIcon: 'nature',
@@ -871,19 +875,29 @@ export const PAYMENT_METHODS = [
         icon: Wallet,
     },
     {
-        id: 'card',
-        label: 'Credit/Debit Card',
-        icon: CreditCard,
-    },
-    {
         id: 'maya',
         label: 'Maya',
         icon: QrCode,
     },
     {
-        id: 'bank',
-        label: 'Bank Transfer (Landbank, BDO)',
+        id: 'landbank',
+        label: 'Landbank',
         icon: Building2,
+    },
+    {
+        id: 'visa',
+        label: 'Visa',
+        icon: CreditCard,
+    },
+    {
+        id: 'mastercard',
+        label: 'Mastercard',
+        icon: CreditCard,
+    },
+    {
+        id: 'cash',
+        label: 'Cash',
+        icon: Wallet,
     },
 ];
 
@@ -1100,7 +1114,7 @@ export const ADMIN_BOOKINGS = [
         date: 'Oct 24, 2026',
         participants: 3,
         totalPaid: 1700,
-        paymentMethod: 'Bank Transfer',
+        paymentMethod: 'LandBank',
         status: 'Upcoming',
         feeBreakdown: [
             { label: 'Environmental fee (3 pax)', amount: 750 },
@@ -1162,7 +1176,7 @@ export const ADMIN_BOOKINGS = [
         date: 'Oct 24, 2026',
         participants: 2,
         totalPaid: 1850,
-        paymentMethod: 'GCash',
+        paymentMethod: 'VISA',
         status: 'Confirmed',
         guide: 'R. Villanueva',
         feeBreakdown: [
@@ -1213,7 +1227,7 @@ export const ADMIN_BOOKINGS = [
         date: 'Aug 12, 2026',
         participants: 1,
         totalPaid: 650,
-        paymentMethod: 'Maya',
+        paymentMethod: 'Mastercard',
         status: 'Completed',
         guide: 'M. Santos',
         feeBreakdown: [

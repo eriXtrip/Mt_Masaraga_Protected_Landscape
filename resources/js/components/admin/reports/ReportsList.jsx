@@ -9,13 +9,11 @@ const formatter = new Intl.NumberFormat('en-PH', {
 });
 
 function RevenueRow({ trail, bookings, isTotal = false }) {
-    const completed = bookings.filter((b) => b.status === 'Completed' || b.status === 'Confirmed');
+    const revenue = bookings.reduce((sum, b) => sum + (b.totalPaid || 0), 0);
+    const count = bookings.length;
+    const hikers = bookings.reduce((sum, b) => sum + (b.participants || 0), 0);
 
-    const revenue = completed.reduce((sum, b) => sum + (b.totalPaid || 0), 0);
-    const count = completed.length;
-    const hikers = completed.reduce((sum, b) => sum + (b.participants || 0), 0);
-
-    const feeBreakdown = completed.reduce((acc, booking) => {
+    const feeBreakdown = bookings.reduce((acc, booking) => {
         booking.feeBreakdown?.forEach((fee) => {
             const label = fee.label.toLowerCase();
             if (label.includes('environmental')) {
@@ -82,10 +80,8 @@ function FillRateRow({ trail, capacity, booked }) {
 }
 
 export default function ReportsList({ bookings, schedules, selectedTrail = 'all' }) {
-    const completedBookings = bookings.filter((b) => b.status === 'Completed' || b.status === 'Confirmed');
-
     const trailBookings = {};
-    completedBookings.forEach((booking) => {
+    bookings.forEach((booking) => {
         if (!trailBookings[booking.trail]) {
             trailBookings[booking.trail] = [];
         }
@@ -132,7 +128,7 @@ export default function ReportsList({ bookings, schedules, selectedTrail = 'all'
                                     {trails.map((trail) => (
                                         <RevenueRow key={trail} trail={trail} bookings={trailBookings[trail] || []} />
                                     ))}
-                                    <RevenueRow isTotal bookings={completedBookings} />
+                                    <RevenueRow isTotal bookings={bookings} />
                                 </>
                             ) : (
                                 <tr>
