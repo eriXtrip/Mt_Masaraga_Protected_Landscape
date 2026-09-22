@@ -1,13 +1,14 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { CalendarCheck, Wallet, Users, Mountain } from 'lucide-react';
 import { useInView } from '@/hooks/useInView';
 import { Button } from '@/components/ui/button';
 import { NEWS } from '../../mockData';
 import { useAdminStore } from '../../state/adminStore';
-import KeyFigures from '../../components/admin/dashboard/KeyFigures';
 import UpcomingBookings from '../../components/admin/dashboard/PendingApprovals';
 import DailySlotQuota from '../../components/admin/dashboard/DailySlotQuota';
 import ParkAdvisories from '../../components/admin/dashboard/ParkAdvisories';
+import { TrailCapacityHeatmap, AdminKPICards } from '../../components/charts';
 
 const formatter = new Intl.NumberFormat('en-PH', {
     style: 'currency',
@@ -18,64 +19,18 @@ const formatter = new Intl.NumberFormat('en-PH', {
 
 export default function AdminDashboard() {
     const navigate = useNavigate();
-    const { profile, bookings, quota, users } = useAdminStore();
+    const { profile, bookings, quota, users, schedules } = useAdminStore();
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
+    const [selectedTrail, setSelectedTrail] = useState('all');
 
     const firstName = (profile.name || 'Admin').split(' ')[0];
 
     const scheduledDates = [...new Set(bookings.filter((b) => b.status !== 'Completed').map((b) => b.date))];
     const hikeDay = scheduledDates[0] || null;
-    const hikeDayBookings = hikeDay ? bookings.filter((b) => b.date === hikeDay && b.status !== 'Completed') : [];
-
-    const upcomingCount = bookings.filter((b) => b.status === 'Upcoming').length;
-    const collected = bookings.filter((b) => b.status === 'Confirmed' || b.status === 'Completed');
-    const revenueCollected = collected.reduce((sum, b) => sum + b.totalPaid, 0);
-
-    const paymentSplit = collected.reduce((groups, b) => {
-        const key = b.paymentMethod;
-        groups[key] = (groups[key] || 0) + b.totalPaid;
-        return groups;
-    }, {});
-    const paymentSub = Object.entries(paymentSplit)
-        .map(([method, amount]) => `${method} ${formatter.format(amount)}`)
-        .join(' · ') || 'No payments received';
-
-    const totalSlots = quota.reduce((sum, q) => sum + q.capacity, 0);
-    const bookedSlots = quota.reduce((sum, q) => sum + q.booked, 0);
-    const usagePct = totalSlots ? Math.round((bookedSlots / totalSlots) * 100) : 0;
-
-    const hikerCount = users.filter((u) => u.role === 3).length;
-    const staffCount = users.filter((u) => u.role === 2).length;
-    const adminCount = users.filter((u) => u.role === 1).length;
-
-    const kpis = [
-        {
-            icon: CalendarCheck,
-            value: String(hikeDayBookings.length),
-            label: 'Hike-day bookings',
-            sub: hikeDay ? `${hikeDay} · ${upcomingCount} upcoming` : 'No bookings yet',
-        },
-        {
-            icon: Wallet,
-            value: formatter.format(revenueCollected),
-            label: 'Revenue collected',
-            sub: paymentSub,
-        },
-        {
-            icon: Mountain,
-            value: totalSlots ? `${usagePct}%` : '0%',
-            label: 'Daily quota usage',
-            sub: totalSlots ? `${bookedSlots} of ${totalSlots} slots booked` : 'No quota set',
-        },
-        {
-            icon: Users,
-            value: String(users.length),
-            label: 'Registered users',
-            sub: `${hikerCount} hikers · ${staffCount} staff · ${adminCount} admin`,
-        },
-    ];
 
     const advisories = NEWS.filter((item) => ['Advisory', 'Weather'].includes(item.category)).slice(0, 2);
+
+    const allTrails = [...new Set(schedules.map((s) => s.trail))].sort();
 
     return (
         <div ref={sectionRef} className="space-y-6 md:space-y-8">
@@ -109,13 +64,36 @@ export default function AdminDashboard() {
             </header>
 
             <div
-                style={{ transitionDelay: '150ms' }}
+                style={{ transitionDelay: '200ms' }}
                 className={`transition-all duration-700 ease-out ${isInView
                     ? 'opacity-100 translate-y-0 scale-100'
                     : 'opacity-0 translate-y-8 scale-95'
                     }`}
             >
-                <KeyFigures kpis={kpis} />
+                <AdminKPICards bookings={bookings} quota={quota} users={users} schedules={schedules} />
+            </div>
+
+            <div
+                style={{ transitionDelay: '250ms' }}
+                className={`rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-5 shadow-xs hover:border-primary/30 hover:shadow-sm transition-all duration-700 ease-out ${isInView
+                    ? 'opacity-100 translate-y-0 scale-100'
+                    : 'opacity-0 translate-y-8 scale-95'
+                    }`}
+            >
+                <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-bold text-on-surface">Trail Capacity Utilization</h3>
+                    <select
+                        value={selectedTrail}
+                        onChange={(e) => setSelectedTrail(e.target.value)}
+                        className="px-3 py-1.5 text-sm border border-outline-variant/40 rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                        <option value="all">All Trails</option>
+                        {allTrails.map((trail) => (
+                            <option key={trail} value={trail}>{trail}</option>
+                        ))}
+                    </select>
+                </div>
+                <TrailCapacityHeatmap schedules={schedules} quota={quota} selectedTrail={selectedTrail} />
             </div>
 
             <div

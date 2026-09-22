@@ -4,6 +4,7 @@ import TrailOverview from './TrailOverview';
 import TrailGallery from './TrailGallery';
 import TrailRequirment from './TrailRequirment';
 import TrailExperience from './TrailExperience';
+import { TrailElevationProfile } from '../../components/charts';
 
 import { useParams, Navigate } from 'react-router-dom';
 import { TRAILS } from '../../mockData';
@@ -29,6 +30,7 @@ export default function Trail() {
                     </div>
                     <div className="flex flex-col gap-8 col-span-4 lg:col-span-2">
                         <TrailRequirment />
+                        <TrailElevationProfile trail={trail} className={"rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-5 shadow-xs transition-colors hover:border-primary/30 hover:shadow-sm"} />
                         <TrailExperience trail={trail} />
                     </div>
                 </div>
