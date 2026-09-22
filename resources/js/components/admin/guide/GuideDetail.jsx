@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import {
     X, UserCheck, Mail, Phone, Calendar, Star, Mountain, Shield,
-    ChevronRight, FileText, MapPin,
+    ChevronRight, FileText, MapPin, Users, TrendingUp, Wallet,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDrawerTransition } from '@/hooks/useDrawerTransition';
@@ -166,11 +166,35 @@ export default function GuideDetail({ guide, onAction, onClose }) {
 
                     {/* Credentials */}
                     <DetailSection title="Credentials">
-                        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                        <div className="grid grid-cols-2 gap-2.5">
                             <InfoCard icon={Shield} label="Certification" value={guide.certification} />
                             <InfoCard icon={Calendar} label="Accredited Since" value={guide.dateAccredited} />
                             <InfoCard icon={Star} label="Rating" value={`${guide.rating} / 5.0`} />
                             <InfoCard icon={Mountain} label="Total Climbs" value={String(guide.totalClimbs)} />
+                        </div>
+                    </DetailSection>
+
+                    {/* Performance Stats */}
+                    <DetailSection title="Performance">
+                        <div className="grid grid-cols-2 gap-2.5">
+                            <InfoCard icon={TrendingUp} label="Climbs" value={String(guide.assignedBookings ?? guide.totalClimbs ?? 0)} />
+                            <InfoCard icon={Users} label="Hikers" value={String(guide.totalHikers ?? 0)} />
+                            <InfoCard icon={Users} label="Avg Group" value={String(guide.avgGroupSize ?? 0)} />
+                            <InfoCard icon={Wallet} label="Revenue" value={`₱${(guide.revenue ?? 0).toLocaleString()}`} />
+                        </div>
+
+                        {/* Utilization Bar */}
+                        <div className="mt-3">
+                            <div className="flex justify-between text-xs mb-1.5">
+                                <span className="text-on-surface-variant">Utilization</span>
+                                <span className="font-semibold text-on-surface">{guide.utilization ?? 0}%</span>
+                            </div>
+                            <div className="h-2 bg-surface-container-high rounded-full overflow-hidden">
+                                <div
+                                    className="h-full rounded-full bg-primary transition-all duration-500"
+                                    style={{ width: `${guide.utilization ?? 0}%` }}
+                                />
+                            </div>
                         </div>
                     </DetailSection>
 

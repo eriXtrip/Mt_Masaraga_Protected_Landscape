@@ -3,7 +3,7 @@ import KeyFigures from '../dashboard/KeyFigures';
 import { formatter } from '../booking/bookingUtils';
 
 export default function PaymentSummary({ bookings }) {
-    const collected = bookings.filter((b) => b.status === 'Confirmed' || b.status === 'Completed');
+    const collected = bookings;
     const totalRevenue = collected.reduce((sum, b) => sum + b.totalPaid, 0);
 
     const refunded = bookings.filter((b) => b.status === 'Refunded');

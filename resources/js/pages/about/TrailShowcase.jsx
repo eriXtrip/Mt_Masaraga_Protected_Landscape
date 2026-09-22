@@ -1,22 +1,16 @@
 import { useState } from 'react';
-import { Map, Flag, Tent, Mountain, TreePine, GripVertical } from 'lucide-react';
+import { Flag } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 import { TRAILS as trails } from '../../mockData';
 import { useInView } from '@/hooks/useInView';
+import TrailElevationProfile from '@/components/charts/TrailElevationProfile';
 
 function WaypointIcon({ type }) {
     if (type === 'summit') {
         return (
             <span className="absolute -left-6 top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-on-primary shadow-sm">
                 <Flag className="h-2.5 w-2.5" />
-            </span>
-        );
-    }
-    if (type === 'camp') {
-        return (
-            <span className="absolute -left-6 top-0.5 flex h-5 w-5 items-center justify-center rounded-full border-2 border-primary bg-white">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             </span>
         );
     }
@@ -38,8 +32,8 @@ export default function TrailShowcase() {
                 {/* Section Header & Trail Tabs */}
                 <div
                     className={`flex flex-col gap-4 border-b border-outline-variant pb-6 md:flex-row md:items-center md:justify-between transition-all duration-700 ease-out ${isInView
-                            ? 'opacity-100 translate-y-0'
-                            : 'opacity-0 translate-y-8'
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 translate-y-8'
                         }`}
                 >
                     <div>
@@ -77,12 +71,12 @@ export default function TrailShowcase() {
 
                 {/* Main Showcase Grid */}
                 <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
-                    {/* Elevation Profile */}
+                    {/* Elevation Profile - Using TrailElevationProfile Component */}
                     <div
                         style={{ transitionDelay: '200ms' }}
                         className={`relative flex flex-col justify-between overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm md:p-6 lg:col-span-8 transition-all duration-700 ease-out ${isInView
-                                ? 'opacity-100 translate-y-0 scale-100'
-                                : 'opacity-0 translate-y-8 scale-95'
+                            ? 'opacity-100 translate-y-0 scale-100'
+                            : 'opacity-0 translate-y-8 scale-95'
                             }`}
                     >
                         <div>
@@ -90,92 +84,15 @@ export default function TrailShowcase() {
                                 Elevation Profile
                             </span>
                             <h3 className="text-lg font-bold text-on-surface md:text-xl">
-                                Elevation Profile: Mt. Masaraga {trail.name}
+                                Mt. Masaraga {trail.name}
                             </h3>
                             <p className="mt-0.5 text-xs text-on-surface-variant md:text-sm">
                                 {trail.subtitle}
                             </p>
                         </div>
 
-                        {/* Elevation Chart SVG */}
-                        <div className="relative mt-6 min-h-75 flex-col items-end border-t border-outline-variant pt-4">
-                            <svg
-                                key={activeTrail}
-                                className="h-72 w-full overflow-visible animate-in fade-in duration-500"
-                                viewBox="0 0 760 300"
-                                preserveAspectRatio="none"
-                            >
-                                <defs>
-                                    <linearGradient id="trailGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" stopColor="#39670d" stopOpacity="0.9" />
-                                        <stop offset="60%" stopColor="#2d5210" stopOpacity="0.7" />
-                                        <stop offset="100%" stopColor="#1a3408" stopOpacity="0.95" />
-                                    </linearGradient>
-                                    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
-                                        <feDropShadow dx="0" dy="4" floodOpacity="0.15" stdDeviation="3" />
-                                    </filter>
-                                </defs>
-
-                                {/* Grid lines */}
-                                <line x1="0" y1="240" x2="760" y2="240" stroke="#e5f1e7" strokeWidth="1" />
-                                <line x1="0" y1="170" x2="760" y2="170" stroke="#e5f1e7" strokeWidth="1" />
-                                <line x1="0" y1="100" x2="760" y2="100" stroke="#e5f1e7" strokeWidth="1" />
-                                <line x1="0" y1="35" x2="760" y2="35" stroke="#e5f1e7" strokeWidth="1" />
-
-                                {/* Filled area */}
-                                <path
-                                    d={`M 0,${trail.elevationPoints[0].y} ${trail.elevationPoints
-                                        .map((p) => `L ${p.x},${p.y}`)
-                                        .join(' ')} L 760,${trail.elevationPoints[trail.elevationPoints.length - 1].y} L 760,300 L 0,300 Z`}
-                                    fill="url(#trailGradient)"
-                                />
-
-                                {/* Line path */}
-                                <path
-                                    d={`M ${trail.elevationPoints.map((p) => `${p.x},${p.y}`).join(' L ')}`}
-                                    fill="none"
-                                    stroke="#1a3408"
-                                    strokeWidth="4"
-                                    strokeLinecap="round"
-                                    filter="url(#shadow)"
-                                />
-
-                                {/* Points and labels */}
-                                {trail.elevationPoints.map((point, i) => (
-                                    <g key={i}>
-                                        <circle
-                                            cx={point.x}
-                                            cy={point.y}
-                                            r={point.isSummit ? 6 : 5}
-                                            fill={point.isSummit ? '#141e18' : '#ffffff'}
-                                            stroke={point.isSummit ? '#ffffff' : '#1a3408'}
-                                            strokeWidth={point.isSummit ? 2.5 : 3}
-                                        />
-                                        {i > 0 && (
-                                            <line
-                                                x1={point.x}
-                                                y1={point.y}
-                                                x2={point.x}
-                                                y2={point.y - 25}
-                                                stroke="#9ec4a3"
-                                                strokeDasharray="2,2"
-                                                strokeWidth="1.5"
-                                            />
-                                        )}
-                                        <text
-                                            x={point.x}
-                                            y={point.isSummit ? point.y - 15 : point.y - 30}
-                                            textAnchor="middle"
-                                            fill={point.isSummit ? '#141e18' : '#42493b'}
-                                            fontSize={point.isSummit ? 12 : 11}
-                                            fontWeight={point.isSummit ? 800 : 600}
-                                        >
-                                            {point.label} ({point.elevation})
-                                        </text>
-                                    </g>
-                                ))}
-                            </svg>
-                        </div>
+                        {/* TrailElevationProfile Component */}
+                        <TrailElevationProfile trail={trail} showHeader={false} />
                     </div>
 
                     {/* Sidebar Cards */}
@@ -184,68 +101,78 @@ export default function TrailShowcase() {
                         <div
                             style={{ transitionDelay: '350ms' }}
                             className={`rounded-2xl border border-outline-variant bg-surface-container-low p-5 shadow-sm md:p-6 transition-all duration-700 ease-out ${isInView
-                                    ? 'opacity-100 translate-y-0'
-                                    : 'opacity-0 translate-y-8'
+                                ? 'opacity-100 translate-y-0'
+                                : 'opacity-0 translate-y-8'
                                 }`}
                         >
                             <span className="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">
                                 Trail Difficulty
                             </span>
                             <div className="mt-2 flex items-baseline gap-2 border-b border-outline-variant pb-4">
-                                <span className="text-4xl font-extrabold tracking-tight text-on-surface">
+                                <span className="text-3xl font-extrabold tracking-tight text-on-surface md:text-4xl">
                                     {trail.difficulty}
                                 </span>
                             </div>
 
-                            <dl className="mt-4 space-y-3 text-xs md:text-sm">
-                                <div className="flex items-center justify-between">
-                                    <dt className="font-medium text-on-surface-variant">Duration</dt>
-                                    <dd className="font-bold text-on-surface">{trail.duration}</dd>
-                                </div>
-                                <div className="flex items-center justify-between border-t border-outline-variant/40 pt-2.5">
-                                    <dt className="font-medium text-on-surface-variant">Trail Class</dt>
-                                    <dd className="font-bold text-on-surface">{trail.trailClass}</dd>
-                                </div>
-                                <div className="flex items-center justify-between border-t border-outline-variant/40 pt-2.5">
-                                    <dt className="font-medium text-on-surface-variant">Technicality</dt>
-                                    <dd className="text-right font-bold text-on-surface">{trail.technicality}</dd>
-                                </div>
+                            {/* Mapped Trail Stats */}
+                            <dl className="grid grid-cols-2 gap-1 text-xs md:text-sm">
+                                {trail.stats?.map((stat) => {
+                                    return (
+                                        <div
+                                            key={stat.id}
+                                            className="flex flex-row items-center justify-between px-3 py-1"
+                                        >
+                                            <dt className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant/80">
+                                                {stat.id}
+                                            </dt>
+                                            <dd className="text-sm font-extrabold tracking-tight text-on-surface md:text-base">
+                                                {stat.value}
+                                            </dd>
+                                        </div>
+                                    );
+                                })}
                             </dl>
+                            <div className="flex items-center justify-between border-t border-outline-variant/40 pt-2">
+                                <dt className="text-on-surface-variant">Trail Class</dt>
+                                <dd className="font-semibold text-primary">{trail.trailClass}</dd>
+                            </div>
                         </div>
 
                         {/* Key Waypoints Card */}
                         <div
                             style={{ transitionDelay: '500ms' }}
                             className={`flex-1 rounded-2xl border border-outline-variant bg-surface-container-low p-5 shadow-sm md:p-6 transition-all duration-700 ease-out ${isInView
-                                    ? 'opacity-100 translate-y-0'
-                                    : 'opacity-0 translate-y-8'
+                                ? 'opacity-100 translate-y-0'
+                                : 'opacity-0 translate-y-8'
                                 }`}
                         >
                             <span className="mb-4 block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">
                                 Key Waypoints
                             </span>
 
-                            <ol className="relative space-y-5 pl-6">
-                                {/* Vertical connecting bar */}
-                                <div
-                                    aria-hidden="true"
-                                    className="absolute bottom-3 left-2.5 top-2 w-0.5 bg-primary-container"
-                                />
-
-                                {trail.waypoints.map((wp, i) => (
-                                    <li key={i} className="relative">
-                                        <WaypointIcon type={wp.icon} />
-                                        <div>
-                                            <h4 className="text-xs font-bold leading-tight text-on-surface md:text-sm">
-                                                {wp.name}
-                                            </h4>
-                                            <p className="mt-0.5 text-xs text-on-surface-variant">
-                                                {wp.description}
-                                            </p>
+                            {/* Waypoints Timeline List */}
+                            <div className="space-y-0">
+                                {trail.waypoints.map((wp, idx) => (
+                                    <div key={idx} className="flex items-start gap-3">
+                                        <div className="flex flex-col items-center">
+                                            <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${wp.icon === 'summit' ? 'bg-primary text-white' : 'bg-primary/10 text-primary'
+                                                }`}>
+                                                {idx + 1}
+                                            </div>
+                                            {idx < trail.waypoints.length - 1 && <div className="w-px h-6 bg-outline-variant/40" />}
                                         </div>
-                                    </li>
+                                        <div className="min-w-0 flex-1 pb-2">
+                                            <p className="text-sm font-semibold text-on-surface">{wp.name}</p>
+                                            <p className="text-xs text-on-surface-variant">{wp.description}</p>
+                                            {wp.icon && (
+                                                <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                                                    {wp.icon}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
                                 ))}
-                            </ol>
+                            </div>
                         </div>
                     </div>
                 </div>

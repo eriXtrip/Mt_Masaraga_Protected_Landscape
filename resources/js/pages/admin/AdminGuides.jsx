@@ -9,9 +9,11 @@ import GuideFilters from '../../components/admin/guide/GuideFilters';
 import GuideList from '../../components/admin/guide/GuideList';
 import GuideDetail from '../../components/admin/guide/GuideDetail';
 import GuideEditForm from '../../components/admin/guide/GuideEditForm';
+import { GuidePerformanceChart } from '../../components/charts';
+import useGuideStats from '@/hooks/useGuideStats';
 
 export default function AdminGuides() {
-    const { guides } = useAdminStore();
+    const { guides, bookings } = useAdminStore();
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -20,7 +22,9 @@ export default function AdminGuides() {
     const [selectedGuide, setSelectedGuide] = useState(null);
     const [editingGuide, setEditingGuide] = useState(null);
 
-    const filteredGuides = guides.filter((guide) => {
+    const allGuideStats = useGuideStats(guides, bookings);
+
+    const filteredGuides = allGuideStats.filter((guide) => {
         const term = searchTerm.toLowerCase();
         const matchesSearch =
             !term ||
@@ -103,6 +107,19 @@ export default function AdminGuides() {
                         }`}
                 >
                     <GuideSummary guides={guides} />
+                </div>
+
+                <div
+                    style={{ transitionDelay: '200ms' }}
+                    className={`rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-5 shadow-xs hover:border-primary/30 hover:shadow-sm transition-all duration-700 ease-out ${isInView
+                        ? 'opacity-100 translate-y-0 scale-100'
+                        : 'opacity-0 translate-y-8 scale-95'
+                        }`}
+                >
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-bold text-on-surface">Guide Performance</h3>
+                    </div>
+                    <GuidePerformanceChart guides={guides} bookings={bookings} />
                 </div>
 
                 <div
