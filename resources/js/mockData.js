@@ -924,6 +924,7 @@ export const ADMIN_USERS = [
         role: 1,
         subtitle: 'System Administrator',
         status: 'Active',
+        permissions: null,
     },
     {
         id: 'user_staff',
@@ -932,6 +933,7 @@ export const ADMIN_USERS = [
         role: 2,
         subtitle: 'Park Staff / Guide',
         status: 'Active',
+        permissions: ['bookings', 'trails', 'guides'],
     },
     {
         id: 'user_hiker',
@@ -940,6 +942,7 @@ export const ADMIN_USERS = [
         role: 3,
         subtitle: 'Hiker',
         status: 'Active',
+        permissions: null,
     },
     {
         id: 'user_jane',
@@ -948,6 +951,7 @@ export const ADMIN_USERS = [
         role: 3,
         subtitle: 'Hiker',
         status: 'Active',
+        permissions: null,
     },
     {
         id: 'user_marcus',
@@ -956,6 +960,7 @@ export const ADMIN_USERS = [
         role: 3,
         subtitle: 'Hiker',
         status: 'Active',
+        permissions: null,
     },
     {
         id: 'user_elena',
@@ -964,6 +969,7 @@ export const ADMIN_USERS = [
         role: 3,
         subtitle: 'Hiker',
         status: 'Active',
+        permissions: null,
     },
 ];
 

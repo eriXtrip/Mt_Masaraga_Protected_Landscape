@@ -254,6 +254,36 @@ export function sendAnnouncement(announcementId) {
     }));
 }
 
+export function createUser(user) {
+    setState((current) => ({
+        ...current,
+        users: [
+            {
+                ...user,
+                id: user.id ?? `user_${Date.now()}`,
+                status: user.status || 'Active',
+            },
+            ...current.users,
+        ],
+    }));
+}
+
+export function updateUser(userId, updates) {
+    setState((current) => ({
+        ...current,
+        users: current.users.map((u) =>
+            u.id === userId ? { ...u, ...updates } : u
+        ),
+    }));
+}
+
+export function deleteUser(userId) {
+    setState((current) => ({
+        ...current,
+        users: current.users.filter((u) => u.id !== userId),
+    }));
+}
+
 export function useAdminStore() {
     return useSyncExternalStore(subscribe, getState);
 }
