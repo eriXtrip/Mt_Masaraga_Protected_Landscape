@@ -1,4 +1,4 @@
-import { CalendarX, Compass, FileText, Globe2, History, Phone, Mountain, ShieldAlert, SlidersHorizontal, Wrench } from 'lucide-react';
+import { CalendarX, Compass, FileText, Globe2, History, LifeBuoy, Mountain, ShieldAlert, SlidersHorizontal, Wrench } from 'lucide-react';
 import SettingsCard from './SettingsCard';
 
 function formatDate(value) {
@@ -82,9 +82,9 @@ function getItems(activeSection, settings) {
             icon: FileText,
             eyebrow: 'Legal page',
             title: page.label,
-            description: 'Control publication, footer visibility, and the displayed policy metadata.',
+            description: 'Control publication, footer visibility, policy metadata, and visitor-facing content.',
             value: page.title,
-            detail: `Updated ${formatDate(page.lastUpdated)}`,
+            detail: `${page.sections?.length || 0} editable sections · Updated ${formatDate(page.lastUpdated)}`,
             status: page.enabled ? 'Published' : 'Hidden',
             statusTone: page.enabled ? 'success' : 'neutral',
             href: `/legal/${key}`,

@@ -3,6 +3,7 @@ import { RotateCcw } from 'lucide-react';
 import { useInView } from '@/hooks/useInView';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/toast';
+import { LEGAL_PAGES } from '../../mockData';
 import {
     resetSettings,
     updateSettings,
@@ -21,9 +22,11 @@ export default function AdminSettings() {
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const [activeSection, setActiveSection] = useState('general');
     const [editing, setEditing] = useState(null);
+    const currentLegalPages = settings.legal && Object.keys(settings.legal).length > 0 ? settings.legal : LEGAL_PAGES;
+    const displaySettings = { ...settings, legal: currentLegalPages };
 
     const handleEdit = (item) => {
-        const groupSettings = settings[item.group] || {};
+        const groupSettings = displaySettings[item.group] || {};
         const value = item.itemKey ? groupSettings[item.itemKey] : groupSettings;
         setEditing({ ...item, value });
     };
@@ -82,7 +85,7 @@ export default function AdminSettings() {
                     style={{ transitionDelay: '150ms' }}
                     className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}
                 >
-                    <SettingsSummary settings={settings} auditLog={auditLog} />
+                    <SettingsSummary settings={displaySettings} auditLog={auditLog} />
                 </div>
 
                 <div
@@ -96,7 +99,7 @@ export default function AdminSettings() {
                     style={{ transitionDelay: '450ms' }}
                     className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}
                 >
-                    <SettingsList activeSection={activeSection} settings={settings} auditLog={auditLog} onEdit={handleEdit} />
+                    <SettingsList activeSection={activeSection} settings={displaySettings} auditLog={auditLog} onEdit={handleEdit} />
                 </div>
             </div>
 

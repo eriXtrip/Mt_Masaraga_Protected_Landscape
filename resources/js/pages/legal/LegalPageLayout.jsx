@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { LEGAL_PAGES } from '../../mockData';
 import { useAdminStore } from '../../state/adminStore';
 
 function formatLastUpdated(value) {
@@ -15,14 +16,78 @@ function formatLastUpdated(value) {
     }).format(date);
 }
 
+function getLegalPage(settings, pageKey) {
+    const fallbackPage = LEGAL_PAGES[pageKey];
+    const currentPage = settings?.legal?.[pageKey];
+
+    if (!currentPage) return fallbackPage;
+
+    return {
+        ...fallbackPage,
+        ...currentPage,
+        introductoryContent: Array.isArray(currentPage.introductoryContent)
+            ? currentPage.introductoryContent
+            : fallbackPage?.introductoryContent ?? [],
+        sections: Array.isArray(currentPage.sections)
+            ? currentPage.sections
+            : fallbackPage?.sections ?? [],
+    };
+}
+
+export function LegalContent({ pageKey }) {
+    const { settings } = useAdminStore();
+    const page = getLegalPage(settings, pageKey);
+
+    if (!page) return null;
+
+    return (
+        <>
+            {page.introductoryContent.map((item, itemIndex) => {
+                if (item.type === 'paragraph') {
+                    return (
+                        <p
+                            key={`intro-paragraph-${itemIndex}`}
+                            className="text-body-md leading-relaxed text-on-surface-variant"
+                        >
+                            {item.text}
+                        </p>
+                    );
+                }
+
+                if (item.type === 'list') {
+                    return <PolicyList key={`intro-list-${itemIndex}`} items={Array.isArray(item.items) ? item.items : []} />;
+                }
+
+                return null;
+            })}
+            {page.sections.map((section, sectionIndex) => (
+                <PolicySection key={`section-${sectionIndex}`} title={section.title}>
+                    {(Array.isArray(section.content) ? section.content : []).map((item, itemIndex) => {
+                        if (item.type === 'paragraph') {
+                            return <p key={`paragraph-${itemIndex}`}>{item.text}</p>;
+                        }
+
+                        if (item.type === 'list') {
+                            return <PolicyList key={`list-${itemIndex}`} items={Array.isArray(item.items) ? item.items : []} />;
+                        }
+
+                        return null;
+                    })}
+                </PolicySection>
+            ))}
+        </>
+    );
+}
+
 export default function LegalPageLayout({ pageKey, title, subtitle, eyebrow, lastUpdated, children }) {
     const { settings } = useAdminStore();
-    const pageSettings = pageKey ? settings?.legal?.[pageKey] : null;
-    const resolvedTitle = pageSettings?.title || title;
-    const resolvedSubtitle = pageSettings && pageSettings.subtitle !== undefined ? pageSettings.subtitle : subtitle;
-    const resolvedLastUpdated = pageSettings?.lastUpdated ? formatLastUpdated(pageSettings.lastUpdated) : lastUpdated;
+    const page = getLegalPage(settings, pageKey);
+    const resolvedTitle = page?.title || title;
+    const resolvedSubtitle = page && page.subtitle !== undefined ? page.subtitle : subtitle;
+    const resolvedLastUpdated = page?.lastUpdated ? formatLastUpdated(page.lastUpdated) : lastUpdated;
+    const content = children ?? (pageKey ? <LegalContent pageKey={pageKey} /> : null);
 
-    if (pageSettings?.enabled === false) {
+    if (page?.enabled === false) {
         return (
             <section className="relative w-full px-6 pt-10 pb-6 md:px-5 lg:px-10">
                 <div className="mx-auto max-w-3xl pt-16 text-center">
@@ -64,7 +129,7 @@ export default function LegalPageLayout({ pageKey, title, subtitle, eyebrow, las
                 <div className="mt-8 border-t border-outline-variant/40" />
 
                 <div className="mt-8 space-y-8 text-on-surface">
-                    {children}
+                    {content}
                 </div>
 
                 <div className="mt-12 border-t border-outline-variant/40" />

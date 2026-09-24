@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { Save, X } from 'lucide-react';
+import { Plus, Save, Trash2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useDrawerTransition } from '@/hooks/useDrawerTransition';
 import { toast } from '@/components/ui/toast';
+import { LEGAL_PAGES } from '@/mockData';
 
 const GENERAL_CONFIG = {
     eyebrow: 'General settings',
@@ -64,8 +65,8 @@ const MAINTENANCE_CONFIG = {
 
 const LEGAL_CONFIG = {
     eyebrow: 'Legal page',
-    title: 'Edit legal publication settings',
-    description: 'Update the page heading, publication date, and footer visibility. Policy text stays in its public page component.',
+    title: 'Edit legal page',
+    description: 'Update the publication details and the visitor-facing policy text.',
     fields: [
         { name: 'enabled', label: 'Page published', type: 'checkbox' },
         { name: 'showInFooter', label: 'Show in footer', type: 'checkbox' },
@@ -188,12 +189,349 @@ function Field({ field, value, onChange }) {
     );
 }
 
+let legalSectionId = 0;
+
+function createLegalSectionId() {
+    legalSectionId += 1;
+    return `legal-section-${legalSectionId}`;
+}
+
+function serializeLegalContent(content) {
+    return (Array.isArray(content) ? content : [])
+        .map((item) => {
+            if (item?.type === 'paragraph') {
+                return typeof item.text === 'string' ? item.text : '';
+            }
+
+            if (item?.type === 'list') {
+                return (Array.isArray(item.items) ? item.items : [])
+                    .filter((item) => typeof item === 'string')
+                    .map((item) => `- ${item}`)
+                    .join('\n');
+            }
+
+            return '';
+        })
+        .filter(Boolean)
+        .join('\n\n');
+}
+
+function parseLegalContent(value) {
+    const content = [];
+    let paragraphLines = [];
+    let listItems = [];
+
+    const flushParagraph = () => {
+        if (paragraphLines.length === 0) return;
+        content.push({ type: 'paragraph', text: paragraphLines.join(' ') });
+        paragraphLines = [];
+    };
+
+    const flushList = () => {
+        if (listItems.length === 0) return;
+        content.push({ type: 'list', items: listItems });
+        listItems = [];
+    };
+
+    String(value ?? '')
+        .replace(/\r\n?/g, '\n')
+        .split('\n')
+        .forEach((line) => {
+            const trimmedLine = line.trim();
+
+            if (!trimmedLine) {
+                flushParagraph();
+                flushList();
+                return;
+            }
+
+            if (line.startsWith('- ')) {
+                flushParagraph();
+                listItems.push(trimmedLine.slice(2).trim());
+                return;
+            }
+
+            flushList();
+            paragraphLines.push(trimmedLine);
+        });
+
+    flushParagraph();
+    flushList();
+
+    return content;
+}
+
+function createLegalDraft(value) {
+    return {
+        intro: serializeLegalContent(value?.introductoryContent),
+        sections: (Array.isArray(value?.sections) ? value.sections : []).map((section) => ({
+            id: createLegalSectionId(),
+            title: section?.title ?? '',
+            content: serializeLegalContent(section?.content),
+        })),
+    };
+}
+
+function hasEmptyListItem(content) {
+    return content.some((item) => item.type === 'list' && item.items.some((listItem) => !listItem));
+}
+
+function validateLegalDraft(draft) {
+    if (draft.sections.length === 0) {
+        return { message: 'Add at least one policy section.', target: 'add-section' };
+    }
+
+    const introContent = parseLegalContent(draft.intro);
+    if (hasEmptyListItem(introContent)) {
+        return {
+            message: 'Introductory content contains an empty list item. Add text after "- ".',
+            target: 'intro',
+        };
+    }
+
+    for (let sectionIndex = 0; sectionIndex < draft.sections.length; sectionIndex += 1) {
+        const section = draft.sections[sectionIndex];
+        if (!section.title.trim()) {
+            return {
+                message: `Section ${sectionIndex + 1} needs a title.`,
+                target: 'section-title',
+                sectionId: section.id,
+            };
+        }
+
+        const sectionContent = parseLegalContent(section.content);
+        if (sectionContent.length === 0) {
+            return {
+                message: `Section ${sectionIndex + 1} needs content.`,
+                target: 'section-content',
+                sectionId: section.id,
+            };
+        }
+
+        if (hasEmptyListItem(sectionContent)) {
+            return {
+                message: `Section ${sectionIndex + 1} contains an empty list item. Add text after "- ".`,
+                target: 'section-content',
+                sectionId: section.id,
+            };
+        }
+    }
+
+    return null;
+}
+
+function serializeLegalDraft(draft) {
+    return {
+        introductoryContent: parseLegalContent(draft.intro),
+        sections: draft.sections.map((section) => ({
+            title: section.title.trim(),
+            content: parseLegalContent(section.content),
+        })),
+    };
+}
+
+function LegalContentEditor({ draft, error, onChange, onErrorChange }) {
+    const introRef = useRef(null);
+    const sectionTitleRefs = useRef({});
+    const sectionContentRefs = useRef({});
+    const addSectionButtonRef = useRef(null);
+    const [focusTarget, setFocusTarget] = useState(null);
+
+    useEffect(() => {
+        const target = focusTarget || error;
+        if (!target) return;
+
+        if (target.target === 'intro') {
+            introRef.current?.focus();
+        } else if (target.target === 'section-title') {
+            sectionTitleRefs.current[target.sectionId]?.focus();
+        } else if (target.target === 'section-content') {
+            sectionContentRefs.current[target.sectionId]?.focus();
+        } else if (target.target === 'add-section') {
+            addSectionButtonRef.current?.focus();
+        }
+
+        if (focusTarget) setFocusTarget(null);
+    }, [error, focusTarget]);
+
+    const updateIntro = (event) => {
+        onErrorChange(null);
+        onChange((current) => ({ ...current, intro: event.target.value }));
+    };
+
+    const updateSection = (sectionId, field, value) => {
+        onErrorChange(null);
+        onChange((current) => ({
+            ...current,
+            sections: current.sections.map((section) => (
+                section.id === sectionId ? { ...section, [field]: value } : section
+            )),
+        }));
+    };
+
+    const addSection = () => {
+        const id = createLegalSectionId();
+        onErrorChange(null);
+        onChange((current) => ({
+            ...current,
+            sections: [...current.sections, { id, title: '', content: '' }],
+        }));
+        setFocusTarget({ target: 'section-title', sectionId: id });
+    };
+
+    const removeSection = (sectionId) => {
+        const removedIndex = draft.sections.findIndex((section) => section.id === sectionId);
+        const nextSections = draft.sections.filter((section) => section.id !== sectionId);
+        const nextSection = nextSections[Math.min(removedIndex, nextSections.length - 1)];
+
+        onErrorChange(null);
+        onChange((current) => ({
+            ...current,
+            sections: current.sections.filter((section) => section.id !== sectionId),
+        }));
+        setFocusTarget(nextSection
+            ? { target: 'section-title', sectionId: nextSection.id }
+            : { target: 'add-section' });
+    };
+
+    const introError = error?.target === 'intro' ? error.message : '';
+
+    return (
+        <section className="space-y-5 border-t border-outline-variant/20 pt-5" aria-labelledby="legal-content-heading">
+            <div>
+                <h3 id="legal-content-heading" className="text-sm font-bold text-on-surface">Policy content</h3>
+                <p id="legal-content-help" className="mt-1 text-xs leading-relaxed text-on-surface-variant">
+                    Leave a blank line between paragraphs. Start each list item with <code className="rounded bg-surface-container px-1 py-0.5 font-mono text-on-surface">- </code> on its own line.
+                </p>
+            </div>
+
+            {error && (
+                <p id="legal-content-error" role="alert" className="rounded-lg bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive">
+                    {error.message}
+                </p>
+            )}
+
+            <div>
+                <label htmlFor="legal-introduction" className="mb-1.5 block text-xs font-semibold text-on-surface-variant">
+                    Introduction (optional)
+                </label>
+                <textarea
+                    ref={introRef}
+                    id="legal-introduction"
+                    rows={7}
+                    value={draft.intro}
+                    onChange={updateIntro}
+                    placeholder="Optional introduction"
+                    aria-invalid={Boolean(introError)}
+                    aria-describedby={`legal-content-help${introError ? ' legal-content-error' : ''}`}
+                    className="w-full resize-y rounded-lg border border-outline-variant bg-surface px-3.5 py-2.5 text-sm font-medium leading-relaxed text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none aria-invalid:border-destructive aria-invalid:ring-destructive/30"
+                />
+            </div>
+
+            <div className="space-y-4">
+                {draft.sections.map((section, sectionIndex) => {
+                    const titleError = error?.target === 'section-title' && error.sectionId === section.id
+                        ? error.message
+                        : '';
+                    const contentError = error?.target === 'section-content' && error.sectionId === section.id
+                        ? error.message
+                        : '';
+                    const titleId = `legal-${section.id}-title`;
+                    const contentId = `legal-${section.id}-content`;
+                    const groupLabelId = `legal-${section.id}-label`;
+
+                    return (
+                        <div
+                            key={section.id}
+                            role="group"
+                            aria-labelledby={groupLabelId}
+                            className="space-y-4 rounded-xl border border-outline-variant/40 bg-surface-container-lowest p-4"
+                        >
+                            <div className="flex items-center justify-between gap-3">
+                                <p id={groupLabelId} className="text-xs font-bold text-on-surface">
+                                    Section {sectionIndex + 1}
+                                </p>
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    className="h-11 gap-2 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                    onClick={() => removeSection(section.id)}
+                                    disabled={draft.sections.length === 1}
+                                    aria-label={`Remove section ${sectionIndex + 1}`}
+                                >
+                                    <Trash2 className="h-4 w-4" aria-hidden="true" />
+                                    Remove
+                                </Button>
+                            </div>
+
+                            <div>
+                                <label htmlFor={titleId} className="mb-1.5 block text-xs font-semibold text-on-surface-variant">
+                                    Section title
+                                </label>
+                                <Input
+                                    ref={(node) => {
+                                        sectionTitleRefs.current[section.id] = node;
+                                    }}
+                                    id={titleId}
+                                    value={section.title}
+                                    onChange={(event) => updateSection(section.id, 'title', event.target.value)}
+                                    aria-invalid={Boolean(titleError)}
+                                    aria-describedby={titleError ? 'legal-content-error' : undefined}
+                                    className="h-11 aria-invalid:border-destructive aria-invalid:ring-destructive/30"
+                                />
+                            </div>
+
+                            <div>
+                                <label htmlFor={contentId} className="mb-1.5 block text-xs font-semibold text-on-surface-variant">
+                                    Section content
+                                </label>
+                                <textarea
+                                    ref={(node) => {
+                                        sectionContentRefs.current[section.id] = node;
+                                    }}
+                                    id={contentId}
+                                    rows={10}
+                                    value={section.content}
+                                    onChange={(event) => updateSection(section.id, 'content', event.target.value)}
+                                    placeholder={'Paragraph text\n\n- List item'}
+                                    aria-invalid={Boolean(contentError)}
+                                    aria-describedby={`legal-content-help${contentError ? ' legal-content-error' : ''}`}
+                                    className="w-full resize-y rounded-lg border border-outline-variant bg-surface px-3.5 py-2.5 text-sm font-medium leading-relaxed text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none aria-invalid:border-destructive aria-invalid:ring-destructive/30"
+                                />
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+
+            <Button
+                ref={addSectionButtonRef}
+                type="button"
+                variant="outline"
+                className="h-11 w-full gap-2 sm:w-auto"
+                onClick={addSection}
+            >
+                <Plus className="h-4 w-4" aria-hidden="true" />
+                Add section
+            </Button>
+        </section>
+    );
+}
+
 export default function SettingsForm({ section, itemKey, value, onSave, onClose }) {
     const config = getFormConfig(section, itemKey);
     const closeButtonRef = useRef(null);
     const dialogRef = useRef(null);
     const { closing, requestClose, handleAnimationEnd } = useDrawerTransition(onClose);
-    const [form, setForm] = useState(() => createInitialForm(value, config.fields));
+    const legalSource = section === 'legal'
+        ? { ...(LEGAL_PAGES[itemKey] ?? {}), ...(value ?? {}) }
+        : null;
+    const formSource = section === 'legal' ? legalSource : value;
+    const [form, setForm] = useState(() => createInitialForm(formSource, config.fields));
+    const [legalDraft, setLegalDraft] = useState(() => (
+        section === 'legal' ? createLegalDraft(legalSource) : null
+    ));
+    const [legalError, setLegalError] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
@@ -238,10 +576,12 @@ export default function SettingsForm({ section, itemKey, value, onSave, onClose 
                 ? event.target.value === '' ? '' : Number(event.target.value)
                 : event.target.value;
         setForm((current) => ({ ...current, [field.name]: nextValue }));
+        setLegalError(null);
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLegalError(null);
 
         const missingField = config.fields.find((field) => field.required && (form[field.name] === '' || form[field.name] === null || form[field.name] === undefined));
         if (missingField) {
@@ -271,9 +611,24 @@ export default function SettingsForm({ section, itemKey, value, onSave, onClose 
             return;
         }
 
+        let updates = form;
+        if (section === 'legal' && legalDraft) {
+            const legalValidationError = validateLegalDraft(legalDraft);
+            if (legalValidationError) {
+                setLegalError(legalValidationError);
+                toast.error(legalValidationError.message);
+                return;
+            }
+
+            updates = {
+                ...form,
+                ...serializeLegalDraft(legalDraft),
+            };
+        }
+
         setIsSubmitting(true);
         try {
-            await onSave(form);
+            await onSave(updates);
             requestClose();
         } catch (error) {
             toast.error('Settings could not be saved.');
@@ -314,17 +669,25 @@ export default function SettingsForm({ section, itemKey, value, onSave, onClose 
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex-1 space-y-5 overflow-y-auto px-5 py-5">
+                <form id="settings-editor-form" onSubmit={handleSubmit} className="flex-1 space-y-5 overflow-y-auto px-5 py-5">
                     {config.fields.map((field) => (
                         <Field key={field.name} field={field} value={form[field.name]} onChange={setField(field)} />
                     ))}
+                    {section === 'legal' && legalDraft && (
+                        <LegalContentEditor
+                            draft={legalDraft}
+                            error={legalError}
+                            onChange={setLegalDraft}
+                            onErrorChange={setLegalError}
+                        />
+                    )}
                 </form>
 
                 <div className="flex items-center justify-end gap-3 border-t border-outline-variant/20 px-5 py-4">
                     <Button type="button" variant="ghost" className="h-11" onClick={requestClose} disabled={isSubmitting}>
                         Cancel
                     </Button>
-                    <Button type="submit" className="h-11 gap-2" disabled={isSubmitting}>
+                    <Button type="submit" form="settings-editor-form" className="h-11 gap-2" disabled={isSubmitting}>
                         <Save className="h-4 w-4" aria-hidden="true" />
                         {isSubmitting ? 'Saving...' : 'Save settings'}
                     </Button>
