@@ -1,16 +1,17 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import {
     RefreshCw,
-    ArrowLeft,
     Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLottie } from "lottie-react";
 import ErrorCone from "../../components/lottiefiles/Under Maintenance.json";
+import { useAdminStore } from '../../state/adminStore';
 
 export default function Maintenance() {
-    const navigate = useNavigate();
+    const { settings } = useAdminStore();
+    const maintenance = settings?.maintenance || {};
+    const isActive = Boolean(maintenance.enabled);
 
     const { View } = useLottie({
         animationData: ErrorCone,
@@ -39,13 +40,13 @@ export default function Maintenance() {
                     <div className="mt-6 max-w-xl space-y-3">
 
                         <h1 className="text-3xl font-bold tracking-tight text-on-surface sm:text-4xl">
-                            System Under Maintenance
+                            {isActive ? maintenance.title || 'System Under Maintenance' : 'Maintenance mode is off'}
                         </h1>
 
                         <p className="text-sm leading-6 text-on-surface-variant sm:text-base">
-                            The Mt. Masaraga Protected Landscape booking portal
-                            is currently undergoing scheduled upgrades to improve
-                            system reliability and security.
+                            {isActive
+                                ? maintenance.message || 'The booking portal is temporarily unavailable.'
+                                : 'The public booking portal is currently available. This page is kept ready for scheduled maintenance.'}
                         </p>
 
                         {/* Estimated completion */}
@@ -53,9 +54,9 @@ export default function Maintenance() {
                             <Clock className="h-4 w-4 text-primary" />
 
                             <span>
-                                Estimated completion:
+                                {isActive ? 'Estimated completion:' : 'Current status:'}
                                 <span className="ml-1 font-semibold text-on-surface">
-                                    2–4 hours
+                                    {isActive ? maintenance.estimatedCompletion || 'To be announced' : 'Available'}
                                 </span>
                             </span>
                         </div>

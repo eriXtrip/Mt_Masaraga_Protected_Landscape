@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react';
-import { ADMIN_BOOKINGS, ADMIN_DAILY_QUOTA, ADMIN_SCHEDULES, ADMIN_USERS, TRAILS, ADMIN_GUIDES, ADMIN_ANNOUNCEMENTS } from '../mockData';
+import { ADMIN_BOOKINGS, ADMIN_DAILY_QUOTA, ADMIN_SCHEDULES, ADMIN_USERS, TRAILS, ADMIN_GUIDES, ADMIN_SETTINGS, ADMIN_ANNOUNCEMENTS } from '../mockData';
 
 const STORAGE_KEY = 'masaraga_admin_store_v2';
 const ADMIN = ADMIN_USERS.find((user) => user.role === 1) || ADMIN_USERS[0] || {};
@@ -10,6 +10,25 @@ const TRAILS_ARRAY = Object.entries(TRAILS).map(([id, trail]) => ({
     status: 'Active',
     featured: id === 'amtic',
 }));
+
+function cloneSettings(settings) {
+    return JSON.parse(JSON.stringify(settings));
+}
+
+function mergeSettings(defaults, current) {
+    if (!current || typeof current !== 'object' || Array.isArray(current)) {
+        return cloneSettings(defaults);
+    }
+
+    return Object.entries(defaults).reduce((merged, [key, value]) => {
+        const currentValue = current[key];
+        const nextValue = value && typeof value === 'object' && !Array.isArray(value)
+            ? mergeSettings(value, currentValue)
+            : currentValue ?? value;
+        merged[key] = nextValue;
+        return merged;
+    }, {});
+}
 
 function createSeed() {
     return {
@@ -25,23 +44,31 @@ function createSeed() {
         users: ADMIN_USERS,
         trails: TRAILS_ARRAY,
         guides: ADMIN_GUIDES,
+        settings: cloneSettings(ADMIN_SETTINGS),
+        auditLog: [],
         announcements: ADMIN_ANNOUNCEMENTS,
     };
 }
 
 function load() {
+    const seed = createSeed();
+
     try {
         const raw = sessionStorage.getItem(STORAGE_KEY);
         if (raw) {
             const parsed = JSON.parse(raw);
             if (parsed && Array.isArray(parsed.bookings)) {
-                return parsed;
+                return {
+                    ...parsed,
+                    settings: mergeSettings(seed.settings, parsed.settings),
+                    auditLog: Array.isArray(parsed.auditLog) ? parsed.auditLog : [],
+                };
             }
         }
     } catch (error) {
         // Fall through to seed data when storage is unavailable.
     }
-    return createSeed();
+    return seed;
 }
 
 let state = load();
@@ -282,6 +309,82 @@ export function deleteUser(userId) {
         ...current,
         users: current.users.filter((u) => u.id !== userId),
     }));
+}
+
+function getChangedFields(previous, updates) {
+    return Object.keys(updates).filter((key) => JSON.stringify(previous?.[key]) !== JSON.stringify(updates[key]));
+}
+
+function addAuditEntry(current, section, changedFields, actor) {
+    return [
+        {
+            id: `AUDIT-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+            section,
+            changedFields,
+            actor: actor || 'Admin',
+            createdAt: new Date().toISOString(),
+        },
+        ...(current.auditLog || []),
+    ].slice(0, 25);
+}
+
+export function updateSettings(group, updates, actor = 'Admin') {
+    setState((current) => {
+        const previous = current.settings?.[group] || {};
+        const changedFields = getChangedFields(previous, updates);
+        if (changedFields.length === 0) {
+            return current;
+        }
+
+        return {
+            ...current,
+            settings: {
+                ...current.settings,
+                [group]: { ...previous, ...updates },
+            },
+            auditLog: addAuditEntry(current, group, changedFields, actor),
+        };
+    });
+}
+
+export function updateSettingItem(group, itemKey, updates, actor = 'Admin') {
+    setState((current) => {
+        const groupSettings = current.settings?.[group] || {};
+        const previous = groupSettings[itemKey] || {};
+        const changedFields = getChangedFields(previous, updates);
+        if (changedFields.length === 0) {
+            return current;
+        }
+
+        return {
+            ...current,
+            settings: {
+                ...current.settings,
+                [group]: {
+                    ...groupSettings,
+                    [itemKey]: { ...previous, ...updates },
+                },
+            },
+            auditLog: addAuditEntry(current, `${group}.${itemKey}`, changedFields, actor),
+        };
+    });
+}
+
+export function resetSettings(actor = 'Admin') {
+    setState((current) => {
+        const changedFields = Object.keys(ADMIN_SETTINGS).filter(
+            (key) => JSON.stringify(current.settings?.[key]) !== JSON.stringify(ADMIN_SETTINGS[key])
+        );
+        if (changedFields.length === 0) {
+            return current;
+        }
+
+        return {
+            ...current,
+            settings: cloneSettings(ADMIN_SETTINGS),
+            auditLog: addAuditEntry(current, 'settings', changedFields, actor),
+        };
+    });
 }
 
 export function useAdminStore() {

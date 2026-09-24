@@ -89,6 +89,6 @@ export const ADMIN_SECTIONS = {
     },
     '/admin/settings': {
         title: 'Settings',
-        description: 'Fees, quotas, maintenance toggle, and audit log.',
+        description: 'Manage fees, capacity defaults, legal and utility pages, contacts, and the settings audit trail.',
     },
 };

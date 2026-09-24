@@ -26,7 +26,14 @@ export default function ContentTabs({ activeTab, onTabChange }) {
                             }`}
                     >
                         <Icon className="h-4 w-4" />
-                        <span className="hidden sm:inline">{tab.label}</span>
+                        <span
+                            className={`grid transition-all duration-300 ease-out sm:grid-cols-[1fr] sm:opacity-100 ${isActive
+                                    ? 'grid-cols-[1fr] opacity-100'
+                                    : 'grid-cols-[0fr] opacity-0 sm:opacity-100'
+                                }`}
+                        >
+                            <span className="overflow-hidden whitespace-nowrap">{tab.label}</span>
+                        </span>
                     </button>
                 );
             })}

@@ -3,6 +3,7 @@ import LegalPageLayout, { PolicySection, PolicyList } from './LegalPageLayout';
 export default function WildlifeProtection() {
     return (
         <LegalPageLayout
+            pageKey="wildlife-protection"
             title="Wildlife Protection"
             subtitle="Conserving Mt. Masaraga's Native Fauna and Flora"
             lastUpdated="September 18, 2026"

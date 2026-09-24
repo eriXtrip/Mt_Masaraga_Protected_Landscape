@@ -3,6 +3,7 @@ import LegalPageLayout, { PolicySection, PolicyList } from './LegalPageLayout';
 export default function RefundPolicy() {
     return (
         <LegalPageLayout
+            pageKey="refund-policy"
             title="Refund and Return Policy"
             subtitle="Cancellations, Fees, and Refund Terms"
             lastUpdated="September 18, 2026"

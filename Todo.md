@@ -26,7 +26,7 @@ Everything in Staff, plus:
 - [-] `/admin/content` — create/edit News & Advisories (weather closures, advisories in mockData `NEWS`), awards/gallery
 - [ ] `/admin/announcements` — broadcast to the `admin-announcements` channel
 - [ ] `/admin/reports` — revenue breakdown (env fee/guide fee/processing), fill rates
-- [ ] `/admin/settings` — fees, quotas, maintenance toggle (Maintenance page exists), audit, legal, contact
+- [x] `/admin/settings` — fees, quotas, maintenance toggle (Maintenance page exists), audit, legal, contact
 
 ## Shared / foundation needed
 - [ ] Role-aware routing & nav: gate routes by role (1/2 get their own nav sections), redirect unauthenticated -> /login, unauthorized -> /access-denied (exists)

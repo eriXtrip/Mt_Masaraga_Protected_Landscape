@@ -3,6 +3,7 @@ import LegalPageLayout, { PolicySection, PolicyList } from './LegalPageLayout';
 export default function EcotourismNotice() {
     return (
         <LegalPageLayout
+            pageKey="ecotourism-policy"
             title="Ecotourism Policy"
             subtitle="Leave No Trace"
             lastUpdated="September 18, 2026"

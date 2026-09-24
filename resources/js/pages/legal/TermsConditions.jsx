@@ -3,6 +3,7 @@ import LegalPageLayout, { PolicySection, PolicyList } from './LegalPageLayout';
 export default function TermsConditions() {
     return (
         <LegalPageLayout
+            pageKey="terms-conditions"
             title="Terms and Conditions"
             subtitle="Booking and Use of the Mt. Masaraga Protected Landscape Platform"
             lastUpdated="September 18, 2026"

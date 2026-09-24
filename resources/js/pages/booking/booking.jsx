@@ -9,7 +9,7 @@ import DocumentChecklistForm from '@/components/forms/DocumentChecklistForm';
 import PaymentForm from '@/components/forms/PaymentForm';
 import BookingConfirmation from './BookingConfirmation';
 import PaymentOverlay from '@/components/features/PaymentOverlay';
-import { createBooking } from '../../state/adminStore';
+import { createBooking, useAdminStore } from '../../state/adminStore';
 import { toast } from '../../components/ui/toast';
 
 import QR from '../../../../public/images/QR_Code_Example.svg.webp';
@@ -36,6 +36,8 @@ export default function Booking() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
+    const { settings } = useAdminStore();
+    const bookingSettings = settings?.booking || {};
 
     // 1. Resolve trail key safely (defaults to 'amtic' if undefined or invalid)
     const trailId = id && TRAILS[id] ? id : 'amtic';
@@ -136,9 +138,9 @@ export default function Booking() {
         }))
         : undefined;
 
-    const baseFee = trailBookingDetails.baseFeePerPax;
+    const baseFee = bookingSettings.baseFeePerPax ?? trailBookingDetails.baseFeePerPax;
     const totalBaseFee = baseFee * participantCount;
-    const processingFee = 50;
+    const processingFee = bookingSettings.processingFee ?? 50;
     const totalAmount = totalBaseFee + processingFee;
 
     // Dynamic Receipt Data generated for Confirmation view

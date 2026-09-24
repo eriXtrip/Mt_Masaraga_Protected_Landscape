@@ -4,6 +4,7 @@ import LegalPageLayout, { PolicySection, PolicyList } from './LegalPageLayout';
 export default function PrivacyNotice() {
     return (
         <LegalPageLayout
+            pageKey="privacy-policy"
             title="Privacy Policy"
             lastUpdated="September 18, 2026"
         >

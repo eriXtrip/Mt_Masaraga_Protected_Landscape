@@ -3,6 +3,7 @@ import LegalPageLayout, { PolicySection, PolicyList } from './LegalPageLayout';
 export default function Disclaimer() {
     return (
         <LegalPageLayout
+            pageKey="disclaimer"
             title="Disclaimer"
             subtitle="Important Information for Visitors of Mt. Masaraga Protected Landscape"
             lastUpdated="September 18, 2026"

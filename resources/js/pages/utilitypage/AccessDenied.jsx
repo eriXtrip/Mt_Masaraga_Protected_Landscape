@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useLottie } from "lottie-react";
 import ErrorCone from "../../components/lottiefiles/Error cone.json";
+import { useAdminStore } from '../../state/adminStore';
 
 const SUGGESTED_ACTIONS = [
     {
@@ -37,6 +38,8 @@ const SUGGESTED_ACTIONS = [
 
 export default function AccessDenied() {
     const navigate = useNavigate();
+    const { settings } = useAdminStore();
+    const accessDeniedSettings = settings?.utility?.accessDenied || {};
 
     const { View } = useLottie({
         animationData: ErrorCone,
@@ -73,11 +76,11 @@ export default function AccessDenied() {
                 <div className="space-y-3 max-w-xl mx-auto">
 
                     <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-on-surface">
-                        Clearance Required
+                        {accessDeniedSettings.title || 'Clearance Required'}
                     </h1>
 
                     <p className="text-sm md:text-base text-on-surface-variant leading-relaxed">
-                        This area requires an active LGU/DENR permit clearance or verified ranger credentials to view.
+                        {accessDeniedSettings.message || 'This area requires verified clearance to view.'}
                     </p>
                 </div>
 

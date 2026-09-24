@@ -1548,6 +1548,118 @@ export const ADMIN_GUIDES = [
     },
 ];
 
+export const ADMIN_SETTINGS = {
+    general: {
+        siteName: 'Mt. Masaraga Protected Landscape',
+        officeName: 'DENR/PAMB Local Office',
+        officeAddress: 'Brgy. Amtic, Ligao City, Albay',
+        officeHours: 'Monday to Friday, 8:00 AM to 5:00 PM',
+    },
+    contact: {
+        supportEmail: 'support@masaraga.gov.ph',
+        officePhone: '+63 (52) 123-4567',
+        emergencyPhone: '+63 917-EMS-SAFE',
+        emergencyAvailability: 'Available 24/7 for active hikers',
+        mapUrl: 'https://maps.app.goo.gl/393u11nnWZpdLjB69',
+        latitude: 13.31859,
+        longitude: 123.59756,
+        facebook: '',
+        instagram: '',
+        x: '',
+    },
+    booking: {
+        baseFeePerPax: 500,
+        environmentalFee: 250,
+        processingFee: 50,
+        guideFeePerGroup: 700,
+        defaultDailyCapacity: 30,
+        guideRatio: 5,
+        maxGroupSize: 5,
+    },
+    maintenance: {
+        enabled: false,
+        title: 'System Under Maintenance',
+        message: 'The Mt. Masaraga Protected Landscape booking portal is currently undergoing scheduled upgrades to improve system reliability and security.',
+        estimatedCompletion: '2-4 hours',
+    },
+    legal: {
+        'privacy-policy': {
+            label: 'Privacy Policy',
+            title: 'Privacy Policy',
+            subtitle: '',
+            lastUpdated: '2026-09-18',
+            enabled: true,
+            showInFooter: true,
+        },
+        'cookie-policy': {
+            label: 'Cookie Policy',
+            title: 'Cookie Policy',
+            subtitle: '',
+            lastUpdated: '2026-09-18',
+            enabled: true,
+            showInFooter: true,
+        },
+        'ecotourism-policy': {
+            label: 'Ecotourism Policy',
+            title: 'Ecotourism Policy',
+            subtitle: 'Leave No Trace',
+            lastUpdated: '2026-09-18',
+            enabled: true,
+            showInFooter: true,
+        },
+        'wildlife-protection': {
+            label: 'Wildlife Protection',
+            title: 'Wildlife Protection',
+            subtitle: "Conserving Mt. Masaraga's Native Fauna and Flora",
+            lastUpdated: '2026-09-18',
+            enabled: true,
+            showInFooter: true,
+        },
+        'terms-conditions': {
+            label: 'Terms and Conditions',
+            title: 'Terms and Conditions',
+            subtitle: 'Booking and Use of the Mt. Masaraga Protected Landscape Platform',
+            lastUpdated: '2026-09-18',
+            enabled: true,
+            showInFooter: true,
+        },
+        disclaimer: {
+            label: 'Disclaimer',
+            title: 'Disclaimer',
+            subtitle: 'Important Information for Visitors of Mt. Masaraga Protected Landscape',
+            lastUpdated: '2026-09-18',
+            enabled: true,
+            showInFooter: true,
+        },
+        'refund-policy': {
+            label: 'Refund and Return Policy',
+            title: 'Refund and Return Policy',
+            subtitle: 'Cancellations, Fees, and Refund Terms',
+            lastUpdated: '2026-09-18',
+            enabled: true,
+            showInFooter: true,
+        },
+    },
+    utility: {
+        notFound: {
+            title: "You've Wandered Off the Trail!",
+            message: "Looks like you took a wrong turn at the trailhead. The page or route you are searching for has been moved, closed, or doesn't exist.",
+            enabled: true,
+        },
+        accessDenied: {
+            title: 'Clearance Required',
+            message: 'This area requires an active LGU/DENR permit clearance or verified ranger credentials to view.',
+            enabled: true,
+        },
+        bookingSuspended: {
+            enabled: false,
+            title: 'Booking Suspended',
+            message: 'New climb reservations are temporarily paused while the park office updates schedules and safety information.',
+            reopenNote: 'Please check back for updates on our announcement.',
+        },
+    },
+};
+
 export const ADMIN_ANNOUNCEMENTS = [
     {
         id: 'ANN-2026-1015-01',

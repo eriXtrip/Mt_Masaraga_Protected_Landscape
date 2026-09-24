@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import ChicamontaaAnimation from '../../components/lottiefiles/chicamontaa.json';
 import { Button } from '../../components/ui/button';
+import { useAdminStore } from '../../state/adminStore';
 
 // Helper component using the hook API to bypass React 19 default export issues
 const LottiePlayer = ({ animationData, loop = true, className = '' }) => {
@@ -55,6 +56,8 @@ const DESTINATIONS = [
 
 export default function NotFound() {
   const navigate = useNavigate();
+  const { settings } = useAdminStore();
+  const notFoundSettings = settings?.utility?.notFound || {};
 
   return (
     <main className="h-full w-full bg-surface px-6 py-8 md:px-12 lg:px-16 font-sans flex flex-col justify-between">
@@ -96,10 +99,10 @@ export default function NotFound() {
                 <span>Wayfinding Assistance</span>
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-on-surface">
-                You've Wandered Off the Trail!
+                {notFoundSettings.title || "You've Wandered Off the Trail!"}
               </h1>
               <p className="text-sm md:text-base text-on-surface-variant leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Looks like you took a wrong turn at the trailhead. The page or route you are searching for has been moved, closed, or doesn't exist.
+                {notFoundSettings.message || 'The page or route you are searching for is unavailable.'}
               </p>
             </div>
 

@@ -1,5 +1,6 @@
 import { ExternalLink, MapPin } from 'lucide-react';
 import { useInView } from '@/hooks/useInView';
+import { useAdminStore } from '../../state/adminStore';
 
 const CENTER_LAT = 13.31859;
 const CENTER_LON = 123.59756;
@@ -21,8 +22,16 @@ const toTile = (lat, lon, zoom) => {
 
 export default function ContactMap() {
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
+    const { settings } = useAdminStore();
+    const contact = settings?.contact || {};
+    const latitude = Number(contact.latitude);
+    const longitude = Number(contact.longitude);
+    const centerLat = Number.isFinite(latitude) && contact.latitude !== '' ? latitude : CENTER_LAT;
+    const centerLon = Number.isFinite(longitude) && contact.longitude !== '' ? longitude : CENTER_LON;
+    const mapUrl = contact.mapUrl || MAP_URL;
+    const officeAddress = contact.officeAddress || settings?.general?.officeAddress || 'Brgy. Amtic, Ligao City, Albay';
 
-    const centerTile = toTile(CENTER_LAT, CENTER_LON, ZOOM);
+    const centerTile = toTile(centerLat, centerLon, ZOOM);
     const x0 = Math.floor(centerTile.x) - Math.floor(GRID_COLS / 2);
     const y0 = Math.floor(centerTile.y) - Math.floor(GRID_ROWS / 2);
     const dx = (centerTile.x - Math.floor(centerTile.x)) * TILE_SIZE;
@@ -65,11 +74,11 @@ export default function ContactMap() {
             <div className="pointer-events-none absolute bottom-4 left-4 z-10 flex items-center gap-2 rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-2.5 shadow-sm sm:left-6">
                 <MapPin className="h-4 w-4 text-primary" />
                 <div className="text-xs">
-                    <p className="font-semibold text-on-surface">Mt. Masaraga Protected Landscape</p>
-                    <p className="text-on-surface-variant">Brgy. Amtic, Ligao City, Albay</p>
+                    <p className="font-semibold text-on-surface">{settings?.general?.siteName || 'Mt. Masaraga Protected Landscape'}</p>
+                    <p className="text-on-surface-variant">{officeAddress}</p>
                 </div>
                 <a
-                    href={MAP_URL}
+                    href={mapUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="pointer-events-auto ml-2 inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-semibold bg-primary text-on-secondary transition-colors hover:bg-primary-container"

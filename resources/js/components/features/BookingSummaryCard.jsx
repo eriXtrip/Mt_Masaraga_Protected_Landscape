@@ -2,6 +2,7 @@ import React from 'react';
 import { Mountain, Calendar, ArrowRight, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { BOOKING_DETAILS } from '../../mockData';
+import { useAdminStore } from '../../state/adminStore';
 
 const MAX_PARTICIPANTS = 5;
 
@@ -16,6 +17,9 @@ export default function BookingSummaryCard({
     onCancel,
     className = '',
 }) {
+    const { settings } = useAdminStore();
+    const maxParticipants = settings?.booking?.maxGroupSize || MAX_PARTICIPANTS;
+
     // Lookup data directly from BOOKING_DETAILS using trailId
     const trailBookingData = BOOKING_DETAILS[trailId] || BOOKING_DETAILS.amtic;
 
@@ -93,7 +97,7 @@ export default function BookingSummaryCard({
                         <div>
                             <span className="text-sm font-bold text-on-surface block">Participants</span>
                             <span className="text-xs text-on-surface-variant font-medium">
-                                Max {MAX_PARTICIPANTS} hikers per booking
+                                 Max {maxParticipants} hikers per booking
                             </span>
                         </div>
                         <div className="flex items-center gap-3 bg-surface-container border border-outline-variant/50 rounded-lg p-1">
@@ -108,8 +112,8 @@ export default function BookingSummaryCard({
                             <span className="font-bold text-on-surface w-4 text-center">{participantCount}</span>
                             <button
                                 type="button"
-                                onClick={() => setParticipantCount(Math.min(MAX_PARTICIPANTS, participantCount + 1))}
-                                disabled={participantCount >= MAX_PARTICIPANTS}
+                                 onClick={() => setParticipantCount(Math.min(maxParticipants, participantCount + 1))}
+                                 disabled={participantCount >= maxParticipants}
                                 className="p-2 rounded hover:bg-surface-variant/50 text-on-surface-variant transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
                             >
                                 <Plus className="h-4 w-4" />

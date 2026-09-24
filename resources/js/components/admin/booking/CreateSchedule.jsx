@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 import { useDrawerTransition } from '@/hooks/useDrawerTransition';
 import { TRAILS } from '../../../mockData';
+import { useAdminStore } from '../../../state/adminStore';
 import { formatDateLabel, getDateKey } from './bookingUtils';
 
 const TRAIL_ORDER = ['amtic', 'ligao'];
@@ -50,7 +51,9 @@ export default function CreateSchedule({ schedules, guides, onConfirm, onClose }
 
     const [trailId, setTrailId] = useState(null);
     const [date, setDate] = useState(undefined);
-    const [capacity, setCapacity] = useState(20);
+    const { settings } = useAdminStore();
+    const defaultCapacity = settings?.booking?.defaultDailyCapacity || 20;
+    const [capacity, setCapacity] = useState(defaultCapacity);
     const [guide, setGuide] = useState('');
 
     const trail = trailId ? TRAILS[trailId] : null;

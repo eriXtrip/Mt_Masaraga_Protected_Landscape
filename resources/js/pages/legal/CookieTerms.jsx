@@ -3,6 +3,7 @@ import LegalPageLayout, { PolicySection, PolicyList } from './LegalPageLayout';
 export default function CookieTerms() {
     return (
         <LegalPageLayout
+            pageKey="cookie-policy"
             title="Cookie Policy"
             lastUpdated="September 18, 2026"
         >
