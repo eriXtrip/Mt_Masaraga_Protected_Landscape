@@ -13,18 +13,21 @@ const formatter = new Intl.NumberFormat('en-PH', {
 function StatCard({ icon: Icon, value, label, sub, trend, trendLabel }) {
     return (
         <div className="rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-4 shadow-xs md:p-5">
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-3">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <Icon className="h-5 w-5" />
                 </span>
+                <div className="flex flex-col">
+                    <p className="text-xl font-bold tracking-tight text-on-surface md:text-2xl">{value}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">{label}</p>
+                </div>
+
                 {trend !== undefined && (
                     <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${trend >= 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}>
                         {trend >= 0 ? '+' : ''}{trend}% {trendLabel || 'vs last period'}
                     </span>
                 )}
             </div>
-            <p className="mt-4 text-xl font-bold tracking-tight text-on-surface md:text-2xl">{value}</p>
-            <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">{label}</p>
             <p className="mt-1 text-xs leading-relaxed text-on-surface-variant">{sub}</p>
         </div>
     );
@@ -78,7 +81,7 @@ export default function ReportsSummary({ bookings, schedules, quota, dateRange =
             icon: CircleDollarSign,
             value: formatter.format(totalRevenue),
             label: 'Total Revenue',
-            sub: `Env: ${formatter.format(feeBreakdown.environmental || 0)} · Guide: ${formatter.format(feeBreakdown.guide || 0)} · Proc: ${formatter.format(feeBreakdown.processing || 0)}`,
+            sub: 'Fees Collected',
         },
         {
             icon: CalendarCheck,
@@ -102,10 +105,6 @@ export default function ReportsSummary({ bookings, schedules, quota, dateRange =
 
     return (
         <section ref={sectionRef} aria-label="Reports summary" className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
-            {kpis.map((kpi) => (
-                <StatCard key={kpi.label} {...kpi} />
-            ))}
-
             {/* Revenue Two Level Pie Chart */}
             <div
                 style={{ transitionDelay: '500ms' }}
@@ -133,9 +132,15 @@ export default function ReportsSummary({ bookings, schedules, quota, dateRange =
                 </div>
 
                 {/* Combined Revenue Breakdown & Trail Fill Rates Card */}
-                <div className="rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-4 shadow-xs md:p-6">
+                <div className="space-y-3">
+                    <div className='grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-2'>
+                        {kpis.map((kpi) => (
+                            <StatCard key={kpi.label} {...kpi} />
+                        ))}
+                    </div>
+
                     {/* Top Section: Revenue Breakdown */}
-                    <div>
+                    <div className='rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-4 shadow-xs md:p-6'>
                         <p className="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Revenue Breakdown</p>
                         <p className="mt-1 text-xs text-on-surface-variant">Breakdown by fee type for {dateRange === 'all' ? 'all time' : dateRange}</p>
 
@@ -165,11 +170,8 @@ export default function ReportsSummary({ bookings, schedules, quota, dateRange =
                         </div>
                     </div>
 
-                    {/* Separator Line */}
-                    <hr className="my-6 border-outline-variant/30" />
-
                     {/* Bottom Section: Trail Fill Rates */}
-                    <div>
+                    <div className='rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-4 shadow-xs md:p-6'>
                         <p className="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Trail Fill Rates</p>
                         <p className="mt-1 text-xs text-on-surface-variant">Capacity utilization per trail</p>
 

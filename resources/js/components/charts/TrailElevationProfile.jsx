@@ -48,11 +48,24 @@ export default function TrailElevationProfile({ trail, className = '', showHeade
 
     if (elevationData.length === 0) {
         return (
-            <ChartContainer height={200} className={className}>
-                <div className="flex items-center justify-center h-full text-on-surface-variant">
-                    No elevation data available
+            <div className="flex flex-col items-center justify-center min-h-65 h-full text-center px-4 py-8 rounded-xl border border-dashed border-outline-variant/30 bg-surface-container-lowest/50">
+                {/* Dynamic Icon Badge */}
+                <div className="w-12 h-12 rounded-full bg-surface-container-high/60 border border-outline-variant/30 flex items-center justify-center text-on-surface-variant/70 mb-3 shrink-0">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3.75h3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                    </svg>
                 </div>
-            </ChartContainer>
+
+                {/* Dynamic Title */}
+                <h4 className="text-sm font-semibold text-on-surface mb-1">
+                    No elevation data available
+                </h4>
+
+                {/* Dynamic Contextual Copy */}
+                <p className="text-xs text-on-surface-variant max-w-xs mb-4 leading-relaxed">
+                    Check back later.
+                </p>
+            </div>
         );
     }
 

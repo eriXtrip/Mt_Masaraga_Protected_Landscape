@@ -21,8 +21,9 @@ export default function StillHaveQuestionCTA() {
 
                         <div className="flex justify-center pt-4">
                             <Button
+                                type="button"
                                 variant="default"
-                                size="xl"
+                                size='xl'
                                 onClick={() => {
                                     navigate('/contact');
                                 }}

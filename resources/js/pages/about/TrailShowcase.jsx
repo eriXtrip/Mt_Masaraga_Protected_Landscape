@@ -151,28 +151,74 @@ export default function TrailShowcase() {
                             </span>
 
                             {/* Waypoints Timeline List */}
-                            <div className="space-y-0">
-                                {trail.waypoints.map((wp, idx) => (
-                                    <div key={idx} className="flex items-start gap-3">
-                                        <div className="flex flex-col items-center">
-                                            <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${wp.icon === 'summit' ? 'bg-primary text-white' : 'bg-primary/10 text-primary'
-                                                }`}>
-                                                {idx + 1}
-                                            </div>
-                                            {idx < trail.waypoints.length - 1 && <div className="w-px h-6 bg-outline-variant/40" />}
-                                        </div>
-                                        <div className="min-w-0 flex-1 pb-2">
-                                            <p className="text-sm font-semibold text-on-surface">{wp.name}</p>
-                                            <p className="text-xs text-on-surface-variant">{wp.description}</p>
-                                            {wp.icon && (
-                                                <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                                                    {wp.icon}
-                                                </span>
-                                            )}
-                                        </div>
+                            {!trail?.waypoints || trail.waypoints.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-outline-variant/30 bg-surface-container-lowest/50 px-4 py-8 text-center">
+                                    {/* Map Pin / Route Icon */}
+                                    <div className="mb-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-container-high/60 border border-outline-variant/30 text-on-surface-variant/70">
+                                        <svg
+                                            className="h-5 w-5"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            strokeWidth="1.5"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                                            />
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+                                            />
+                                        </svg>
                                     </div>
-                                ))}
-                            </div>
+
+                                    {/* Title */}
+                                    <h4 className="text-sm font-semibold text-on-surface mb-0.5">
+                                        No waypoints listed
+                                    </h4>
+
+                                    {/* Description */}
+                                    <p className="text-xs text-on-surface-variant max-w-55">
+                                        Route stops and landmarks have not been mapped for this trail yet.
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="space-y-0">
+                                    {trail.waypoints.map((wp, idx) => (
+                                        <div key={idx} className="flex items-start gap-3">
+                                            <div className="flex flex-col items-center">
+                                                <div
+                                                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${wp.icon === 'summit'
+                                                        ? 'bg-primary text-white'
+                                                        : 'bg-primary/10 text-primary'
+                                                        }`}
+                                                >
+                                                    {idx + 1}
+                                                </div>
+                                                {idx < trail.waypoints.length - 1 && (
+                                                    <div className="w-px h-6 bg-outline-variant/40" />
+                                                )}
+                                            </div>
+                                            <div className="min-w-0 flex-1 pb-2">
+                                                <p className="text-sm font-semibold text-on-surface">
+                                                    {wp.name}
+                                                </p>
+                                                <p className="text-xs text-on-surface-variant">
+                                                    {wp.description}
+                                                </p>
+                                                {wp.icon && (
+                                                    <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                                                        {wp.icon}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

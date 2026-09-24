@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { CalendarCheck, Wallet, Users, Mountain } from 'lucide-react';
 import { useInView } from '@/hooks/useInView';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,7 @@ export default function AdminDashboard() {
     const { profile, bookings, quota, users, schedules } = useAdminStore();
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const [selectedTrail, setSelectedTrail] = useState('all');
+    const [dateFilter, setDateFilter] = useState('all');
 
     const firstName = (profile.name || 'Admin').split(' ')[0];
 
@@ -31,6 +32,26 @@ export default function AdminDashboard() {
     const advisories = NEWS.filter((item) => ['Advisory', 'Weather'].includes(item.category)).slice(0, 2);
 
     const allTrails = [...new Set(schedules.map((s) => s.trail))].sort();
+
+    function getMonthYearLabel(dateKey) {
+        const [year, month] = dateKey.split('-');
+        const date = new Date(parseInt(year), parseInt(month) - 1);
+        return date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+    }
+
+    const monthYearOptions = useMemo(() => {
+        const set = new Set();
+        schedules.forEach((s) => {
+            if (s.dateKey) {
+                const [year, month] = s.dateKey.split('-');
+                set.add(`${year}-${month}`);
+            }
+        });
+        return [...set].sort().reverse().map((my) => {
+            const [year, month] = my.split('-');
+            return { value: my, label: getMonthYearLabel(`${year}-${month}-01`) };
+        });
+    }, [schedules]);
 
     return (
         <div ref={sectionRef} className="space-y-6 md:space-y-8">
@@ -80,20 +101,36 @@ export default function AdminDashboard() {
                     : 'opacity-0 translate-y-8 scale-95'
                     }`}
             >
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                     <h3 className="text-lg font-bold text-on-surface">Trail Capacity Utilization</h3>
-                    <select
-                        value={selectedTrail}
-                        onChange={(e) => setSelectedTrail(e.target.value)}
-                        className="px-3 py-1.5 text-sm border border-outline-variant/40 rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary"
-                    >
-                        <option value="all">All Trails</option>
-                        {allTrails.map((trail) => (
-                            <option key={trail} value={trail}>{trail}</option>
-                        ))}
-                    </select>
+                    <div className='grid grid-cols-2 gap-3'>
+                        <select
+                            value={selectedTrail}
+                            onChange={(e) => setSelectedTrail(e.target.value)}
+                            className="px-3 py-1.5 text-sm border border-outline-variant/40 rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary"
+                        >
+                            <option value="all">All Trails</option>
+                            {allTrails.map((trail) => (
+                                <option key={trail} value={trail}>{trail}</option>
+                            ))}
+                        </select>
+
+                        <select
+                            value={dateFilter}
+                            onChange={(e) => setDateFilter(e.target.value)}
+                            className="px-3 py-1.5 text-sm border border-outline-variant/40 rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary"
+                        >
+                            <option value="all">All Dates</option>
+                            <option value="current-month">Current Month</option>
+                            {monthYearOptions.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
-                <TrailCapacityHeatmap schedules={schedules} quota={quota} selectedTrail={selectedTrail} />
+                <TrailCapacityHeatmap schedules={schedules} quota={quota} selectedTrail={selectedTrail} dateFilter={dateFilter} />
             </div>
 
             <div
