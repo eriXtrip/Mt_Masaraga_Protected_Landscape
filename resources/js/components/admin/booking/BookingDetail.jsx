@@ -151,16 +151,8 @@ export default function BookingDetail({ booking, guideOptions, scheduleGuide, on
                 onAnimationEnd={closing ? handleAnimationEnd : undefined}
                 className={`absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-surface-container-lowest shadow-xl ${closing ? 'animate-out slide-out-to-right animation-duration-300' : 'animate-in slide-in-from-right animation-duration-300'} motion-reduce:animate-none`}
             >
-                <div className="flex items-start justify-between gap-4 border-b border-outline-variant/20 px-5 py-4">
-                    <div className="flex min-w-0 items-center gap-3">
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                            {getInitials(booking.leadHiker)}
-                        </span>
-                        <div className="min-w-0">
-                            <p className="truncate text-sm font-bold text-on-surface">{booking.leadHiker}</p>
-                            <p className="truncate text-xs text-on-surface-variant">{booking.reference}</p>
-                        </div>
-                    </div>
+                <div className="flex items-center justify-between gap-4 border-b border-outline-variant/20 px-5 py-4">
+                    <h1 className="truncate text-lg font-bold text-on-surface">{booking.reference}</h1>
                     <div className="flex shrink-0 items-center gap-2">
                         <StatusPill status={booking.status} />
                         <button
