@@ -15,4 +15,11 @@ export default defineConfig({
         react({ include: /\.(js|jsx|ts|tsx)$/ }),
         tailwindcss(),
     ],
+    // server: {
+    //     host: '0.0.0.0',
+    //     port: 5173,
+    //     hmr: {
+    //       host: '192.168.254.103' // Tells React Refresh / HMR to connect directly to PC IP
+    //     }
+    //   }
 });

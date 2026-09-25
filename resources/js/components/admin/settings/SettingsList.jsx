@@ -1,4 +1,4 @@
-import { CalendarX, Compass, FileText, Globe2, History, LifeBuoy, Mountain, ShieldAlert, SlidersHorizontal, Wrench } from 'lucide-react';
+import { CalendarX, Compass, FileText, Globe2, History, Phone, LifeBuoy, Mountain, ShieldAlert, SlidersHorizontal, Wrench } from 'lucide-react';
 import SettingsCard from './SettingsCard';
 
 function formatDate(value) {
