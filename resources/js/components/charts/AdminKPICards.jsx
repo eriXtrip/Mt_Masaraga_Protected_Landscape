@@ -58,7 +58,7 @@ export default function AdminKPICards({ bookings, quota, users, schedules }) {
                 label: 'Total Revenue Collected',
                 sub: `₱${thisMonthRevenue.toLocaleString()} this month`,
                 trend: thisMonthRevenue > 0 ? `+${Math.round((thisMonthRevenue / totalRevenue) * 100)}% this month` : null,
-                color: 'emerald',
+                color: 'primary',
             },
             {
                 id: 'quota-usage',
@@ -67,7 +67,7 @@ export default function AdminKPICards({ bookings, quota, users, schedules }) {
                 label: 'Overall Quota Usage',
                 sub: totalSlots ? `${bookedSlots} of ${totalSlots} slots booked` : 'No quota set',
                 trend: usagePct > 80 ? 'High utilization' : usagePct > 50 ? 'Moderate utilization' : 'Low utilization',
-                color: usagePct > 80 ? 'red' : usagePct > 50 ? 'amber' : 'emerald',
+                color: 'primary',
             },
             {
                 id: 'users',
@@ -76,7 +76,7 @@ export default function AdminKPICards({ bookings, quota, users, schedules }) {
                 label: 'Registered Users',
                 sub: `${hikerCount} hikers · ${staffCount} staff · ${activeGuides} active guides`,
                 trend: hikerCount > 0 ? `${hikerCount} active hikers` : 'No hikers yet',
-                color: 'blue',
+                color: 'primary',
             },
             {
                 id: 'schedule-status',
@@ -85,7 +85,7 @@ export default function AdminKPICards({ bookings, quota, users, schedules }) {
                 label: 'Published Schedules',
                 sub: `${fullSchedules} full · ${limitedSchedules} limited`,
                 trend: fullSchedules > 0 ? 'Some dates fully booked' : 'Availability open',
-                color: fullSchedules > 0 ? 'amber' : 'emerald',
+                color: 'primary',
             },
             {
                 id: 'capacity-alert',
@@ -94,7 +94,7 @@ export default function AdminKPICards({ bookings, quota, users, schedules }) {
                 label: 'Dates Needing Attention',
                 sub: fullSchedules > 0 ? `${fullSchedules} full, consider adding slots` : 'All dates have availability',
                 trend: fullSchedules > 0 ? 'Action recommended' : 'No action needed',
-                color: fullSchedules > 0 ? 'red' : 'emerald',
+                color: 'primary',
             },
         ];
     }, [bookings, quota, users, schedules]);

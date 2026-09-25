@@ -29,7 +29,7 @@ export default function SettingsFilters({ activeSection, onSectionChange }) {
                             aria-selected={isActive}
                             aria-controls="settings-panel"
                             onClick={() => onSectionChange(section.key)}
-                            className={`inline-flex h-11 shrink-0 items-center gap-2 rounded-xl px-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isActive
+                            className={`cursor-pointer inline-flex h-11 shrink-0 items-center gap-2 rounded-xl px-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isActive
                                 ? 'bg-primary text-on-secondary'
                                 : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                                 }`}

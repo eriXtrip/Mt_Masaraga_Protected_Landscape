@@ -120,7 +120,7 @@ export default function ReportsSummary({ bookings, schedules, quota, dateRange =
                             value={selectedTrail}
                             onChange={(e) => setSelectedTrail(e.target.value)}
                             aria-label="Filter revenue by trail"
-                            className="min-h-11 px-3 py-1.5 text-sm border border-outline-variant/40 rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary"
+                            className="cursor-pointer min-h-11 px-3 py-1.5 text-sm border border-outline-variant/40 rounded-lg bg-surface focus:outline-none focus:ring-2 focus:ring-primary"
                         >
                             <option value="all">All Trails</option>
                             {allTrails.map((trail) => (

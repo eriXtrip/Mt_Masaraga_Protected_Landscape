@@ -250,7 +250,7 @@ export default function BookingConfirmation({
                             variant="default"
                             size="lg"
                             onClick={onDownloadPdf}
-                            className="flex-1 gap-2 cursor-pointer"
+                            className="flex-none sm:flex-1 gap-2 h-10"
                         >
                             <Download className="h-4 w-4" />
                             <span className="text-sm">Download PDF Passes</span>
@@ -259,7 +259,7 @@ export default function BookingConfirmation({
                             variant="outline"
                             size="lg"
                             onClick={handleOpenEmailModal}
-                            className="flex-1 gap-2 cursor-pointer"
+                            className="flex-none sm:flex-1 gap-2 h-10"
                         >
                             <Mail className="h-4 w-4" />
                             <span className="text-sm">Send to Email</span>
@@ -277,20 +277,20 @@ export default function BookingConfirmation({
                         className="bg-secondary text-on-secondary rounded-2xl p-6 shadow-md relative overflow-hidden cursor-pointer hover:-translate-y-0.5 transition-all w-full text-left group"
                     >
                         <div className="flex items-center justify-between relative">
-                        <div className="flex items-center gap-4">
-                            <div className="bg-on-secondary/20 p-3 rounded-full shrink-0">
-                                <MessageSquare className="h-6 w-6 text-on-secondary fill-on-secondary/20" />
+                            <div className="flex items-center gap-4">
+                                <div className="bg-on-secondary/20 p-3 rounded-full shrink-0">
+                                    <MessageSquare className="h-6 w-6 text-on-secondary fill-on-secondary/20" />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold mb-0.5">
+                                        Join Group Announcement
+                                    </h3>
+                                    <p className="text-xs text-on-secondary/80">
+                                        Announcement from the Park Staff.
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-lg font-bold mb-0.5">
-                                    Join Group Announcement
-                                </h3>
-                                <p className="text-xs text-on-secondary/80">
-                                    Announcement from the Park Staff.
-                                </p>
-                            </div>
-                        </div>
-                        <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform shrink-0" />
+                            <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform shrink-0" />
                         </div>
                     </button>
 
