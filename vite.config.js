@@ -11,7 +11,7 @@ export default defineConfig({
         },
     },
     plugins: [
-        laravel(['resources/js/app.jsx', 'resources/js/admin.jsx']),
+        laravel(['resources/js/app.jsx', 'resources/js/admin.jsx', 'resources/js/staff.jsx']),
         react({ include: /\.(js|jsx|ts|tsx)$/ }),
         tailwindcss(),
     ],
