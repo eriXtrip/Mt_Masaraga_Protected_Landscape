@@ -18,7 +18,7 @@ export default function ActivePassCard({ pass }) {
     };
 
     return (
-        <div className="bg-surface-container-lowest border border-outline-variant/40 rounded-3xl p-5 md:p-6 shadow-sm">
+        <div className="p-2">
             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <div className="flex items-center gap-2">
                     <span className="text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full uppercase">
@@ -48,8 +48,11 @@ export default function ActivePassCard({ pass }) {
                     </Button>
                 </div>
             </div>
-
-            <HikerTicketPass currentPass={pass} />
+            <div className="relative z-10 w-full flex justify-center items-center overflow-hidden py-1">
+                <div className="transform origin-top scale-[0.68] min-[380px]:scale-[0.72] min-[480px]:scale-[0.80] sm:scale-[0.90] lg:scale-100 transition-transform duration-200 -mb-27.5 min-[380px]:-mb-20 min-[480px]:-mb-12.5 sm:-mb-6.25 lg:mb-0">
+                    <HikerTicketPass currentPass={pass} />
+                </div>
+            </div>
         </div>
     );
 }
