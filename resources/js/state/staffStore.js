@@ -84,6 +84,7 @@ export function getBookingPasses(bookings = []) {
 
     return bookings.flatMap((booking) => {
         const transaction = transactionsByReference.get(booking.reference);
+        const assignedLeadHiker = booking.hikers?.[0]?.fullName || booking.leadHiker;
         const sourcePasses = transaction?.passesData?.length
             ? transaction.passesData
             : (booking.hikers || [{ fullName: booking.leadHiker }]).map((hiker) => ({ hikerName: hiker.fullName }));
@@ -93,8 +94,8 @@ export function getBookingPasses(bookings = []) {
             bookingId: booking.id,
             scheduleId: booking.scheduleId,
             reference: booking.reference,
-            hikerName: pass.hikerName || booking.hikers?.[index]?.fullName || booking.leadHiker,
-            leadHiker: pass.leadHiker || booking.leadHiker,
+            hikerName: booking.hikers?.[index]?.fullName || pass.hikerName || booking.leadHiker,
+            leadHiker: assignedLeadHiker || pass.leadHiker || pass.hikerName,
             trail: pass.trail || booking.trail,
             date: pass.date || booking.date,
             qrCodeUrl: pass.qrCodeUrl || QRCode,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useInView } from '@/hooks/useInView';
 import { useHikerStore } from '../../state/hikerStore';
+import { ADMIN_BOOKINGS } from '../../mockData';
 import { ShieldCheck } from 'lucide-react';
 import {
     DigitalPassesHeader,
@@ -10,17 +11,24 @@ import {
     EmptyPassesState,
 } from '../../components/hiker/digitalpass';
 
+const bookingsByReference = new Map(ADMIN_BOOKINGS.map((booking) => [booking.reference, booking]));
+
 export default function DigitalPasses() {
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const { transactions } = useHikerStore();
 
-    const passes = transactions.flatMap((txn) =>
-        txn.passesData.map((pass) => ({
+    const passes = transactions.flatMap((txn) => {
+        const booking = bookingsByReference.get(txn.transactionId);
+        const assignedLeadHiker = txn.passesData?.[0]?.leadHiker;
+
+        return (txn.passesData || []).map((pass, index) => ({
             ...pass,
+            hikerName: booking?.hikers?.[index]?.fullName || pass.hikerName,
+            leadHiker: assignedLeadHiker,
             transactionId: txn.transactionId,
             hikeDate: txn.hikeDate,
-        }))
-    );
+        }));
+    });
 
     const activePasses = passes.filter((pass) => pass.status === 'Valid');
     const otherPasses = passes.filter((pass) => pass.status !== 'Valid');

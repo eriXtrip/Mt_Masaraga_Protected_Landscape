@@ -70,13 +70,13 @@ export default function HikerTicketPass({ currentPass }) {
                         <div className="grid grid-cols-2 gap-y-3 gap-x-3.5">
                             <div className="min-w-0">
                                 <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
-                                    LEAD HIKER
+                                    GUIDE HIKER
                                 </span>
                                 <span
                                     className="text-xs font-bold text-on-surface line-clamp-2 leading-snug wrap-break-words"
-                                    title={currentPass.leadHiker}
+                                    title={currentPass.guideHiker}
                                 >
-                                    {currentPass.leadHiker}
+                                    {currentPass.guideHiker || 'Not provided'}
                                 </span>
                             </div>
 

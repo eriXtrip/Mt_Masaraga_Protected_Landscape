@@ -6,21 +6,17 @@ import BookingConfirmation from '@/pages/booking/BookingConfirmation';
 import StatusPill from './StatusPill';
 import ManageBookingCard from './ManageBookingCard';
 import { toast } from '@/components/ui/toast';
+import { ADMIN_BOOKINGS } from '../../../mockData';
 
 export default function TransactionDetailView({ transaction, onBack, onCancelClick }) {
     const navigate = useNavigate();
-
-    const downloadAllQrs = (txn) => {
-        toast.add({ type: 'info', title: 'Download started', description: 'Downloading QR passes...' });
-        txn.passesData.forEach((pass) => {
-            const link = document.createElement('a');
-            link.href = pass.qrCodeUrl;
-            link.download = `${pass.id}.webp`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-    };
+    const booking = ADMIN_BOOKINGS.find((item) => item.reference === transaction.transactionId);
+    const assignedLeadHiker = booking?.hikers?.[0]?.fullName || booking?.leadHiker;
+    const passesData = (transaction.passesData || []).map((pass, index) => ({
+        ...pass,
+        hikerName: booking?.hikers?.[index]?.fullName || pass.hikerName,
+        leadHiker: assignedLeadHiker || pass.leadHiker || pass.hikerName,
+    }));
 
     return (
         <div className="min-h-screen bg-surface p-4 md:p-8 font-sans">
@@ -61,9 +57,8 @@ export default function TransactionDetailView({ transaction, onBack, onCancelCli
 
                 <BookingConfirmation
                     selectedDate={transaction.hikeDate}
-                    passesData={transaction.passesData}
+                    passesData={passesData}
                     receiptData={transaction.receiptData}
-                    onDownloadPdf={() => downloadAllQrs(transaction)}
                     onSendEmail={(email) => {
                         toast.add({ type: 'info', title: 'Email sent', description: `Passes sent to ${email}.` });
                     }}

@@ -78,7 +78,7 @@ export default function Booking() {
 
         createBooking({
             scheduleId: selectedSchedule.id,
-            leadHiker: hikerData[0].fullName,
+            guideHiker: selectedSchedule?.guide || '',
             contact: hikerData[0].emergencyContact,
             trail: selectedSchedule.trail,
             date: formattedSelectedDate,
@@ -123,7 +123,7 @@ export default function Booking() {
         ? ADMIN_SCHEDULES.find((schedule) => schedule.trailId === trailId && schedule.dateKey === getDateKey(date))
         : null;
 
-    const leadHiker = hikerData?.[0]?.fullName || '';
+    const guideHiker = selectedSchedule?.guide || '';
 
     // Dynamic Passes Data generated for Confirmation view
     const passesData = hikerData
@@ -133,7 +133,7 @@ export default function Booking() {
             status: 'Valid',
             date: formattedSelectedDate,
             trail: trailBookingDetails.selectedTrail,
-            leadHiker,
+            guideHiker,
             hikerName: hiker.fullName,
         }))
         : undefined;
@@ -290,9 +290,6 @@ export default function Booking() {
                         selectedDate={formattedSelectedDate}
                         passesData={passesData}
                         receiptData={receiptData}
-                        onDownloadPdf={() => {
-                            toast.add({ type: 'info', title: 'Download started', description: 'Your PDF passes are being downloaded.' });
-                        }}
                         onSendEmail={() => {
                             toast.add({ type: 'info', title: 'Email sent', description: 'Passes sent to your email.' });
                         }}

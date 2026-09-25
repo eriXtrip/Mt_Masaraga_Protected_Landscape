@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useInView } from '@/hooks/useInView';
 import QR from '../../../../public/images/QR_Code_Example.svg.webp';
 import HikerTicketPass from '../../components/features/HikerTicketPass';
+import DigitalPassDownloadModal from '../../components/hiker/digitalpass/DigitalPassDownloadModal';
 import { Input } from '@/components/ui/input';
 import {
     CheckCircle2,
@@ -31,7 +32,7 @@ const DEFAULT_BOOKING_PASSES = [
         status: 'Valid',
         date: 'Oct 24, 2023',
         trail: 'Ambot Trail',
-        leadHiker: 'Jane Doe',
+        guideHiker: 'Rodel Villanueva',
         hikerName: 'Jane Doe',
     },
     {
@@ -40,7 +41,7 @@ const DEFAULT_BOOKING_PASSES = [
         status: 'Valid',
         date: 'Oct 24, 2023',
         trail: 'Ambot Trail',
-        leadHiker: 'Jane Doe',
+        guideHiker: 'Rodel Villanueva',
         hikerName: 'John Smith',
     },
 ];
@@ -87,13 +88,13 @@ export default function BookingConfirmation({
     selectedDate,
     passesData = DEFAULT_BOOKING_PASSES,
     receiptData = DEFAULT_PAYMENT_RECEIPT,
-    onDownloadPdf,
     onSendEmail,
     onJoinGroupChat,
     onGoToChecklist,
 }) {
     const [activeIndex, setActiveIndex] = useState(0);
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
+    const [isPassDownloadOpen, setIsPassDownloadOpen] = useState(false);
 
     // Modal State
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -102,9 +103,13 @@ export default function BookingConfirmation({
     const [isSentSuccess, setIsSentSuccess] = useState(false);
 
     // Apply the selected date to the passes if provided
-    const displayPasses = selectedDate
+    const displayPasses = (selectedDate
         ? passesData.map(pass => ({ ...pass, date: selectedDate }))
-        : passesData;
+        : passesData
+    ).map(pass => ({
+        ...pass,
+        guideHiker: pass.guideHiker,
+    }));
 
     const handlePrevPass = () => {
         setActiveIndex((prev) => (prev === 0 ? displayPasses.length - 1 : prev - 1));
@@ -249,11 +254,11 @@ export default function BookingConfirmation({
                         <Button
                             variant="default"
                             size="lg"
-                            onClick={onDownloadPdf}
+                            onClick={() => setIsPassDownloadOpen(true)}
                             className="flex-none sm:flex-1 gap-2 h-10"
                         >
                             <Download className="h-4 w-4" />
-                            <span className="text-sm">Download PDF Passes</span>
+                            <span className="text-sm">Download Pass Images</span>
                         </Button>
                         <Button
                             variant="outline"
@@ -388,6 +393,13 @@ export default function BookingConfirmation({
 
                 </div>
             </div>
+
+            <DigitalPassDownloadModal
+                isOpen={isPassDownloadOpen}
+                passes={displayPasses}
+                onClose={() => setIsPassDownloadOpen(false)}
+                title="Download pass images"
+            />
 
             {/* Email Input Modal Overlay */}
             {isEmailModalOpen && (
