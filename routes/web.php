@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('/staff/{path?}', function () {
+    return view('staff');
+})->where('path', '.*');
+
 Route::get('/admin/{path?}', function () {
     return view('admin');
 })->where('path', '.*');

@@ -7,6 +7,8 @@ import {
     ScrollText,
     MessageSquare,
     LayoutDashboard,
+    CalendarDays,
+    ScanLine,
     Ticket,
     UserRound
 } from 'lucide-react';
@@ -35,6 +37,48 @@ const HIKER_USER_LINKS = [
     { label: 'My Profile', to: '/hiker/profile', icon: UserRound },
 ];
 
+const STAFF_USER_LINKS = [
+    { label: 'Staff dashboard', to: '/staff/dashboard', icon: LayoutDashboard },
+    { label: 'My schedules', to: '/staff/schedules', icon: CalendarDays },
+    { label: 'Pass verification', to: '/staff/verify', icon: ScanLine },
+    { label: 'Staff messages', to: '/staff/messages', icon: MessageSquare },
+];
+
+const ADMIN_USER_LINKS = [
+    { label: 'Admin console', to: '/admin/dashboard', icon: LayoutDashboard },
+];
+
+const getAccountLinks = (role) => {
+    if (role === 2) return STAFF_USER_LINKS;
+    if (role === 1) return ADMIN_USER_LINKS;
+    return HIKER_USER_LINKS;
+};
+
+const getAccountLabel = (role) => {
+    if (role === 2) return 'Staff workspace';
+    if (role === 1) return 'Admin workspace';
+    return 'Hiker account';
+};
+
+function AccountNavLink({ item, onClick, mobile = false }) {
+    const IconComponent = item.icon;
+    const content = (
+        <>
+            <IconComponent className="h-4 w-4 shrink-0 text-primary" />
+            <span>{item.label}</span>
+        </>
+    );
+    const className = mobile
+        ? 'flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-semibold text-on-surface transition-colors hover:bg-surface-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
+        : 'flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-on-surface transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
+
+    if (item.to.startsWith('/staff') || item.to.startsWith('/admin')) {
+        return <a href={item.to} onClick={onClick} className={className}>{content}</a>;
+    }
+
+    return <Link to={item.to} onClick={onClick} className={className}>{content}</Link>;
+}
+
 export default function Navbar() {
     const [open, setOpen] = useState(false);
     const [userDropdownOpen, setUserDropdownOpen] = useState(false);
@@ -58,6 +102,8 @@ export default function Navbar() {
 
     // Current active user from array
     const currentUser = MOCK_USERS[currentUserIndex] || MOCK_USERS[0];
+    const accountLinks = getAccountLinks(currentUser.role);
+    const accountLabel = getAccountLabel(currentUser.role);
 
     // Helper to extract initials (e.g., "Juan Dela Cruz" -> "JD")
     const getInitials = (name) => {
@@ -172,22 +218,11 @@ export default function Navbar() {
                                     {/* Hiker Profile Navigation Options (Transactions & Messages) */}
                                     <div className="space-y-0.5 py-1 border-b border-outline-variant/20 mb-1">
                                         <span className="text-[9px] font-bold text-outline uppercase tracking-wider block mb-1 px-3">
-                                            Hiker Account
+                                            {accountLabel}
                                         </span>
-                                        {HIKER_USER_LINKS.map((item) => {
-                                            const IconComponent = item.icon;
-                                            return (
-                                                <Link
-                                                    key={item.to}
-                                                    to={item.to}
-                                                    onClick={closeAll}
-                                                    className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-on-surface hover:bg-primary/10 hover:text-primary transition-colors"
-                                                >
-                                                    <IconComponent className="h-4 w-4 shrink-0 text-primary" />
-                                                    <span>{item.label}</span>
-                                                </Link>
-                                            );
-                                        })}
+                                        {accountLinks.map((item) => (
+                                            <AccountNavLink key={item.to} item={item} onClick={closeAll} />
+                                        ))}
                                     </div>
 
                                     {/* Logout Button */}
@@ -281,27 +316,11 @@ export default function Navbar() {
                     {isLoggedIn && (
                         <li className="border-t border-outline-variant/30 pt-2">
                             <span className="px-4 text-xs font-bold text-outline uppercase tracking-wider block mb-1">
-                                Hiker Account
+                                {accountLabel}
                             </span>
-                            {HIKER_USER_LINKS.map((item) => {
-                                const IconComponent = item.icon;
-                                return (
-                                    <NavLink
-                                        key={item.to}
-                                        to={item.to}
-                                        onClick={closeAll}
-                                        className={({ isActive }) =>
-                                            `flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-semibold ${isActive
-                                                ? 'bg-primary-container text-on-primary-container'
-                                                : 'text-on-surface hover:bg-surface-container'
-                                            }`
-                                        }
-                                    >
-                                        <IconComponent className="h-4 w-4 shrink-0 text-primary" />
-                                        <span>{item.label}</span>
-                                    </NavLink>
-                                );
-                            })}
+                            {accountLinks.map((item) => (
+                                <AccountNavLink key={item.to} item={item} onClick={closeAll} mobile />
+                            ))}
                         </li>
                     )}
 

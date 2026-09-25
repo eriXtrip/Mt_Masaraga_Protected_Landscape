@@ -51,15 +51,24 @@ export default function Login() {
         setTimeout(() => completeLogin(pendingUser), 500);
     };
 
-     const completeLogin = (user) => {
-         if (user?.role === 1) {
-             window.location.assign('/admin/dashboard');
-             return;
-         }
-         toast.add({ type: 'success', title: 'Login successful', description: 'Welcome back!' });
-         localStorage.setItem('currentUser', JSON.stringify(user));
-         navigate('/');
-     };
+    const completeLogin = (user) => {
+        if (!user) return;
+
+        localStorage.setItem('currentUser', JSON.stringify(user));
+
+        if (user.role === 1) {
+            window.location.assign('/admin/dashboard');
+            return;
+        }
+
+        if (user.role === 2) {
+            window.location.assign('/staff/dashboard');
+            return;
+        }
+
+        toast.add({ type: 'success', title: 'Login successful', description: 'Welcome back!' });
+        navigate('/');
+    };
 
     return (
         <div ref={sectionRef} className="relative flex min-h-screen w-full flex-col bg-surface text-on-surface lg:flex-row overflow-hidden">
