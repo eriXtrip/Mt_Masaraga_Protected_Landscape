@@ -13,7 +13,8 @@ export default function ManageBookingCard({ onCancelClick }) {
                     <div>
                         <h3 className="text-base font-bold text-on-surface">Manage Booking</h3>
                         <p className="text-xs text-on-surface-variant mt-1">
-                            Reschedule your climb date or cancel your booking. Both follow the Refund and Return Policy.
+                            Need a different climb date? Message park staff on Messenger. Cancellations follow
+                            the Refund and Return Policy.
                         </p>
                     </div>
                 </div>

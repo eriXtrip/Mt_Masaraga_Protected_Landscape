@@ -894,11 +894,6 @@ export const PAYMENT_METHODS = [
         label: 'Mastercard',
         icon: CreditCard,
     },
-    {
-        id: 'cash',
-        label: 'Cash',
-        icon: Wallet,
-    },
 ];
 
 export const DEFAULT_BOOKING_SUMMARY = {
@@ -2206,7 +2201,7 @@ export const ADMIN_SETTINGS = {
         mapUrl: 'https://maps.app.goo.gl/393u11nnWZpdLjB69',
         latitude: 13.31859,
         longitude: 123.59756,
-        facebook: '',
+        facebook: 'https://m.me/MtMasaragaProtectedLandscape',
         instagram: '',
         x: '',
     },

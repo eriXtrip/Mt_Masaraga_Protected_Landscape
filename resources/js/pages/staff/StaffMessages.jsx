@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { MessageSquare, ShieldAlert, UsersRound, X } from 'lucide-react';
 import { useInView } from '@/hooks/useInView';
-import Conversation from '../../components/hiker/groupchat/Conversation';
-import ConversationList from '../../components/hiker/groupchat/ConversationList';
-import GCMember from '../../components/hiker/groupchat/GCmember';
+import Conversation from '../../components/messaging/Conversation';
+import ConversationList from '../../components/messaging/ConversationList';
+import GroupMember from '../../components/messaging/GroupMember';
 import { toast } from '../../components/ui/toast';
 import { markChannelRead, sendMessage, useStaffStore } from '../../state/staffStore';
 import StaffEmptyState from '../../components/staff/StaffEmptyState';
@@ -94,7 +94,7 @@ export default function StaffMessages() {
                         <button type="button" onClick={() => setShowMembers(false)} aria-label="Close group members" className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-lg bg-surface-container-lowest/90 text-on-surface-variant hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                             <X className="h-5 w-5" />
                         </button>
-                        <GCMember members={activeChannel.members} onClose={() => setShowMembers(false)} />
+                        <GroupMember members={activeChannel.members} onClose={() => setShowMembers(false)} />
                     </div>
                 </div>
             )}

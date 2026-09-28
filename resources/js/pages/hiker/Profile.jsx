@@ -6,7 +6,6 @@ import {
     ProfileSidebar,
     PersonalInfoForm,
     EmergencyContactForm,
-    ChangePasswordForm,
 } from '../../components/hiker/profile';
 
 export default function Profile() {
@@ -26,11 +25,8 @@ export default function Profile() {
         emergencyMobile: profile.emergencyContact.mobile,
     });
 
-    const [password, setPassword] = useState({ newPassword: '', confirmPassword: '' });
-
     const setField = (key) => (event) =>
         setForm((current) => ({ ...current, [key]: event.target.value }));
-
     const handleSave = (event) => {
         event.preventDefault();
         updateProfile({
@@ -44,24 +40,6 @@ export default function Profile() {
             },
         });
         toast.add({ type: 'success', title: 'Profile updated', description: 'Your details have been saved.' });
-    };
-
-    const handlePasswordFieldChange = (key, value) => {
-        setPassword((current) => ({ ...current, [key]: value }));
-    };
-
-    const handlePasswordSubmit = (event) => {
-        event.preventDefault();
-        if (password.newPassword.length < 8) {
-            toast.add({ type: 'error', title: 'Password too short', description: 'New password must be at least 8 characters.' });
-            return;
-        }
-        if (password.newPassword !== password.confirmPassword) {
-            toast.add({ type: 'error', title: 'Passwords do not match', description: 'The new password and confirmation do not match.' });
-            return;
-        }
-        toast.add({ type: 'success', title: 'Password updated', description: 'Your password has been changed successfully.' });
-        setPassword({ newPassword: '', confirmPassword: '' });
     };
 
     return (
@@ -94,12 +72,6 @@ export default function Profile() {
                             form={form}
                             onFieldChange={setField}
                             onSave={handleSave}
-                        />
-
-                        <ChangePasswordForm
-                            password={password}
-                            onPasswordFieldChange={handlePasswordFieldChange}
-                            onSubmit={handlePasswordSubmit}
                         />
                     </div>
                 </div>

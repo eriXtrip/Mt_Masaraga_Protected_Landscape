@@ -69,7 +69,7 @@ export default function UpcomingClimbCard({ climb, countdown }) {
                     </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row lg:flex-col items-stretch lg:items-end gap-3 shrink-0">
+                <div className="flex flex-last items-stretch lg:items-end gap-3 shrink-0">
                     <Button
                         variant="default"
                         size="lg"
@@ -78,15 +78,6 @@ export default function UpcomingClimbCard({ climb, countdown }) {
                     >
                         <Ticket className="h-4 w-4" />
                         View e-Passes
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="lg"
-                        className="gap-2 cursor-pointer"
-                        onClick={() => navigate('/hiker/transactions')}
-                    >
-                        Manage Booking
-                        <ChevronRight className="h-4 w-4" />
                     </Button>
                 </div>
             </div>

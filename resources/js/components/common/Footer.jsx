@@ -35,9 +35,9 @@ export default function Footer() {
         return page?.enabled !== false && page?.showInFooter !== false;
     });
     const socialLinks = [
-        { key: 'facebook', label: 'Facebook', href: contact.facebook, icon: Facebook },
-        { key: 'instagram', label: 'Instagram', href: contact.instagram, icon: Instagram },
-        { key: 'x', label: 'X', href: contact.x, icon: X },
+        { key: 'facebook', label: 'Facebook', href: contact.facebook, logo: Facebook },
+        { key: 'instagram', label: 'Instagram', href: contact.instagram, logo: Instagram },
+        { key: 'x', label: 'X', href: contact.x, logo: X },
     ].filter((link) => link.href);
 
     return (
@@ -73,21 +73,18 @@ export default function Footer() {
                         </h3>
                         {socialLinks.length > 0 ? (
                             <div className="flex gap-3 items-center">
-                                {socialLinks.map((social) => {
-                                    const Icon = social.icon;
-                                    return (
-                                        <a
-                                            key={social.key}
-                                            href={social.href}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            aria-label={social.label}
-                                            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/60 p-2 transition-all hover:bg-primary-container hover:text-white"
-                                        >
-                                            <Icon className="h-4 w-4" aria-hidden="true" />
-                                        </a>
-                                    );
-                                })}
+                                {socialLinks.map((social) => (
+                                    <a
+                                        key={social.key}
+                                        href={social.href}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        aria-label={social.label}
+                                        className="flex h-9 w-9 items-center justify-center rounded-full bg-white/60 p-2 transition-all hover:bg-primary-container"
+                                    >
+                                        <img src={social.logo} alt="" aria-hidden="true" className="h-4 w-4 object-contain" />
+                                    </a>
+                                ))}
                             </div>
                         ) : (
                             <p className="text-xs text-on-secondary">No social links configured.</p>

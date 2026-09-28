@@ -33,7 +33,6 @@ const HIKER_USER_LINKS = [
     { label: 'My Dashboard', to: '/hiker/dashboard', icon: LayoutDashboard },
     { label: 'My Transactions', to: '/hiker/transactions', icon: ScrollText },
     { label: 'My Digital Passes', to: '/hiker/passes', icon: Ticket },
-    { label: 'Messages & Chat', to: '/hiker/messages', icon: MessageSquare },
     { label: 'My Profile', to: '/hiker/profile', icon: UserRound },
 ];
 

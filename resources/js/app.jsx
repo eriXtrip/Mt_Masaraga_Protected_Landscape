@@ -18,7 +18,6 @@ import Login from './pages/loginSignup/login';
 import ForgotPassword from './pages/loginSignup/forgotpassword';
 import Trail from './pages/trail/trail';
 import Booking from './pages/booking/booking';
-import GroupChat from './pages/hiker/groupchat';
 import Transaction from './pages/hiker/transaction';
 import NewsDetail from './pages/content/NewsDetail';
 import AwardsDetail from './pages/content/AwardsDetail';
@@ -118,7 +117,6 @@ const App = () => {
                             <Route path="/booking/:id" element={<Booking />} />
                             <Route path="/booking" element={<Booking />} />
                         </Route>
-                        <Route path="/hiker/messages" element={<GroupChat />} />
                         <Route path="/hiker/transactions" element={<Transaction />} />
                         <Route path="/hiker/dashboard" element={<HikerDashboard />} />
                         <Route path="/hiker/profile" element={<Profile />} />

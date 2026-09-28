@@ -4,11 +4,10 @@ import { Download, Loader2, X } from 'lucide-react';
 import MtMasaragaLogo from '../../../../../public/assets/logo/MT. MASARAGA LOGO.png';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/toast';
+import { downloadElementAsImage } from '@/lib/printImage';
 
 const PASS_WIDTH_INCHES = 3.39;
 const PASS_HEIGHT_INCHES = 1.80;
-const PASS_WIDTH_PIXELS = PASS_WIDTH_INCHES * 96;
-const PASS_HEIGHT_PIXELS = PASS_HEIGHT_INCHES * 96;
 
 function getExpirationDate(dateString) {
     const baseDate = dateString ? new Date(dateString) : new Date();
@@ -79,48 +78,12 @@ export const DigitalPassPreview = forwardRef(function DigitalPassPreview({ pass 
     );
 });
 
-function waitForImages(element) {
-    const images = Array.from(element.querySelectorAll('img'));
-    return Promise.all(images.map((image) => {
-        if (image.complete) return Promise.resolve();
-        return new Promise((resolve) => {
-            image.addEventListener('load', resolve, { once: true });
-            image.addEventListener('error', resolve, { once: true });
-        });
-    }));
-}
-
-async function renderPassImage(element, pass) {
-    const { toBlob } = await import('html-to-image');
-    await waitForImages(element);
-    const blob = await toBlob(element, {
-        backgroundColor: '#ffffff',
-        cacheBust: true,
-        canvasHeight: Math.round(PASS_HEIGHT_INCHES * 300),
-        canvasWidth: Math.round(PASS_WIDTH_INCHES * 300),
-        height: PASS_HEIGHT_PIXELS,
-        pixelRatio: 1,
-        skipAutoScale: true,
-        skipFonts: true,
-        style: {
-            boxSizing: 'border-box',
-            height: `${PASS_HEIGHT_INCHES}in`,
-            margin: '0',
-            transform: 'none',
-            transformOrigin: 'top left',
-            width: `${PASS_WIDTH_INCHES}in`,
-        },
-        width: PASS_WIDTH_PIXELS,
+function renderPassImage(element, pass) {
+    return downloadElementAsImage(element, {
+        fileName: `${pass.id || 'digital-pass'}.png`,
+        widthInches: PASS_WIDTH_INCHES,
+        heightInches: PASS_HEIGHT_INCHES,
     });
-    if (!blob) throw new Error('The pass image could not be created.');
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${pass.id || 'digital-pass'}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export default function DigitalPassDownloadModal({ isOpen, passes = [], onClose, title = 'Download pass images' }) {

@@ -10,11 +10,18 @@ import { ADMIN_BOOKINGS } from '../../../mockData';
 
 export default function TransactionDetailView({ transaction, onBack, onCancelClick }) {
     const navigate = useNavigate();
-    const booking = ADMIN_BOOKINGS.find((item) => item.reference === transaction.transactionId);
-    const assignedLeadHiker = booking?.hikers?.[0]?.fullName || booking?.leadHiker;
+
+    // Health declarations and waivers are reproduced from the hiker records captured
+    // at booking. Admin bookings keep their own reference, so the admin store is only
+    // a fallback for seeded transactions that predate the stored roster.
+    const storedHikers = transaction.hikers || [];
+    const adminBooking = ADMIN_BOOKINGS.find((item) => item.reference === transaction.transactionId);
+    const hikerRecords = storedHikers.length > 0 ? storedHikers : (adminBooking?.hikers || []);
+    const assignedLeadHiker = hikerRecords[0]?.fullName || adminBooking?.leadHiker;
+
     const passesData = (transaction.passesData || []).map((pass, index) => ({
         ...pass,
-        hikerName: booking?.hikers?.[index]?.fullName || pass.hikerName,
+        hikerName: hikerRecords[index]?.fullName || pass.hikerName,
         leadHiker: assignedLeadHiker || pass.leadHiker || pass.hikerName,
     }));
 
@@ -59,11 +66,10 @@ export default function TransactionDetailView({ transaction, onBack, onCancelCli
                     selectedDate={transaction.hikeDate}
                     passesData={passesData}
                     receiptData={transaction.receiptData}
+                    hikerData={hikerRecords}
                     onSendEmail={(email) => {
                         toast.add({ type: 'info', title: 'Email sent', description: `Passes sent to ${email}.` });
                     }}
-                    onJoinGroupChat={() => navigate('/hiker/messages')}
-                    onGoToChecklist={() => navigate('/')}
                 />
 
                 {transaction.status === 'Confirmed' && (

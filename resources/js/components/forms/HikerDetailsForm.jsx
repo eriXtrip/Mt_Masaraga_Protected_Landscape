@@ -1,30 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { User, PhoneCall, Stethoscope, Scale, ChevronDown, CheckCircle2, AlertCircle } from 'lucide-react';
+import { User, PhoneCall, Stethoscope, Scale, ChevronDown, CheckCircle2, AlertCircle, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input, Select } from '@/components/ui/input';
 
 import { HEALTH_QUESTIONS } from '../../mockData';
 
-export default function HikerDetailsForm({ participantCount = 1, onBack, onNext }) {
-    const getInitialState = () => Array.from({ length: participantCount }, () => ({
-        fullName: '',
-        dateOfBirth: '',
-        address: '',
-        emergencyName: '',
-        emergencyRelationship: '',
-        emergencyContact: '',
-        healthAnswers: {
-            health1: '',
-            health2: '',
-            health3: '',
-            health4: '',
-            health5: '',
-            health6: '',
-        },
-        agreeWaiver: false,
-    }));
+const EMERGENCY_RELATIONSHIPS = [
+    'Spouse',
+    'Parent',
+    'Sibling',
+    'Child',
+    'Relative',
+    'Friend',
+    'Guardian',
+];
 
-    const [formDataArray, setFormDataArray] = useState(getInitialState());
+const emptyHiker = () => ({
+    fullName: '',
+    dateOfBirth: '',
+    address: '',
+    emergencyName: '',
+    emergencyRelationship: '',
+    emergencyContact: '',
+    shareEmergencyContact: true,
+    healthAnswers: {
+        health1: '',
+        health2: '',
+        health3: '',
+        health4: '',
+        health5: '',
+        health6: '',
+    },
+    agreeWaiver: false,
+});
+
+const areHealthAnswersComplete = (healthAnswers) =>
+    HEALTH_QUESTIONS.every((question) => Boolean(healthAnswers[question.id]));
+
+const areAllHealthAnswersNo = (healthAnswers) =>
+    HEALTH_QUESTIONS.every((question) => healthAnswers[question.id] === 'no');
+
+export default function HikerDetailsForm({ participantCount = 1, onBack, onNext }) {
+    const [formDataArray, setFormDataArray] = useState(() => Array.from({ length: participantCount }, emptyHiker));
     const [openHikerIndex, setOpenHikerIndex] = useState(0);
 
     const toggleHiker = (index) => {
@@ -34,87 +51,123 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
     useEffect(() => {
         setFormDataArray((prev) => {
             if (prev.length === participantCount) return prev;
-            const newArray = [...prev];
             if (participantCount > prev.length) {
-                for (let i = prev.length; i < participantCount; i++) {
-                    newArray.push({
-                        fullName: '',
-                        dateOfBirth: '',
-                        address: '',
-                        emergencyName: '',
-                        emergencyRelationship: '',
-                        emergencyContact: '',
-                        healthAnswers: {
-                            health1: '', health2: '', health3: '', health4: '', health5: '', health6: '',
-                        },
-                        agreeWaiver: false,
-                    });
-                }
-            } else {
-                newArray.length = participantCount;
+                return [...prev, ...Array.from({ length: participantCount - prev.length }, emptyHiker)];
             }
-            return newArray;
+            return prev.slice(0, participantCount);
         });
     }, [participantCount]);
 
+    const updateHiker = (index, patch) => {
+        setFormDataArray((prev) => {
+            const next = [...prev];
+            next[index] = { ...next[index], ...patch };
+            return next;
+        });
+    };
+
     const handleInputChange = (index, e) => {
         const { name, value, type, checked } = e.target;
-        setFormDataArray((prev) => {
-            const newArr = [...prev];
-            if (type === 'checkbox') {
-                newArr[index] = { ...newArr[index], [name]: checked };
-            } else {
-                newArr[index] = { ...newArr[index], [name]: value };
-            }
-            return newArr;
-        });
+        updateHiker(index, { [name]: type === 'checkbox' ? checked : value });
     };
 
     const handleHealthChange = (index, questionId, value) => {
         setFormDataArray((prev) => {
-            const newArr = [...prev];
-            newArr[index] = {
-                ...newArr[index],
-                healthAnswers: {
-                    ...newArr[index].healthAnswers,
-                    [questionId]: value,
-                },
+            const next = [...prev];
+            next[index] = {
+                ...next[index],
+                healthAnswers: { ...next[index].healthAnswers, [questionId]: value },
             };
-            return newArr;
+            return next;
         });
     };
 
-    const isHikerComplete = (formData) => {
-        return (
-            formData.fullName.trim() !== '' &&
-            formData.dateOfBirth.trim() !== '' &&
-            formData.address.trim() !== '' &&
-            formData.emergencyName.trim() !== '' &&
-            formData.emergencyRelationship.trim() !== '' &&
-            formData.emergencyContact.trim() !== '' &&
-            HEALTH_QUESTIONS.every(
-                (q) => formData.healthAnswers[q.id] && formData.healthAnswers[q.id] !== ''
-            ) &&
-            formData.agreeWaiver
+    const markNoHealthConditions = (index) => {
+        const cleared = HEALTH_QUESTIONS.reduce(
+            (answers, question) => ({ ...answers, [question.id]: 'no' }),
+            {}
         );
+        setFormDataArray((prev) => {
+            const next = [...prev];
+            next[index] = { ...next[index], healthAnswers: cleared };
+            return next;
+        });
     };
 
-    const isFormValid = formDataArray.every(isHikerComplete);
+    // The lead hiker carries the group's contact and residential details. Companions
+    // only need an identity, a health declaration, and a signed waiver, and default to
+    // the lead's emergency contact unless they declare their own.
+    const isHikerComplete = (formData, isLead) => {
+        const hasIdentity =
+            formData.fullName.trim() !== '' &&
+            formData.dateOfBirth.trim() !== '' &&
+            areHealthAnswersComplete(formData.healthAnswers) &&
+            formData.agreeWaiver;
+
+        if (isLead) {
+            return (
+                hasIdentity &&
+                formData.address.trim() !== '' &&
+                formData.emergencyName.trim() !== '' &&
+                formData.emergencyRelationship !== '' &&
+                formData.emergencyContact.trim() !== ''
+            );
+        }
+
+        const hasEmergencyContact = formData.shareEmergencyContact ||
+            (formData.emergencyName.trim() !== '' &&
+                formData.emergencyRelationship !== '' &&
+                formData.emergencyContact.trim() !== '');
+
+        return hasIdentity && hasEmergencyContact;
+    };
+
+    const isFormValid = formDataArray.every((formData, index) =>
+        isHikerComplete(formData, index === 0)
+    );
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (isFormValid && onNext) {
-            onNext(formDataArray);
-        }
+        if (!isFormValid || !onNext) return;
+
+        const [lead] = formDataArray;
+
+        // Resolve companions' inherited contacts so every hiker record downstream
+        // (booking, e-pass, staff roster) is self-contained.
+        const resolved = formDataArray.map((formData, index) => {
+            if (index === 0 || !formData.shareEmergencyContact) {
+                return { ...formData, shareEmergencyContact: undefined };
+            }
+
+            return {
+                ...formData,
+                emergencyName: lead.emergencyName,
+                emergencyRelationship: lead.emergencyRelationship,
+                emergencyContact: lead.emergencyContact,
+                shareEmergencyContact: undefined,
+            };
+        });
+
+        onNext(resolved);
     };
 
     const maxDate = new Date(Date.now() - 86400000).toISOString().split('T')[0];
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 mt-6">
+            <div className="bg-surface-container-low border border-outline-variant/40 rounded-2xl p-4 md:p-5">
+                <p className="text-sm text-on-surface-variant leading-relaxed">
+                    <span className="font-bold text-on-surface">Hiker 1 is the booking lead</span> and covers the
+                    group's contact, address, and emergency contact. Everyone after that only needs their
+                    name, date of birth, health declaration, and waiver signature.
+                </p>
+            </div>
+
             {formDataArray.map((formData, index) => {
+                const isLead = index === 0;
                 const isOpen = openHikerIndex === index;
-                const complete = isHikerComplete(formData);
+                const complete = isHikerComplete(formData, isLead);
+                const allHealthNo = areAllHealthAnswersNo(formData.healthAnswers);
 
                 return (
                     <div
@@ -137,8 +190,14 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                     {index + 1}
                                 </div>
                                 <h2 className="text-xl md:text-2xl font-extrabold text-on-surface tracking-tight">
-                                    Hiker {index + 1} Details
+                                    {isLead ? 'Lead Hiker' : `Companion ${index}`}
                                 </h2>
+                                {isLead && (
+                                    <span className="text-xs font-semibold text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full inline-flex items-center gap-1">
+                                        <Users className="h-3 w-3" />
+                                        Booker
+                                    </span>
+                                )}
                                 {formData.fullName.trim() !== '' && (
                                     <span className="text-xs font-semibold text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full">
                                         {formData.fullName}
@@ -200,20 +259,22 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                                 required
                                             />
                                         </div>
-                                        <div className="space-y-1.5 md:col-span-2">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant block">
-                                                Complete Address
-                                            </label>
-                                            <Input
-                                                name="address"
-                                                value={formData.address}
-                                                onChange={(e) => handleInputChange(index, e)}
-                                                className="w-full"
-                                                placeholder="Barangay, City/Municipality, Province"
-                                                type="text"
-                                                required
-                                            />
-                                        </div>
+                                        {isLead && (
+                                            <div className="space-y-1.5 md:col-span-2">
+                                                <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant block">
+                                                    Complete Address
+                                                </label>
+                                                <Input
+                                                    name="address"
+                                                    value={formData.address}
+                                                    onChange={(e) => handleInputChange(index, e)}
+                                                    className="w-full"
+                                                    placeholder="Barangay, City/Municipality, Province"
+                                                    type="text"
+                                                    required
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 </section>
 
@@ -223,50 +284,78 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                         <PhoneCall className="h-5 w-5 text-primary" />
                                         Emergency Contact
                                     </h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
-                                        <div className="space-y-1.5">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant block">
-                                                Contact Person Name
-                                            </label>
-                                            <Input
-                                                name="emergencyName"
-                                                value={formData.emergencyName}
+
+                                    {!isLead && (
+                                        <label className="flex items-start gap-3 cursor-pointer p-3 rounded-xl bg-primary-container/10 border border-primary/30">
+                                            <input
+                                                type="checkbox"
+                                                name="shareEmergencyContact"
+                                                checked={formData.shareEmergencyContact}
                                                 onChange={(e) => handleInputChange(index, e)}
-                                                className="w-full"
-                                                placeholder="Maria Dela Cruz"
-                                                type="text"
-                                                required
+                                                className="mt-0.5 h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary/20 cursor-pointer"
                                             />
+                                            <span className="text-sm font-medium text-on-surface leading-relaxed">
+                                                Same emergency contact as the lead hiker
+                                                {formData.shareEmergencyContact && formDataArray[0].fullName.trim() !== '' && (
+                                                    <span className="block text-xs text-on-surface-variant mt-0.5">
+                                                        Contacting {formDataArray[0].fullName.trim()} on this hiker's behalf.
+                                                    </span>
+                                                )}
+                                            </span>
+                                        </label>
+                                    )}
+
+                                    {(isLead || !formData.shareEmergencyContact) && (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
+                                            <div className="space-y-1.5">
+                                                <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant block">
+                                                    Contact Person Name
+                                                </label>
+                                                <Input
+                                                    name="emergencyName"
+                                                    value={formData.emergencyName}
+                                                    onChange={(e) => handleInputChange(index, e)}
+                                                    className="w-full"
+                                                    placeholder="Maria Dela Cruz"
+                                                    type="text"
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant block">
+                                                    Relationship
+                                                </label>
+                                                <Select
+                                                    name="emergencyRelationship"
+                                                    value={formData.emergencyRelationship}
+                                                    onChange={(e) => handleInputChange(index, e)}
+                                                    className="w-full"
+                                                    required
+                                                >
+                                                    <option value="">Select relationship</option>
+                                                    {EMERGENCY_RELATIONSHIPS.map((relationship) => (
+                                                        <option key={relationship} value={relationship}>
+                                                            {relationship}
+                                                        </option>
+                                                    ))}
+                                                </Select>
+                                            </div>
+                                            <div className="space-y-1.5 md:col-span-2">
+                                                <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant block">
+                                                    Mobile / Phone Number
+                                                </label>
+                                                <Input
+                                                    name="emergencyContact"
+                                                    value={formData.emergencyContact}
+                                                    onChange={(e) => handleInputChange(index, e)}
+                                                    className="w-full"
+                                                    placeholder="+63 900 000 0000"
+                                                    type="tel"
+                                                    required
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="space-y-1.5">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant block">
-                                                Relationship
-                                            </label>
-                                            <Input
-                                                name="emergencyRelationship"
-                                                value={formData.emergencyRelationship}
-                                                onChange={(e) => handleInputChange(index, e)}
-                                                className="w-full"
-                                                placeholder="Spouse / Parent / Sibling"
-                                                type="text"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="space-y-1.5 md:col-span-2">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-on-surface-variant block">
-                                                Mobile / Phone Number
-                                            </label>
-                                            <Input
-                                                name="emergencyContact"
-                                                value={formData.emergencyContact}
-                                                onChange={(e) => handleInputChange(index, e)}
-                                                className="w-full"
-                                                placeholder="+63 900 000 0000"
-                                                type="tel"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
+                                    )}
                                 </section>
 
                                 {/* Health Declaration Section */}
@@ -275,7 +364,23 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                         <Stethoscope className="h-5 w-5 text-primary" />
                                         Health Declaration
                                     </h3>
-                                    <div className="space-y-3 pt-1">
+                                    <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                                        <p className="text-xs text-on-surface-variant">
+                                            Answer for {isLead ? 'yourself' : 'this hiker'}. The guide reads this before the climb.
+                                        </p>
+                                        {!allHealthNo && (
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => markNoHealthConditions(index)}
+                                                className="rounded-lg border-outline-variant hover:bg-surface-container cursor-pointer"
+                                            >
+                                                None of these apply
+                                            </Button>
+                                        )}
+                                    </div>
+                                    <div className="space-y-3">
                                         {HEALTH_QUESTIONS.map((item) => {
                                             const currentAnswer = formData.healthAnswers[item.id];
                                             return (
@@ -349,7 +454,7 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                                             className="mt-0.5 h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary/20 cursor-pointer"
                                         />
                                         <span className="text-xs font-medium text-on-surface leading-normal">
-                                            I have read, understood, and agree to the terms outlined in the Mount Masaraga Protected Landscape Liability Waiver.
+                                            {isLead ? 'I have read' : `${formData.fullName.trim() || 'This hiker'} has read`}, understood, and agree to the terms outlined in the Mount Masaraga Protected Landscape Liability Waiver.
                                         </span>
                                     </label>
                                 </section>
@@ -377,7 +482,7 @@ export default function HikerDetailsForm({ participantCount = 1, onBack, onNext 
                     disabled={!isFormValid}
                     className="rounded-xl bg-primary font-bold shadow-md hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
                 >
-                    Proceed to Document Checklist
+                    Proceed to Payment
                 </Button>
             </div>
         </form>

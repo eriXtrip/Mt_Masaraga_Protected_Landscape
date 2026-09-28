@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useInView } from '@/hooks/useInView';
 import QR from '../../../../public/images/QR_Code_Example.svg.webp';
 import HikerTicketPass from '../../components/features/HikerTicketPass';
 import DigitalPassDownloadModal from '../../components/hiker/digitalpass/DigitalPassDownloadModal';
+import PrintableDocumentModal from '../../components/features/PrintableDocumentModal';
+import HealthDeclarationDocument from '../../components/features/HealthDeclarationDocument';
+import LiabilityWaiverDocument from '../../components/features/LiabilityWaiverDocument';
+import { A4_DOCUMENT } from '../../lib/printImage';
 import { Input } from '@/components/ui/input';
 import {
     CheckCircle2,
@@ -16,6 +21,7 @@ import {
     ChevronLeft,
     ChevronRight,
     FileText,
+    Scale,
     ShieldAlert,
     Map,
     X,
@@ -24,6 +30,9 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from '../../components/ui/toast';
+import { ADMIN_SETTINGS, CHECKLIST_ITEMS } from '../../mockData';
+
+const MESSENGER_URL = ADMIN_SETTINGS.contact.facebook;
 
 const DEFAULT_BOOKING_PASSES = [
     {
@@ -82,19 +91,27 @@ const HIKER_RESOURCES = [
         downloadUrl: '/downloads/Mt-Masaraga-Trail-Map.pdf',
         icon: Map,
     },
+    {
+        id: 'liability_waiver',
+        title: 'Liability Waiver',
+        description: 'The four clauses you accepted for this booking.',
+        icon: Scale,
+        generated: true,
+    },
 ];
 
 export default function BookingConfirmation({
     selectedDate,
     passesData = DEFAULT_BOOKING_PASSES,
     receiptData = DEFAULT_PAYMENT_RECEIPT,
+    hikerData = [],
     onSendEmail,
-    onJoinGroupChat,
-    onGoToChecklist,
 }) {
     const [activeIndex, setActiveIndex] = useState(0);
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const [isPassDownloadOpen, setIsPassDownloadOpen] = useState(false);
+    const [isHealthDeclarationOpen, setIsHealthDeclarationOpen] = useState(false);
+    const [isWaiverOpen, setIsWaiverOpen] = useState(false);
 
     // Modal State
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -110,6 +127,57 @@ export default function BookingConfirmation({
         ...pass,
         guideHiker: pass.guideHiker,
     }));
+
+    const issuedAt = new Date().toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+    });
+
+    // Health declarations and the waiver are reproduced from what each hiker
+    // declared at booking, so a stored transaction can reprint them later.
+    const hikerList = hikerData;
+
+    const healthDeclarationDocuments = hikerList.map((hiker, index) => {
+        const pass = displayPasses[index] || displayPasses[0] || {};
+        const documentCode = pass.id || `MMPL-${index + 1}`;
+
+        return {
+            id: documentCode,
+            fileName: `health-declaration-${String(index + 1).padStart(2, '0')}.png`,
+            label: hiker.fullName,
+            meta: documentCode,
+            widthInches: A4_DOCUMENT.widthInches,
+            heightInches: A4_DOCUMENT.heightInches,
+            content: (
+                <HealthDeclarationDocument
+                    hiker={hiker}
+                    trail={pass.trail}
+                    hikeDate={selectedDate || pass.date}
+                    guideHiker={pass.guideHiker}
+                    documentCode={documentCode}
+                    issuedAt={issuedAt}
+                />
+            ),
+        };
+    });
+
+    const waiverDocuments = [
+        {
+            id: 'MMP-LW-001',
+            fileName: 'liability-waiver.png',
+            label: 'Liability Waiver',
+            meta: 'MMP-LW-001',
+            widthInches: A4_DOCUMENT.widthInches,
+            heightInches: A4_DOCUMENT.heightInches,
+            content: (
+                <LiabilityWaiverDocument
+                    documentCode="MMP-LW-001"
+                    issuedAt={issuedAt}
+                />
+            ),
+        },
+    ];
 
     const handlePrevPass = () => {
         setActiveIndex((prev) => (prev === 0 ? displayPasses.length - 1 : prev - 1));
@@ -136,6 +204,15 @@ export default function BookingConfirmation({
         setEmailInput('');
         setIsEmailModalOpen(true);
     };
+
+    useEffect(() => {
+        if (!isEmailModalOpen) return undefined;
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') setIsEmailModalOpen(false);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isEmailModalOpen]);
 
     // Handle Email Submit Simulation
     const handleSendEmailSubmit = (e) => {
@@ -275,11 +352,12 @@ export default function BookingConfirmation({
                 {/* Right Column: Summary & CTA */}
                 <div className="lg:col-span-5 flex flex-col gap-6 mt-8 lg:mt-0">
 
-                    {/* Hiker Chat CTA Card */}
-                    <button
-                        type="button"
-                        onClick={onJoinGroupChat}
-                        className="bg-secondary text-on-secondary rounded-2xl p-6 shadow-md relative overflow-hidden cursor-pointer hover:-translate-y-0.5 transition-all w-full text-left group"
+                    {/* Park Staff Messenger CTA */}
+                    <a
+                        href={MESSENGER_URL}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="bg-secondary text-on-secondary rounded-2xl p-6 shadow-md relative overflow-hidden hover:-translate-y-0.5 transition-all w-full text-left group"
                     >
                         <div className="flex items-center justify-between relative">
                             <div className="flex items-center gap-4">
@@ -288,16 +366,16 @@ export default function BookingConfirmation({
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-bold mb-0.5">
-                                        Join Group Announcement
+                                        Message Your Park Staff
                                     </h3>
                                     <p className="text-xs text-on-secondary/80">
-                                        Announcement from the Park Staff.
+                                        Jump-off details and guide updates on Messenger.
                                     </p>
                                 </div>
                             </div>
                             <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform shrink-0" />
                         </div>
-                    </button>
+                    </a>
 
                     {/* Receipt Summary Card */}
                     <div className="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl p-6 shadow-sm">
@@ -365,11 +443,16 @@ export default function BookingConfirmation({
 
                                         <button
                                             type="button"
-                                            onClick={(e) =>
-                                                handleDownload(e, resource.downloadUrl, resource.fileName)
-                                            }
+                                            onClick={(e) => {
+                                                if (resource.generated) {
+                                                    e.preventDefault();
+                                                    setIsWaiverOpen(true);
+                                                    return;
+                                                }
+                                                handleDownload(e, resource.downloadUrl, resource.fileName);
+                                            }}
                                             className="p-2 rounded-lg text-primary hover:bg-primary/10 transition-colors shrink-0 cursor-pointer"
-                                            title={`Download ${resource.fileName}`}
+                                            title={resource.generated ? 'View liability waiver' : `Download ${resource.fileName}`}
                                         >
                                             <Download className="h-4 w-4" />
                                         </button>
@@ -378,17 +461,46 @@ export default function BookingConfirmation({
                             })}
                         </div>
 
-                        <a
-                            href="/"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                if (onGoToChecklist) onGoToChecklist();
-                            }}
-                            className="inline-flex items-center gap-1.5 text-primary font-bold text-sm hover:underline underline-offset-4 cursor-pointer"
-                        >
-                            <ChevronLeft className="h-4 w-4" />
-                            <span>Back to Checklist</span>
-                        </a>
+                        <div className="mt-4 rounded-xl border border-outline-variant/50 bg-surface-container-low/60 p-4">
+                            <p className="text-sm font-bold text-on-surface mb-1">Bring on hike day</p>
+                            <p className="text-xs text-on-surface-variant leading-relaxed mb-3">
+                                No upload needed. Present the physical copies below at the jump-off point,
+                                or staff will not be able to check you in.
+                            </p>
+                            <ul className="space-y-2.5">
+                                {CHECKLIST_ITEMS.map((item) => (
+                                    <li key={item.id} className="flex items-start gap-2 text-xs text-on-surface-variant">
+                                        <span className="mt-0.5 text-primary shrink-0">
+                                            <CheckCircle2 className="h-3.5 w-3.5" />
+                                        </span>
+                                        <div className="min-w-0 flex-1">
+                                            <p>
+                                                <span className="font-semibold text-on-surface">{item.title}</span>
+                                                {' — '}
+                                                {item.description}
+                                            </p>
+                                            {item.id === 'health_declaration' && hikerList.length > 0 && (
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => setIsHealthDeclarationOpen(true)}
+                                                    className="mt-1.5 min-h-9 cursor-pointer gap-1.5"
+                                                >
+                                                    <Download className="h-3.5 w-3.5" />
+                                                    {`Download health declaration${hikerList.length === 1 ? '' : 's'}`}
+                                                </Button>
+                                            )}
+                                            {item.id === 'booking_ticket' && (
+                                                <p className="mt-1 text-[11px] text-on-surface-variant/80">
+                                                    Your e-pass above is the accepted ticket copy.
+                                                </p>
+                                            )}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
                 </div>
@@ -401,15 +513,45 @@ export default function BookingConfirmation({
                 title="Download pass images"
             />
 
+            <PrintableDocumentModal
+                isOpen={isHealthDeclarationOpen}
+                onClose={() => setIsHealthDeclarationOpen(false)}
+                eyebrow="System generated"
+                title="Health declaration"
+                description="Generated from the answers given at booking. Print one per hiker and present it at the jump-off point."
+                documents={healthDeclarationDocuments}
+            />
+
+            <PrintableDocumentModal
+                isOpen={isWaiverOpen}
+                onClose={() => setIsWaiverOpen(false)}
+                eyebrow="Accepted for this booking"
+                title="Liability waiver"
+                description="The four clauses signed by every hiker on this booking, countersigned by the guide at jump-off."
+                documents={waiverDocuments}
+            />
+
             {/* Email Input Modal Overlay */}
-            {isEmailModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="relative w-full max-w-md bg-surface-container-lowest border border-outline-variant/40 rounded-2xl shadow-2xl p-6 overflow-hidden">
+            {isEmailModalOpen && createPortal(
+                <div
+                    className="fixed inset-0 z-100 isolate flex items-center justify-center overflow-y-auto bg-inverse-surface/60 p-4"
+                    onClick={(event) => {
+                        if (event.target === event.currentTarget) setIsEmailModalOpen(false);
+                    }}
+                >
+                    <div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="email-passes-title"
+                        className="relative my-auto max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-2xl border border-outline-variant/40 bg-surface-container-lowest p-6 shadow-xl"
+                    >
 
                         {/* Close Button */}
                         <button
+                            type="button"
                             onClick={() => setIsEmailModalOpen(false)}
-                            className="absolute top-4 right-4 p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 rounded-full transition-colors cursor-pointer"
+                            aria-label="Close email form"
+                            className="absolute top-4 right-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                         >
                             <X className="h-5 w-5" />
                         </button>
@@ -417,11 +559,11 @@ export default function BookingConfirmation({
                         {!isSentSuccess ? (
                             <form onSubmit={handleSendEmailSubmit} className="space-y-5">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-3 rounded-xl bg-primary/10 text-primary shrink-0">
+                                    <div className="shrink-0 rounded-xl bg-primary/10 p-3 text-primary">
                                         <Mail className="h-6 w-6" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-on-surface">Email E-Passes</h3>
+                                        <h3 id="email-passes-title" className="text-xl font-bold text-on-surface">Email E-Passes</h3>
                                         <p className="text-xs text-on-surface-variant">
                                             Send physical ticket copies directly to your inbox.
                                         </p>
@@ -429,12 +571,14 @@ export default function BookingConfirmation({
                                 </div>
 
                                 <div className="space-y-1.5">
-                                    <label className="text-xs font-semibold text-on-surface uppercase tracking-wider block">
+                                    <label htmlFor="email-passes-input" className="block text-xs font-semibold uppercase tracking-wider text-on-surface">
                                         Email Address
                                     </label>
                                     <Input
+                                        id="email-passes-input"
                                         type="email"
                                         required
+                                        autoFocus
                                         placeholder="name@example.com"
                                         value={emailInput}
                                         onChange={(e) => setEmailInput(e.target.value)}
@@ -442,11 +586,12 @@ export default function BookingConfirmation({
                                     />
                                 </div>
 
-                                <div className="flex gap-3 justify-end pt-2">
+                                <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
                                     <Button
                                         type="button"
                                         variant="outline"
                                         onClick={() => setIsEmailModalOpen(false)}
+                                        className="min-h-11 cursor-pointer"
                                     >
                                         Cancel
                                     </Button>
@@ -454,7 +599,7 @@ export default function BookingConfirmation({
                                         type="submit"
                                         variant="default"
                                         disabled={isSending || !emailInput}
-                                        className="gap-2"
+                                        className="min-h-11 cursor-pointer gap-2"
                                     >
                                         {isSending ? (
                                             <>
@@ -471,8 +616,8 @@ export default function BookingConfirmation({
                                 </div>
                             </form>
                         ) : (
-                            <div className="flex flex-col items-center text-center py-4 space-y-4 animate-in zoom-in-95 duration-200">
-                                <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
+                            <div className="flex flex-col items-center space-y-4 py-4 text-center animate-in zoom-in-95 duration-200">
+                                <div className="flex h-16 w-16 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-primary">
                                     <CheckCircle2 className="h-10 w-10" />
                                 </div>
                                 <div className="space-y-1">
@@ -483,15 +628,16 @@ export default function BookingConfirmation({
                                 </div>
                                 <Button
                                     variant="default"
-                                    className="w-full mt-2"
                                     onClick={() => setIsEmailModalOpen(false)}
+                                    className="mt-2 min-h-11 w-full cursor-pointer"
                                 >
                                     Done
                                 </Button>
                             </div>
                         )}
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </main>
     );

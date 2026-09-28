@@ -5,17 +5,17 @@ import ProgressNode from '@/components/features/ProgressNode';
 import { Calendar } from '@/components/ui/calendar';
 import BookingSummaryCard from '@/components/features/BookingSummaryCard';
 import HikerDetailsForm from '@/components/forms/HikerDetailsForm';
-import DocumentChecklistForm from '@/components/forms/DocumentChecklistForm';
 import PaymentForm from '@/components/forms/PaymentForm';
 import BookingConfirmation from './BookingConfirmation';
 import PaymentOverlay from '@/components/features/PaymentOverlay';
 import { createBooking, useAdminStore } from '../../state/adminStore';
+import { addHikerBooking } from '../../state/hikerStore';
 import { toast } from '../../components/ui/toast';
 
 import QR from '../../../../public/images/QR_Code_Example.svg.webp';
 import { BOOKING_DETAILS, TRAILS, ADMIN_SCHEDULES } from '../../mockData';
 
-const STEPS = ['Select Date', 'Hikers Details', 'Checklist', 'Payment'];
+const STEPS = ['Select Date', 'Hiker Details', 'Payment'];
 
 function getDateKey(date) {
     return date.toLocaleDateString('en-CA');
@@ -54,7 +54,7 @@ export default function Booking() {
     const [hikerData, setHikerData] = useState(null);
     const [paymentData, setPaymentData] = useState(null);
 
-    // Scroll smoothly to top whenever step changes (specifically steps 2, 3, 4, 5)
+    // Scroll smoothly to top whenever step changes
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentStep]);
@@ -73,8 +73,17 @@ export default function Booking() {
         setCurrentStep(step);
     };
 
+    const handleNextStep = () => {
+        setCurrentStep((prev) => prev + 1);
+    };
+
     const handlePaymentComplete = () => {
         if (!hikerData?.length || !paymentData || !date || !selectedSchedule) return;
+
+        const feeBreakdown = [
+            { label: `Base Fee (${hikerData.length} x ₱${baseFee})`, amount: totalBaseFee },
+            { label: 'Processing fee', amount: processingFee },
+        ];
 
         createBooking({
             scheduleId: selectedSchedule.id,
@@ -86,10 +95,7 @@ export default function Booking() {
             totalPaid: paymentData.totalAmount,
             paymentMethod: paymentData.paymentMethod,
             status: 'Confirmed',
-            feeBreakdown: [
-                { label: `Base Fee (${hikerData.length} x ₱${baseFee})`, amount: totalBaseFee },
-                { label: 'Processing fee', amount: processingFee },
-            ],
+            feeBreakdown,
             hikers: hikerData.map((hiker) => ({
                 fullName: hiker.fullName,
                 dateOfBirth: hiker.dateOfBirth,
@@ -102,13 +108,24 @@ export default function Booking() {
             })),
         });
 
+        addHikerBooking({
+            trail: trailBookingDetails.selectedTrail,
+            hikeDate: formattedSelectedDate,
+            dateBooked: new Date().toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+            }),
+            passes: passesData,
+            hikers: hikerData,
+            totalAmount,
+            paymentMethod: paymentData.paymentMethod,
+            breakdown: feeBreakdown,
+        });
+
         setShowPaymentOverlay(false);
         toast.add({ type: 'success', title: 'Booking confirmed!', description: 'Your e-passes are ready.' });
         handleNextStep();
-    };
-
-    const handleNextStep = () => {
-        setCurrentStep((prev) => prev + 1);
     };
 
     const formattedSelectedDate = date
@@ -180,8 +197,8 @@ export default function Booking() {
         <div ref={sectionRef} className="min-h-dvh bg-surface font-sans">
             <div className={`max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-12 space-y-8 md:space-y-10 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
-                {/* Header / Progress Section (Only visible during steps 1 - 4) */}
-                {currentStep <= 4 && (
+                {/* Header / Progress Section (Only visible during steps 1 - 3) */}
+                {currentStep <= 3 && (
                     <header className="flex flex-col items-center text-center gap-6 md:gap-8">
                         <div>
                             <p className="text-[11px] font-bold uppercase tracking-widest text-primary">
@@ -191,7 +208,7 @@ export default function Booking() {
                                 Book {trail.name}
                             </h1>
                             <p className="text-sm md:text-base text-on-surface-variant mt-2 max-w-xl">
-                                Pick your climb date, register every hiker, confirm your documents, and pay.
+                                Pick your climb date, register your group, and pay. No account needed.
                             </p>
                         </div>
 
@@ -219,7 +236,7 @@ export default function Booking() {
                 )}
 
                 {/* Steps Content Area */}
-                {currentStep <= 4 && (
+                {currentStep <= 3 && (
                     <div className="flex flex-col gap-6">
                         <div className="flex-1 min-w-0">
                             {/* STEP 1: SELECT DATE */}
@@ -261,21 +278,11 @@ export default function Booking() {
                                 />
                             )}
 
-                            {/* STEP 3: DOCUMENT CHECKLIST */}
+                            {/* STEP 3: PAYMENT FORM */}
                             {currentStep === 3 && (
-                                <DocumentChecklistForm
-                                    onBack={() => goToStep(2)}
-                                    onNext={() => {
-                                        handleNextStep();
-                                    }}
-                                />
-                            )}
-
-                            {/* STEP 4: PAYMENT FORM */}
-                            {currentStep === 4 && (
                                 <PaymentForm
                                     summary={bookingSummary}
-                                    onBack={() => goToStep(3)}
+                                    onBack={() => goToStep(2)}
                                     onPayNow={(data) => {
                                         setPaymentData(data);
                                         setShowPaymentOverlay(true);
@@ -286,20 +293,15 @@ export default function Booking() {
                     </div>
                 )}
 
-                {/* STEP 5: BOOKING CONFIRMATION */}
-                {currentStep === 5 && (
+                {/* STEP 4: BOOKING CONFIRMATION */}
+                {currentStep === 4 && (
                     <BookingConfirmation
                         selectedDate={formattedSelectedDate}
                         passesData={passesData}
                         receiptData={receiptData}
-                        onSendEmail={() => {
-                            toast.add({ type: 'info', title: 'Email sent', description: 'Passes sent to your email.' });
-                        }}
-                        onJoinGroupChat={() => {
-                            navigate('/hiker/messages');
-                        }}
-                        onGoToChecklist={() => {
-                            goToStep(3);
+                        hikerData={hikerData}
+                        onSendEmail={(email) => {
+                            toast.add({ type: 'info', title: 'Email sent', description: `Passes sent to ${email}.` });
                         }}
                     />
                 )}
