@@ -123,6 +123,17 @@ export default function Booking() {
         ? ADMIN_SCHEDULES.find((schedule) => schedule.trailId === trailId && schedule.dateKey === getDateKey(date))
         : null;
 
+    // The date's remaining slots cap the group size, on top of the admin group limit.
+    const groupMaxParticipants = bookingSettings.maxGroupSize ?? 5;
+    const availableSlots = selectedSchedule ? trailSlots[getDateKey(date)] : null;
+    const maxParticipants = availableSlots === null
+        ? groupMaxParticipants
+        : Math.min(groupMaxParticipants, availableSlots);
+
+    useEffect(() => {
+        setParticipantCount((prev) => Math.max(1, Math.min(prev, maxParticipants)));
+    }, [maxParticipants]);
+
     const guideHiker = selectedSchedule?.guide || '';
 
     // Dynamic Passes Data generated for Confirmation view
@@ -166,7 +177,7 @@ export default function Booking() {
     };
 
     return (
-        <div ref={sectionRef} className="min-h-screen bg-surface font-sans">
+        <div ref={sectionRef} className="min-h-dvh bg-surface font-sans">
             <div className={`max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-12 space-y-8 md:space-y-10 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
                 {/* Header / Progress Section (Only visible during steps 1 - 4) */}
@@ -191,26 +202,16 @@ export default function Booking() {
                                 const isActive = step === currentStep;
 
                                 return (
-                                    <div
+                                    <ProgressNode
                                         key={step}
-                                        className={`flex items-center ${index < STEPS.length - 1 ? 'flex-1' : ''}`}
-                                    >
-                                        <ProgressNode
-                                            step={step}
-                                            name={stepName}
-                                            isActive={isActive}
-                                            isCompleted={isCompleted}
-                                            color="primary"
-                                        />
-                                        {index < STEPS.length - 1 && (
-                                            <div className="mx-2 h-0.75 flex-1 rounded-full bg-surface-container-highest overflow-hidden">
-                                                <div
-                                                    className="h-full rounded-full bg-primary transition-all duration-300"
-                                                    style={{ width: currentStep > step ? '100%' : '0%' }}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
+                                        variant="line"
+                                        step={step}
+                                        name={stepName}
+                                        isActive={isActive}
+                                        isCompleted={isCompleted}
+                                        activeStepName={`${STEPS[currentStep - 1]}`}
+                                        color="primary"
+                                    />
                                 );
                             })}
                         </div>
@@ -239,6 +240,7 @@ export default function Booking() {
                                             selectedDate={formattedSelectedDate}
                                             participantCount={participantCount}
                                             setParticipantCount={setParticipantCount}
+                                            maxParticipants={maxParticipants}
                                             onContinue={handleNextStep}
                                             onCancel={() => navigate('/trail')}
                                             className="w-full"
