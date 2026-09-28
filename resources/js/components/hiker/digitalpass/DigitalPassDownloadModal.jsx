@@ -26,8 +26,8 @@ function getExpirationDate(dateString) {
 function PassField({ label, value }) {
     return (
         <div style={{ minWidth: 0 }}>
-            <p style={{ color: '#737969', fontSize: '4.5px', fontWeight: 800, letterSpacing: '0.08em', lineHeight: 1.1, textTransform: 'uppercase' }}>{label}</p>
-            <p title={value} style={{ color: '#141e18', fontSize: '6px', fontWeight: 700, lineHeight: 1.2, margin: '2px 0 0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{value || 'Not provided'}</p>
+            <p style={{ color: '#737969', fontSize: '4.8px', fontWeight: 800, letterSpacing: '0.08em', lineHeight: 1.1, textTransform: 'uppercase' }}>{label}</p>
+            <p title={value} style={{ color: '#141e18', fontSize: '7px', fontWeight: 700, lineHeight: 1.2, margin: '2px 0 0', overflow: 'hidden', whiteSpace: 'wrap' }}>{value || 'Not provided'}</p>
         </div>
     );
 }
@@ -41,11 +41,11 @@ export const DigitalPassPreview = forwardRef(function DigitalPassPreview({ pass 
             ref={ref}
             style={{ background: '#ffffff', border: '1px solid #c2c9b7', borderRadius: '0.16in', boxSizing: 'border-box', color: '#141e18', fontFamily: 'Inter, sans-serif', height: '1.80in', overflow: 'hidden', position: 'relative', width: '3.39in' }}
         >
-            <div style={{ alignItems: 'center', background: '#749455', borderBottom: '1px solid rgba(193,201,183,0.45)', boxSizing: 'border-box', display: 'flex', height: '0.39in', justifyContent: 'space-between', padding: '0.07in 0.13in' }}>
+            <div style={{ alignItems: 'center', background: '#749455', borderBottom: '1px solid rgba(193, 201, 183, 0.8)', boxSizing: 'border-box', display: 'flex', height: '0.39in', justifyContent: 'space-between', padding: '0.07in 0.13in' }}>
                 <img src={MtMasaragaLogo} alt="Mt. Masaraga logo" style={{ height: '0.25in', maxWidth: '1.25in', objectFit: 'contain' }} />
                 <div style={{ alignItems: 'flex-end', display: 'flex', flexDirection: 'column' }}>
                     <span style={{ color: '#f9ffec', fontSize: '4px', fontWeight: 800, letterSpacing: '0.1em', lineHeight: 1 }}>ECOTOURISM TRAIL ID</span>
-                    <span style={{ background: '#e8f4ea', borderRadius: '0.03in', color: '#0f1b18', fontFamily: 'monospace', fontSize: '5.5px', fontWeight: 800, lineHeight: 1.2, marginTop: '2px', padding: '2px 4px' }}>{pass.id}</span>
+                    <span style={{ background: '#e8f4ea', borderRadius: '0.03in', color: '#0f1b18', fontFamily: 'monospace', fontSize: '4px', fontWeight: 800, lineHeight: 1.2, marginTop: '2px', padding: '2px 3px', alignContent: 'center', alignItems: 'center' }}>{pass.id}</span>
                 </div>
             </div>
 
@@ -55,7 +55,7 @@ export const DigitalPassPreview = forwardRef(function DigitalPassPreview({ pass 
                         <p style={{ color: '#737969', fontSize: '4.5px', fontWeight: 800, letterSpacing: '0.08em', lineHeight: 1.1, textTransform: 'uppercase' }}>HIKER NAME / CARDHOLDER</p>
                         <p title={pass.hikerName} style={{ color: '#141e18', fontSize: '15px', fontWeight: 800, lineHeight: 1.1, margin: '3px 0 0', maxHeight: '0.27in', overflow: 'hidden' }}>{pass.hikerName}</p>
                     </div>
-                    <div style={{ display: 'grid', gap: '0.07in 0.12in', gridTemplateColumns: '1fr 1fr', marginTop: '0.09in' }}>
+                    <div style={{ display: 'grid', gap: '0.09in 0.12in', gridTemplateColumns: '1fr 1fr', marginTop: '0.13in' }}>
                         <PassField label="GUIDE HIKER" value={guideHiker} />
                         <PassField label="ASSIGNED TRAIL" value={pass.trail} />
                         <PassField label="CLIMB DATE" value={pass.date || pass.hikeDate} />
@@ -63,7 +63,7 @@ export const DigitalPassPreview = forwardRef(function DigitalPassPreview({ pass 
                     </div>
                 </div>
 
-                <div style={{ alignItems: 'center', borderLeft: '1px solid rgba(193,201,183,0.5)', display: 'flex', flexDirection: 'column', flexShrink: 0, paddingLeft: '0.1in', width: '0.9in' }}>
+                <div style={{ alignItems: 'center', borderLeft: '1px solid rgba(193, 201, 183, 0.8)', display: 'flex', flexDirection: 'column', flexShrink: 0, paddingLeft: '0.1in', width: '0.9in' }}>
                     <div style={{ background: '#ffffff', border: '1px solid #c2c9b7', borderRadius: '0.07in', boxSizing: 'border-box', padding: '0.045in' }}>
                         <img src={pass.qrCodeUrl} alt="QR code pass" style={{ display: 'block', height: '0.65in', objectFit: 'cover', width: '0.65in' }} />
                     </div>
@@ -105,6 +105,9 @@ async function renderPassImage(element, pass) {
         style: {
             boxSizing: 'border-box',
             height: `${PASS_HEIGHT_INCHES}in`,
+            margin: '0',
+            transform: 'none',
+            transformOrigin: 'top left',
             width: `${PASS_WIDTH_INCHES}in`,
         },
         width: PASS_WIDTH_PIXELS,
@@ -203,13 +206,13 @@ export default function DigitalPassDownloadModal({ isOpen, passes = [], onClose,
                                 {passes.map((pass) => (
                                     <div key={pass.id} className="flex min-w-0 flex-col items-center gap-3 rounded-xl border border-outline-variant/30 bg-surface-container-low p-4">
                                         <div className="w-full flex justify-center transition-opacity duration-300">
-                                            <div ref={(element) => { if (element) previewRefs.current.set(pass.id, element); else previewRefs.current.delete(pass.id); }} className="transform origin-top scale-[0.68] min-[380px]:scale-[0.90] min-[480px]:scale-[0.95] sm:scale-[0.90] lg:scale-100 transition-transform duration-200 -mb-27.5 min-[380px]:-mb-20 min-[480px]:-mb-12.5 sm:-mb-6.25 lg:mb-0">
-                                                <DigitalPassPreview pass={pass} />
+                                            <div className="transform origin-top scale-[0.68] min-[380px]:scale-[0.90] min-[480px]:scale-[0.95] sm:scale-[0.90] lg:scale-100 transition-transform duration-200 -mb-27.5 min-[380px]:-mb-20 min-[480px]:-mb-12.5 sm:-mb-6.25 lg:mb-0">
+                                                <DigitalPassPreview ref={(element) => { if (element) previewRefs.current.set(pass.id, element); else previewRefs.current.delete(pass.id); }} pass={pass} />
                                             </div>
                                         </div>
                                         <div className="w-full text-center pt-15 sm:pt-5">
                                             <p className="truncate text-sm font-bold text-on-surface">{pass.hikerName}</p>
-                                            <p className="mt-1 truncate font-mono text-[11px] text-on-surface-variant">{pass.id}</p>
+                                            <p className="truncate font-mono text-[11px] text-on-surface-variant">{pass.id}</p>
                                         </div>
                                         <Button type="button" variant="outline" onClick={() => handleDownload(pass)} disabled={isDownloading} className="min-h-11 w-full cursor-pointer gap-2">
                                             {isDownloading && downloadingId === pass.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
