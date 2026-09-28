@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Mt. Masaraga Protected Landscape</title>
     <meta name="theme-color" content="#39670d">
     <meta name="mobile-web-app-capable" content="yes">
