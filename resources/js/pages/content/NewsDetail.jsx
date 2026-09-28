@@ -27,7 +27,7 @@ export default function NewsDetail() {
     const relatedUpdates = NEWS.filter((item) => item.id !== currentArticle.id);
 
     return (
-        <div className="min-h-screen bg-surface font-sans">
+        <div className="min-h-dvh bg-surface font-sans">
 
             {/* Top Bar Navigation - Minimal & Functional */}
             <header className=" bg-surface">

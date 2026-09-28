@@ -65,7 +65,7 @@ export default function Profile() {
     };
 
     return (
-        <div ref={sectionRef} className="min-h-screen bg-surface font-sans">
+        <div ref={sectionRef} className="min-h-dvh bg-surface font-sans">
             <div className={`max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-12 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
                 <header className="mb-8">

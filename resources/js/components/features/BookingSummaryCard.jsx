@@ -13,12 +13,15 @@ export default function BookingSummaryCard({
     selectedDate = 'Please select a date',
     participantCount = 1,
     setParticipantCount,
+    maxParticipants: slotLimit,
     onContinue,
     onCancel,
     className = '',
 }) {
     const { settings } = useAdminStore();
-    const maxParticipants = settings?.booking?.maxGroupSize || MAX_PARTICIPANTS;
+    const groupMaxParticipants = settings?.booking?.maxGroupSize || MAX_PARTICIPANTS;
+    const isSlotLimited = slotLimit !== undefined && slotLimit < groupMaxParticipants;
+    const maxParticipants = Math.max(1, Math.min(groupMaxParticipants, slotLimit ?? groupMaxParticipants));
 
     // Lookup data directly from BOOKING_DETAILS using trailId
     const trailBookingData = BOOKING_DETAILS[trailId] || BOOKING_DETAILS.amtic;
@@ -97,7 +100,9 @@ export default function BookingSummaryCard({
                         <div>
                             <span className="text-sm font-bold text-on-surface block">Participants</span>
                             <span className="text-xs text-on-surface-variant font-medium">
-                                 Max {maxParticipants} hikers per booking
+                                {isSlotLimited
+                                    ? `${maxParticipants} ${maxParticipants === 1 ? 'slot' : 'slots'} left for this date`
+                                    : `Max ${maxParticipants} hikers per booking`}
                             </span>
                         </div>
                         <div className="flex items-center gap-3 bg-surface-container border border-outline-variant/50 rounded-lg p-1">

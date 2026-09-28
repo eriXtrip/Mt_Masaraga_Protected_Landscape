@@ -9,7 +9,7 @@ export default function Cta() {
     const [containerRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
 
     return (
-        <section className="relative flex min-h-screen lg:min-h-screen w-full items-stretch justify-start overflow-hidden bg-surface-container-highest">
+        <section className="relative flex min-h-dvh lg:min-h-dvh w-full items-stretch justify-start overflow-hidden bg-surface-container-highest">
             {/* Background Image & Scrim Overlay */}
             <div className="absolute inset-0 z-0">
                 <img

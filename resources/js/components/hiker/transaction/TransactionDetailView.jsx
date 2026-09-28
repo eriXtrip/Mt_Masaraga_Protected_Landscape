@@ -19,7 +19,7 @@ export default function TransactionDetailView({ transaction, onBack, onCancelCli
     }));
 
     return (
-        <div className="min-h-screen bg-surface p-4 md:p-8 font-sans">
+        <div className="min-h-dvh bg-surface p-4 md:p-8 font-sans">
             <div className="max-w-7xl mx-auto space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <Button

@@ -79,7 +79,7 @@ export default function StaffSidebar({ open, onClose }) {
                     <span className="text-[10px] font-bold uppercase tracking-widest text-on-secondary/70">Park staff console</span>
                 </div>
 
-                <nav className="custom-sidebar-scrollbar mt-4 flex-1 space-y-5 overflow-y-auto px-3 pb-4">
+                <nav className="custom-sidebar-scrollbar mt-4 flex-1 space-y-5 overflow-y-auto px-3 pb-[calc(1rem+env(safe-area-inset-bottom))]">
                     {STAFF_NAV_GROUPS.map((group) => (
                         <div key={group.label}>
                             <p className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-on-secondary/80">{group.label}</p>

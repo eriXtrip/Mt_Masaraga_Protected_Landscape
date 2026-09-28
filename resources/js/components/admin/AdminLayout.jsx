@@ -38,7 +38,7 @@ export default function AdminLayout() {
     }, [sidebarOpen]);
 
     return (
-        <div className="min-h-screen bg-surface font-sans text-on-surface">
+        <div className="min-h-dvh bg-surface font-sans text-on-surface">
             <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
             <div className="lg:pl-76">

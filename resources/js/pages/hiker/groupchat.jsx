@@ -15,7 +15,7 @@ export default function GroupChat() {
     const subtitle = isAdminChannel ? 'Official updates from Park Staff' : 'Climb Date: Oct 24, 2026';
 
     return (
-        <div ref={sectionRef} className="min-h-screen bg-surface font-sans">
+        <div ref={sectionRef} className="min-h-dvh bg-surface font-sans">
             <div className="max-w-7xl mx-auto my-4 md:my-6 px-3 md:px-4 relative overflow-hidden">
 
                 <header className="mb-4 md:mb-6 transition-all duration-700 ease-out">

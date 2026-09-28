@@ -34,7 +34,7 @@ export default function HikerDashboard() {
     const recent = transactions.slice(0, 3);
 
     return (
-        <div ref={sectionRef} className="min-h-screen bg-surface font-sans">
+        <div ref={sectionRef} className="min-h-dvh bg-surface font-sans">
             <div className={`max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-12 space-y-8 md:space-y-10 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
                 <DashboardHeader

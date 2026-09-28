@@ -119,7 +119,7 @@ export default function Signup() {
     const strengthColors = ['text-error', 'text-error', 'text-tertiary', 'text-primary'];
 
     return (
-        <div ref={sectionRef} className="flex min-h-screen w-full flex-col bg-surface text-on-surface lg:flex-row overflow-hidden">
+        <div ref={sectionRef} className="flex min-h-dvh w-full flex-col bg-surface text-on-surface lg:flex-row overflow-hidden">
             {/* Left Side: Hero Image Background (Slides in from Left) */}
             <div
                 className={`hidden w-full shrink-0 bg-cover bg-center bg-surface-variant lg:flex lg:w-[42%] xl:w-[40%] relative flex-col justify-end p-12 transition-all duration-1000 ease-out ${isInView
@@ -161,18 +161,14 @@ export default function Signup() {
             {/* Right Side: Multi-Step Registration Wizard (Slides in from Right) */}
             <div
                 style={{ transitionDelay: '150ms' }}
-                className={`flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%] transition-all duration-1000 ease-out ${isInView
+                className={`flex min-h-dvh w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%] transition-all duration-1000 ease-out ${isInView
                     ? 'opacity-100 translate-x-0'
                     : 'opacity-0 translate-x-16 lg:translate-x-24'
                     }`}
             >
                 <div className="max-w-md w-full mx-auto pt-5 pb-12">
                     {/* Header + Mobile Logo */}
-                    <div className="flex items-center gap-2 text-primary lg:hidden">
-                        <Mountain className="h-13 w-13" />
-                        <span className="text-headline-md font-bold">Mt. Masaraga PL</span>
-                    </div>
-                    <div className="mb-12 text-center md:text-left">
+                    <div className="mb-10 text-center md:text-left">
                         <h2 className="text-2xl font-bold text-on-surface">
                             Join the Community
                         </h2>
@@ -182,39 +178,29 @@ export default function Signup() {
                     </div>
 
                     {/* Stepper Progress Tracker */}
-                    <div className="w-full pb-4 px-1">
-                        <div className="relative mb-6 flex w-full items-center">
-                            {[1, 2, 3, 4, 5, 6].map((step, index) => {
+                    <div className="w-full pb-2 px-1">
+                        <div className="relative mb-6 flex w-full items-center gap-2 sm:gap-3">
+                            {['Name', 'Gender', 'Email', 'Verify', 'Password', 'Complete'].map((stepName, index, arr) => {
+                                const step = index + 1;
                                 const isCompleted = step < currentStep;
                                 const isActive = step === currentStep;
+
                                 return (
-                                    <div key={step} className={`flex items-center ${index < 5 ? 'flex-1' : ''}`}>
-                                        <ProgressNode
-                                            step={step}
-                                            name={['Name', 'Gender', 'Email', 'Verify', 'Password', 'Complete'][step - 1]}
-                                            isActive={isActive}
-                                            isCompleted={isCompleted}
-                                            onClick={() => goToStep(step)}
-                                            color="primary"
-                                        />
-                                        {index < 5 && (
-                                            <div className="mx-2 h-0.75 flex-1 rounded-full bg-surface-container-highest">
-                                                <div
-                                                    className="h-full rounded-full bg-primary transition-all duration-300"
-                                                    style={{ width: currentStep > step ? '100%' : '0%' }}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
+                                    <ProgressNode
+                                        key={step}
+                                        step={step}
+                                        variant="line"
+                                        name={stepName}
+                                        isActive={isActive}
+                                        isCompleted={isCompleted}
+                                        onClick={() => goToStep(step)}
+                                        color="primary"
+                                        totalSteps={arr.length}
+                                        activeStepName={arr[currentStep - 1]}
+                                        isLastStep={index === arr.length - 1}
+                                    />
                                 );
                             })}
-                        </div>
-                        {/* Mobile counter */}
-                        <div className="flex justify-between px-1 text-[11px] font-medium text-on-surface-variant sm:hidden">
-                            <span>
-                                Step {currentStep} of {TOTAL_STEPS}
-                            </span>
-                            <span className="font-semibold text-primary">{STEP_TITLES[currentStep - 1]}</span>
                         </div>
                     </div>
 

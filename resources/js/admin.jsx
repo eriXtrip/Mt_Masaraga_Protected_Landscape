@@ -49,7 +49,7 @@ function AdminAccessGate({ children }) {
 
     if (checking) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-surface px-6 text-center text-on-surface">
+            <div className="flex min-h-dvh items-center justify-center bg-surface px-6 text-center text-on-surface">
                 <div>
                     <p className="text-sm font-semibold">Checking admin access...</p>
                     <p className="mt-2 text-xs text-on-surface-variant">Please wait while your admin console loads.</p>

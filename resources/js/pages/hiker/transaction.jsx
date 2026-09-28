@@ -76,7 +76,7 @@ export default function Transaction() {
     }
 
     return (
-        <div ref={sectionRef} className="min-h-screen bg-surface p-4 md:p-8 font-sans overflow-hidden">
+        <div ref={sectionRef} className="min-h-dvh bg-surface p-4 md:p-8 font-sans overflow-hidden">
             <div className={`max-w-5xl mx-auto space-y-6 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <TransactionHeader />
 

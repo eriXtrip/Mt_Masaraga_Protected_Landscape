@@ -98,7 +98,7 @@ export default function StaffBookingDetail({ booking, schedule, documentStatuses
                 </div>
 
                 {canDecide && (
-                    <div className="sticky bottom-0 mt-6 grid gap-3 border-t border-outline-variant/20 bg-surface-container-lowest pt-4 sm:grid-cols-2">
+                    <div className="sticky bottom-0 mt-6 grid gap-3 border-t border-outline-variant/20 bg-surface-container-lowest pt-4 pb-[env(safe-area-inset-bottom)] sm:grid-cols-2">
                         <Button type="button" variant="destructive" size="lg" onClick={onReject} className="min-h-11 cursor-pointer gap-2">
                             <X className="h-4 w-4" />
                             Reject permit

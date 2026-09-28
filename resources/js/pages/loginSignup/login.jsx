@@ -71,7 +71,7 @@ export default function Login() {
     };
 
     return (
-        <div ref={sectionRef} className="relative flex min-h-screen w-full flex-col bg-surface text-on-surface lg:flex-row overflow-hidden">
+        <div ref={sectionRef} className="relative flex min-h-dvh w-full flex-col bg-surface text-on-surface lg:flex-row overflow-hidden">
 
             {/* Standalone Admin Modal Component */}
             <AdminAuthModal
@@ -120,29 +120,50 @@ export default function Login() {
             {/* Right Side: Login Form (Slides in from Right) */}
             <div
                 style={{ transitionDelay: '150ms' }}
-                className={`flex min-h-screen w-full flex-col justify-between overflow-y-auto bg-surface-container-lowest p-6 sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%] transition-all duration-1000 ease-out ${isInView
-                    ? 'opacity-100 translate-x-0'
-                    : 'opacity-0 translate-x-16 lg:translate-x-24'
-                    }`}
+                className={`flex min-h-dvh w-full flex-col justify-between overflow-y-auto bg-transparent p-0 sm:bg-surface-container-lowest sm:p-10 md:p-14 lg:w-[58%] lg:p-16 xl:w-[60%] transition-all duration-1000 ease-out ${
+                    isInView
+                        ? 'opacity-100 translate-x-0'
+                        : 'opacity-100 sm:opacity-0 translate-x-0 sm:translate-x-16 lg:translate-x-24'
+                }`}
             >
-                <div className="max-w-md w-full mx-auto pt-5 pb-12">
-                    {/* Header + Mobile Logo */}
-                    <div className="flex items-center gap-2 text-primary lg:hidden mb-6">
-                        <Mountain className="h-10 w-10" />
-                        <span className="text-headline-md font-bold">Mt. Masaraga PL</span>
-                    </div>
-                    <div className="mb-8 text-center md:text-left">
-                        <h2 className="text-2xl font-bold text-on-surface">
-                            Welcome Back
-                        </h2>
-                        <p className="font-body-md text-body-md text-on-surface-variant">
-                            Log in to manage your bookings and permits.
-                        </p>
+                <img
+                    src={MtMasaraga}
+                    alt="Mt. Masaraga covered in lush green rainforest piercing through morning mist"
+                    className="absolute inset-0 w-full h-full object-cover object-top sm:hidden block"
+                />
+
+                {/* Gradient Scrim for Contrast & Atmosphere */}
+                <div className="absolute inset-0 bg-linear-to-r from-black/50 via-black/20 to-transparent sm:hidden block" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/50 via-black/20 to-black/20 lg:to-black/20 sm:hidden block" />
+
+                <div className="flex flex-col flex-1 max-w-md w-full mx-auto pt-5 sm:pb-12 justify-between sm:justify-start">
+                    {/* Header - Downward animation on mobile */}
+                    <div
+                        className={`sm:mt-0 mt-30 transform transition-all duration-700 ease-out sm:transform-none ${
+                            isInView
+                                ? 'opacity-100 translate-y-0'
+                                : 'opacity-0 -translate-y-12 sm:opacity-100 sm:translate-y-0'
+                        }`}
+                    >
+                        <div className="mb-8 text-center md:text-left px-6">
+                            <h2 className="text-2xl font-bold sm:text-on-surface text-white">
+                                Welcome Back
+                            </h2>
+                            <p className="font-body-md text-body-md sm:text-on-surface-variant text-white">
+                                Log in to manage your bookings.
+                            </p>
+                        </div>
                     </div>
 
-                    {/* Form Area */}
-                    <div className="flex flex-col justify-start px-1">
-                        <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Form Area - Upward animation on mobile */}
+                    <div
+                        className={`flex flex-col justify-between flex-1 sm:flex-initial sm:mt-0 mt-13 p-6 sm:px-1 pb-6 bg-surface-container-lowest sm:bg-transparent shadow-lg sm:shadow-none rounded-t-3xl border-t sm:border-none border-outline-variant/30 sm:rounded-b-3xl transform transition-all duration-700 ease-out sm:transform-none ${
+                            isInView
+                                ? 'opacity-100 translate-y-0'
+                                : 'opacity-0 translate-y-full sm:opacity-100 sm:translate-y-0'
+                        }`}
+                    >
+                        <form onSubmit={handleSubmit} className="space-y-6 sm:px-6 px-0">
                             <div>
                                 <label className="block font-label-md text-label-md text-on-surface mb-2" htmlFor="email">
                                     Email Address

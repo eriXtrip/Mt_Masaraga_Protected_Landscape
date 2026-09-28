@@ -17,7 +17,7 @@ export default function BookingSuspended() {
     });
 
     return (
-        <main className="flex min-h-screen w-full items-center justify-center bg-surface px-6 py-10 font-sans md:px-12 lg:px-16">
+        <main className="flex min-h-dvh w-full items-center justify-center bg-surface px-6 py-10 font-sans md:px-12 lg:px-16">
             <section className="w-full max-w-3xl text-center items-center mx-auto">
                 {/* ADDED 'mx-auto' HERE */}
                 <div className="relative mx-auto flex h-48 w-48 items-center justify-center sm:h-55 sm:w-55">

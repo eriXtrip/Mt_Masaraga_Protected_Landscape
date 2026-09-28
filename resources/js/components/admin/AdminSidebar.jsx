@@ -82,7 +82,7 @@ export default function AdminSidebar({ open, onClose }) {
                 </div>
 
                 {/* Navigation groups with custom sidebar scrollbar styling */}
-                <nav className="mt-4 flex-1 space-y-5 overflow-y-auto px-3 pb-4 custom-sidebar-scrollbar">
+                <nav className="mt-4 flex-1 space-y-5 overflow-y-auto px-3 pb-[calc(1rem+env(safe-area-inset-bottom))] custom-sidebar-scrollbar">
                     {ADMIN_NAV_GROUPS.map((group) => (
                         <div key={group.label}>
                             <p className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-on-secondary/80">

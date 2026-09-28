@@ -89,7 +89,7 @@ export default function StaffMessages() {
             </div>
 
             {showMembers && activeChannel && (
-                <div className="fixed inset-0 z-50 flex items-end justify-center bg-inverse-surface/50 p-4 sm:items-center lg:static lg:mt-6 lg:bg-transparent lg:p-0">
+                <div className="fixed inset-0 z-50 flex items-end justify-center bg-inverse-surface/50 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:items-center lg:static lg:mt-6 lg:bg-transparent lg:p-0">
                     <div className="relative w-full max-w-sm">
                         <button type="button" onClick={() => setShowMembers(false)} aria-label="Close group members" className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-lg bg-surface-container-lowest/90 text-on-surface-variant hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                             <X className="h-5 w-5" />

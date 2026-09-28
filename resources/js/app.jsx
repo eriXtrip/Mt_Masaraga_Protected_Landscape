@@ -5,6 +5,7 @@ import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
 import SplashScreen from './components/common/SplashScreen';
+import InstallPrompt from './components/common/InstallPrompt';
 import { Toaster } from './components/ui/toast';
 import { useAdminStore } from './state/adminStore';
 
@@ -99,6 +100,7 @@ const App = () => {
             )}
             <ScrollToTop />
             <Toaster />
+            <InstallPrompt />
             <Routes>
                 {/* Routes wrapped with Navbar and Footer */}
                 <Route element={<MaintenanceGate />}>

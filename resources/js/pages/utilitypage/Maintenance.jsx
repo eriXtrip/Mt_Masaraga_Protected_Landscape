@@ -20,7 +20,7 @@ export default function Maintenance() {
     });
 
     return (
-        <main className="min-h-screen w-full bg-surface px-6 py-8 md:px-12 lg:px-16 font-sans flex flex-col justify-center items-center">
+        <main className="min-h-dvh w-full bg-surface px-6 py-8 md:px-12 lg:px-16 font-sans flex flex-col justify-center items-center">
 
             <div className="w-full max-w-3xl">
 

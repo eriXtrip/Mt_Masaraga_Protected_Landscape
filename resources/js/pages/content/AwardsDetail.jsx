@@ -13,7 +13,7 @@ export default function AwardDetails() {
     const data = AWARDS.find((award) => award.id === id);
 
     return (
-        <div className="min-h-screen bg-surface font-sans">
+        <div className="min-h-dvh bg-surface font-sans">
 
             {/* Top Back Action Header */}
             <header className="bg-surface">

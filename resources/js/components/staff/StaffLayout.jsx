@@ -36,7 +36,7 @@ export default function StaffLayout() {
     }, [sidebarOpen]);
 
     return (
-        <div className="min-h-screen bg-surface font-sans text-on-surface">
+        <div className="min-h-dvh bg-surface font-sans text-on-surface">
             <StaffSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
             <div className="lg:pl-76">
