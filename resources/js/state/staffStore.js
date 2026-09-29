@@ -3,10 +3,8 @@ import QRCode from '../../../public/images/QR_Code_Example.svg.webp';
 import {
     ADMIN_ANNOUNCEMENTS,
     ADMIN_BOOKINGS,
-    ADMIN_GUIDES,
     ADMIN_SCHEDULES,
     CHECKLIST_ITEMS,
-    DEFAULT_MESSAGES,
     MOCK_TRANSACTIONS,
     MOCK_USERS,
 } from '../mockData';
@@ -114,51 +112,8 @@ function createDocumentStatuses(bookings = []) {
     }, {});
 }
 
-function createChannels(schedules = [], bookings = [], staff = FALLBACK_STAFF, guides = []) {
-    const assignedSchedules = getAssignedSchedules(schedules, staff, guides);
+function createChannels() {
     const channels = {};
-
-    assignedSchedules.forEach((schedule) => {
-        const scheduleBookings = bookings.filter((booking) => booking.scheduleId === schedule.id);
-        const hikerMembers = scheduleBookings.flatMap((booking) => booking.hikers || []);
-        const channelId = `group-${schedule.id}`;
-        const defaultMessages = DEFAULT_MESSAGES.map((message, index) => ({
-            ...message,
-            id: `${channelId}-${message.id}`,
-            isSelf: false,
-            isAdmin: index !== 1,
-        }));
-
-        channels[channelId] = {
-            id: channelId,
-            type: 'group',
-            scheduleId: schedule.id,
-            title: `${schedule.trail} · ${schedule.date}`,
-            subtitle: `${schedule.booked} registered hikers · ${schedule.guide}`,
-            lastMessage: defaultMessages.at(-1)?.message || 'Group channel ready',
-            timestamp: defaultMessages.at(-1)?.timestamp || '08:18 AM',
-            unreadCount: 0,
-            messages: defaultMessages,
-            members: [
-                {
-                    id: staff.id,
-                    name: staff.name,
-                    avatar: getInitials(staff.name),
-                    role: staff.subtitle,
-                    isAdmin: true,
-                    isOnline: true,
-                },
-                ...hikerMembers.map((hiker, index) => ({
-                    id: `${channelId}-hiker-${index}`,
-                    name: hiker.fullName,
-                    avatar: getInitials(hiker.fullName),
-                    role: index === 0 ? 'Lead hiker' : 'Group member',
-                    isAdmin: false,
-                    isOnline: false,
-                })),
-            ],
-        };
-    });
 
     const announcements = ADMIN_ANNOUNCEMENTS
         .filter((announcement) => announcement.audience === 'all' || announcement.audience === 'staff')
@@ -210,7 +165,7 @@ function createSeedState() {
     return {
         checkIns,
         documentStatuses: createDocumentStatuses(bookings),
-        channels: createChannels(ADMIN_SCHEDULES, bookings, FALLBACK_STAFF, ADMIN_GUIDES),
+        channels: createChannels(),
         trailLogs: [],
         incidents: [],
     };

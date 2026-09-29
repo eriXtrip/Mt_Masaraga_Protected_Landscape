@@ -1,15 +1,11 @@
 import React, { useRef, useEffect } from 'react';
-import { Mountain, Users, MessageCircleQuestion } from 'lucide-react';
-import { Button } from "@/components/ui/button";
+import { Megaphone, MessageCircleQuestion } from 'lucide-react';
 import SendGCMessage from "../forms/SendGCMsgForm";
-import { DEFAULT_MESSAGES, DEFAULT_MEMBERS } from '../../mockData';
 
 export default function Conversation({
-    trailName = 'Masaraga Summit Trail',
-    subtitle = 'Climb Date: Oct 24, 2026',
-    messages = DEFAULT_MESSAGES,
-    membersCount = DEFAULT_MEMBERS.length,
-    onToggleMembers,
+    title = 'Park announcements',
+    subtitle = 'Updates for staff and assigned groups',
+    messages = [],
     onSendMessage,
 }) {
     const scrollRef = useRef(null);
@@ -25,38 +21,20 @@ export default function Conversation({
 
             {/* 1. Header: Channel Name & Meta */}
             <header className="bg-surface-container-low border-b border-outline-variant/30 px-4 md:px-6 py-4 flex items-center justify-between shrink-0 z-10">
-                <div className="flex items-center gap-2.5 md:gap-3.5">
+                <div className="flex items-center gap-2.5 md:gap-3.5 min-w-0">
                     <div className="h-10 w-10 md:h-11 md:w-11 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
-                        <Mountain className="h-6 w-6" />
+                        <Megaphone className="h-6 w-6" />
                     </div>
-                    <div>
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Group Chat</p>
-                        <h1 className="text-base font-bold text-on-surface leading-tight mt-0.5">
-                            {trailName}
+                    <div className="min-w-0">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Announcement</p>
+                        <h1 className="text-base font-bold text-on-surface leading-tight mt-0.5 truncate">
+                            {title}
                         </h1>
-                        <p className="text-xs font-medium text-on-surface-variant flex items-center gap-1.5 mt-0.5">
-                            <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                        <p className="text-xs font-medium text-on-surface-variant flex items-center gap-1.5 mt-0.5 truncate">
+                            <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
                             {subtitle}
                         </p>
                     </div>
-                </div>
-
-                {/* Action Controls */}
-                <div className="flex items-center gap-2">
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={onToggleMembers}
-                        className="rounded-full gap-1.5 text-on-surface-variant hover:text-on-surface cursor-pointer"
-                        title="Group Members"
-                    >
-                        <Users className="h-4 w-4" />
-                        <span className="hidden sm:inline text-xs font-semibold">Members</span>
-                        <span className="h-5 min-w-5 px-1 inline-flex items-center justify-center rounded-full bg-primary/10 text-primary text-[10px] font-bold">
-                            {membersCount}
-                        </span>
-                    </Button>
                 </div>
             </header>
 
@@ -107,9 +85,9 @@ export default function Conversation({
                         <span className="h-12 w-12 rounded-2xl bg-surface-container-high text-on-surface-variant flex items-center justify-center">
                             <MessageCircleQuestion className="h-6 w-6" />
                         </span>
-                        <p className="text-sm font-semibold text-on-surface">No messages yet</p>
+                        <p className="text-sm font-semibold text-on-surface">No announcements yet</p>
                         <p className="text-xs text-on-surface-variant max-w-xs">
-                            Start the conversation with your trail companions.
+                            Notices from the park management office will appear here.
                         </p>
                     </div>
                 )}
@@ -118,7 +96,7 @@ export default function Conversation({
             {/* 3. Docked Input Form inside Container Footer */}
             <footer className="shrink-0 bg-surface-container-low border-t border-outline-variant/30 p-3 md:p-4">
                 <SendGCMessage
-                    trailName={trailName}
+                    trailName={title}
                     onSendMessage={onSendMessage}
                 />
             </footer>

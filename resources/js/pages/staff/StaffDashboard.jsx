@@ -136,7 +136,7 @@ export default function StaffDashboard() {
                 </StaffPageHeader>
             </div>
 
-            <section style={{ transitionDelay: '150ms' }} aria-label="Staff key figures" className={`grid grid-cols-1 gap-3 transition-all duration-700 ease-out sm:grid-cols-2 xl:grid-cols-4 ${isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}>
+            <section style={{ transitionDelay: '150ms' }} aria-label="Staff key figures" className={`grid grid-cols-2 gap-3 transition-all duration-700 ease-out sm:grid-cols-2 xl:grid-cols-4 ${isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}>
                 {metrics.map((metric) => <StaffMetricCard key={metric.label} {...metric} />)}
             </section>
 
@@ -225,7 +225,7 @@ export default function StaffDashboard() {
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">
                     {[
                         { to: '/staff/bookings', label: 'Review permit applications', detail: 'Approve or reject submitted groups.', icon: ClipboardCheck },
-                        { to: '/staff/messages', label: 'Message assigned groups', detail: 'Share jump-off updates and safety notes.', icon: MessageSquare },
+                        { to: '/staff/messages', label: 'Read park announcements', detail: 'Check trail conditions and safety notices.', icon: MessageSquare },
                         { to: '/staff/reports', label: 'Record a field report', detail: 'Log a trail observation or incident.', icon: CloudLightning },
                     ].map((action) => {
                         const Icon = action.icon;

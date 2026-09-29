@@ -182,7 +182,7 @@ export const EXPERIENCES = [
 export const TRAILS = {
     amtic: {
         id: 'amtic',
-        name: 'Amtic Trail (or Sabluyon Trail)',
+        name: 'Sabluyon Trail',
         difficulty: 'Major Climb',
         difficultyClass: 'bg-primary-container text-on-primary-container',
         trailClass: 'Class 3 - Technical Scramble',
@@ -500,7 +500,7 @@ export const MOCK_TRANSACTIONS = [
         transactionId: 'TXN-2026-1024',
         dateBooked: 'Oct 20, 2026',
         hikeDate: 'Oct 24, 2026',
-        trail: 'Masaraga Summit Trail',
+        trail: 'Balogo Trail',
         participantCount: 2,
         status: 'Confirmed',
         totalPaid: '₱1,850.00',
@@ -512,7 +512,7 @@ export const MOCK_TRANSACTIONS = [
                 qrCodeUrl: QR,
                 status: 'Valid',
                 date: 'Oct 24, 2026',
-                trail: 'Masaraga Summit Trail',
+                trail: 'Balogo Trail',
                 guideHiker: 'Rodel Villanueva',
                 hikerName: 'Jane Doe',
             },
@@ -521,7 +521,7 @@ export const MOCK_TRANSACTIONS = [
                 qrCodeUrl: QR,
                 status: 'Valid',
                 date: 'Oct 24, 2026',
-                trail: 'Masaraga Summit Trail',
+                trail: 'Balogo Trail',
                 guideHiker: 'Rodel Villanueva',
                 hikerName: 'John Smith',
             },
@@ -541,7 +541,7 @@ export const MOCK_TRANSACTIONS = [
         transactionId: 'TXN-2026-0812',
         dateBooked: 'Aug 05, 2026',
         hikeDate: 'Aug 12, 2026',
-        trail: 'Ambot Trail',
+        trail: 'Sabluyon Trail',
         participantCount: 1,
         status: 'Completed',
         totalPaid: '₱650.00',
@@ -553,7 +553,7 @@ export const MOCK_TRANSACTIONS = [
                 qrCodeUrl: QR,
                 status: 'Used',
                 date: 'Aug 12, 2026',
-                trail: 'Ambot Trail',
+                trail: 'Sabluyon Trail',
                 guideHiker: 'Jose Reyes',
                 hikerName: 'Jane Doe',
             },
@@ -722,7 +722,7 @@ export const ABOUT_RESOURCES = [
 export const BOOKING_DETAILS = {
     amtic: {
         id: 'amtic',
-        selectedTrail: 'Amtic Trail (or Sabluyon Trail)',
+        selectedTrail: 'Sabluyon Trail',
         baseFeePerPax: 500.0,
         note: '*Total calculated on next step based on pax count.',
     },
@@ -734,81 +734,16 @@ export const BOOKING_DETAILS = {
     },
 };
 
-export const DEFAULT_MESSAGES = [
-    {
-        id: 1,
-        sender: 'Park Admin',
-        avatar: 'PA',
-        message: 'Welcome hikers! Please make sure to arrive at the jump-off point 30 minutes before your scheduled climb for the safety briefing.',
-        timestamp: '08:00 AM',
-        isAdmin: true,
-    },
-    {
-        id: 2,
-        sender: 'Jane Doe (Lead Hiker)',
-        avatar: 'JD',
-        message: 'Copy admin! Are we required to bring physical copies of our IDs?',
-        timestamp: '08:15 AM',
-        isAdmin: false,
-        isSelf: true,
-    },
-    {
-        id: 3,
-        sender: 'Park Admin',
-        avatar: 'PA',
-        message: 'Yes, Jane. Please present your digital ID.',
-        timestamp: '08:18 AM',
-        isAdmin: true,
-    }
-];
-
 export const DEFAULT_CONVERSATIONS = [
     {
-        id: 'admin-announcements',
+        id: 'park-announcements',
         type: 'admin',
-        title: 'Park Announcements',
-        subtitle: 'Official updates from Ecotourism Guest',
-        lastMessage: 'Reminder: wear face mask and observe Leave No Trace principles.',
+        title: 'Park announcements',
+        subtitle: 'Updates for staff and assigned groups',
+        lastMessage: 'Trail conditions and park notices from the management office.',
         timestamp: '9:30 AM',
-        unreadCount: 1,
-        icon: ShieldAlert,
-    },
-    {
-        id: 'hikers-gc',
-        type: 'gc',
-        title: 'GC Summit Trail Oct 24,2026',
-        subtitle: 'Discussion with trail companions',
-        lastMessage: 'Yes, Jane. Please present your digital ID.',
-        timestamp: '08:18 AM',
         unreadCount: 0,
-        icon: Users,
-    },
-];
-
-export const DEFAULT_MEMBERS = [
-    {
-        id: 'admin_1',
-        name: 'Park Admin',
-        avatar: 'PA',
-        role: 'Station Staff',
-        isAdmin: true,
-        isOnline: true,
-    },
-    {
-        id: 'hiker_1',
-        name: 'Jane Doe',
-        avatar: 'JD',
-        role: 'Lead Hiker',
-        isAdmin: false,
-        isOnline: true,
-    },
-    {
-        id: 'hiker_2',
-        name: 'John Smith',
-        avatar: 'JS',
-        role: 'Hiker',
-        isAdmin: false,
-        isOnline: false,
+        icon: ShieldAlert,
     },
 ];
 
@@ -897,7 +832,7 @@ export const PAYMENT_METHODS = [
 ];
 
 export const DEFAULT_BOOKING_SUMMARY = {
-    trail: 'Ambot Trail',
+    trail: 'Sabluyon Trail',
     date: 'Oct 24, 2024',
     participants: '4 Pax',
     breakdown: [
@@ -975,7 +910,7 @@ export const ADMIN_BOOKINGS = [
         reference: 'TXN-2026-0928',
         guideHiker: 'Rodel Villanueva',
         contact: 'r.villanueva@masaraga.gov.ph',
-        trail: 'Amtic Trail (or Sabluyon Trail)',
+        trail: 'Sabluyon Trail',
         date: 'Oct 24, 2026',
         participants: 2,
         totalPaid: 1850,
@@ -1025,7 +960,7 @@ export const ADMIN_BOOKINGS = [
         reference: 'TXN-2026-0930',
         guideHiker: 'Jose Reyes',
         contact: 'j.reyes@masaraga.gov.ph',
-        trail: 'Amtic Trail (or Sabluyon Trail)',
+        trail: 'Sabluyon Trail',
         date: 'Oct 25, 2026',
         participants: 5,
         totalPaid: 2000,
@@ -1173,7 +1108,7 @@ export const ADMIN_BOOKINGS = [
         reference: 'TXN-2026-1024',
         guideHiker: 'Paolo Cruz',
         contact: 'p.cruz@masaraga.gov.ph',
-        trail: 'Amtic Trail (or Sabluyon Trail)',
+        trail: 'Sabluyon Trail',
         date: 'Oct 30, 2026',
         participants: 2,
         totalPaid: 1850,
@@ -1262,7 +1197,7 @@ export const ADMIN_BOOKINGS = [
 export const ADMIN_DAILY_QUOTA = [
     {
         trailId: 'amtic',
-        trail: 'Amtic Trail (or Sabluyon Trail)',
+        trail: 'Sabluyon Trail',
         date: 'Oct 24, 2026',
         booked: 44,
         capacity: 50,
@@ -1286,7 +1221,7 @@ export const ADMIN_SCHEDULES = [
     {
         id: 'sch-amtic-2026-10-05',
         trailId: 'amtic',
-        trail: 'Amtic Trail (or Sabluyon Trail)',
+        trail: 'Sabluyon Trail',
         date: 'Oct 05, 2026',
         dateKey: '2026-10-05',
         capacity: 20,
@@ -1297,7 +1232,7 @@ export const ADMIN_SCHEDULES = [
     {
         id: 'sch-amtic-2026-10-06',
         trailId: 'amtic',
-        trail: 'Amtic Trail (or Sabluyon Trail)',
+        trail: 'Sabluyon Trail',
         date: 'Oct 06, 2026',
         dateKey: '2026-10-06',
         capacity: 20,
@@ -1308,7 +1243,7 @@ export const ADMIN_SCHEDULES = [
     {
         id: 'sch-amtic-2026-10-07',
         trailId: 'amtic',
-        trail: 'Amtic Trail (or Sabluyon Trail)',
+        trail: 'Sabluyon Trail',
         date: 'Oct 07, 2026',
         dateKey: '2026-10-07',
         capacity: 20,
@@ -1319,7 +1254,7 @@ export const ADMIN_SCHEDULES = [
     {
         id: 'sch-amtic-2026-10-08',
         trailId: 'amtic',
-        trail: 'Amtic Trail (or Sabluyon Trail)',
+        trail: 'Sabluyon Trail',
         date: 'Oct 08, 2026',
         dateKey: '2026-10-08',
         capacity: 20,
@@ -1330,7 +1265,7 @@ export const ADMIN_SCHEDULES = [
     {
         id: 'sch-amtic-2026-10-09',
         trailId: 'amtic',
-        trail: 'Amtic Trail (or Sabluyon Trail)',
+        trail: 'Sabluyon Trail',
         date: 'Oct 09, 2026',
         dateKey: '2026-10-09',
         capacity: 20,
@@ -1341,7 +1276,7 @@ export const ADMIN_SCHEDULES = [
     {
         id: 'sch-amtic-2026-10-10',
         trailId: 'amtic',
-        trail: 'Amtic Trail (or Sabluyon Trail)',
+        trail: 'Sabluyon Trail',
         date: 'Oct 10, 2026',
         dateKey: '2026-10-10',
         capacity: 20,
@@ -1352,7 +1287,7 @@ export const ADMIN_SCHEDULES = [
     {
         id: 'sch-amtic-2026-10-24',
         trailId: 'amtic',
-        trail: 'Amtic Trail (or Sabluyon Trail)',
+        trail: 'Sabluyon Trail',
         date: 'Oct 24, 2026',
         dateKey: '2026-10-24',
         capacity: 50,

@@ -5,7 +5,7 @@ import { DEFAULT_CONVERSATIONS } from '../../mockData';
 
 export default function ConversationList({
     conversations = DEFAULT_CONVERSATIONS,
-    activeId = 'hikers-gc',
+    activeId = 'park-announcements',
     onSelectConversation,
 }) {
     return (
@@ -75,7 +75,7 @@ export default function ConversationList({
                     })
                 ) : (
                     <p className="text-center text-xs text-on-surface-variant py-8">
-                        You are not part of any group chat yet.
+                        No announcements to show right now.
                     </p>
                 )}
             </div>

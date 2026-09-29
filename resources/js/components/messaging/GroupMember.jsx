@@ -2,11 +2,8 @@ import React from 'react';
 import { ShieldCheck, Users, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
-// Mock data based on the DEFAULT_MESSAGES senders
-import { DEFAULT_MEMBERS } from '../../mockData';
-
 export default function GroupMember({
-    members = DEFAULT_MEMBERS,
+    members = [],
     onClose,
 }) {
     return (
@@ -24,7 +21,7 @@ export default function GroupMember({
                             Group Members
                         </h2>
                         <p className="text-xs font-medium text-on-surface-variant mt-0.5">
-                            {members.length} in this climb
+                            {members.length} in this group
                         </p>
                     </div>
                 </div>

@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { MessageSquare, ShieldAlert, UsersRound, X } from 'lucide-react';
+import { MessageSquare, ShieldAlert, ArrowLeft } from 'lucide-react';
 import { useInView } from '@/hooks/useInView';
 import Conversation from '../../components/messaging/Conversation';
 import ConversationList from '../../components/messaging/ConversationList';
-import GroupMember from '../../components/messaging/GroupMember';
 import { toast } from '../../components/ui/toast';
 import { markChannelRead, sendMessage, useStaffStore } from '../../state/staffStore';
 import StaffEmptyState from '../../components/staff/StaffEmptyState';
@@ -12,92 +10,127 @@ import StaffPageHeader from '../../components/staff/StaffPageHeader';
 
 const CHANNEL_ICONS = {
     admin: ShieldAlert,
-    group: UsersRound,
 };
 
 export default function StaffMessages() {
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const { channels } = useStaffStore();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const channelList = useMemo(() => Object.values(channels).map((channel) => ({ ...channel, icon: CHANNEL_ICONS[channel.type] || MessageSquare })), [channels]);
-    const requestedGroup = searchParams.get('group');
-    const initialChannelId = requestedGroup && channels[`group-${requestedGroup}`] ? `group-${requestedGroup}` : channelList[0]?.id;
-    const [activeChannelId, setActiveChannelId] = useState(initialChannelId);
-    const [showMembers, setShowMembers] = useState(false);
 
+    // Track selected channel ID
+    const [selectedChannelId, setSelectedChannelId] = useState(null);
+    // Track mobile view state (whether viewing the active channel detail or the channel list)
+    const [showMobileChat, setShowMobileChat] = useState(false);
+
+    const channelList = useMemo(() => {
+        return Object.values(channels).map((channel) => ({
+            ...channel,
+            icon: CHANNEL_ICONS[channel.type] || MessageSquare,
+        }));
+    }, [channels]);
+
+    // Set default active channel if none is selected yet
     useEffect(() => {
-        if (requestedGroup && channels[`group-${requestedGroup}`]) {
-            setActiveChannelId(`group-${requestedGroup}`);
+        if (channelList.length > 0 && !selectedChannelId) {
+            setSelectedChannelId(channelList[0].id);
         }
-    }, [channels, requestedGroup]);
+    }, [channelList, selectedChannelId]);
 
     useEffect(() => {
-        if (!showMembers) return undefined;
+        Object.keys(channels).forEach(markChannelRead);
+    }, [channels]);
 
-        const handleKeyDown = (event) => {
-            if (event.key === 'Escape') setShowMembers(false);
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [showMembers]);
-
-    const activeChannel = channels[activeChannelId] || channelList[0];
+    const activeChannel = useMemo(() => {
+        return channelList.find((c) => c.id === selectedChannelId) || channelList[0];
+    }, [channelList, selectedChannelId]);
 
     const handleSelect = (channel) => {
-        setActiveChannelId(channel.id);
-        setSearchParams(channel.type === 'group' ? { group: channel.scheduleId } : {});
+        setSelectedChannelId(channel.id);
         markChannelRead(channel.id);
-        setShowMembers(false);
+        setShowMobileChat(true); // Switch to conversation view on mobile selection
     };
 
     const handleSend = (message) => {
         if (!activeChannel) return;
         const sent = sendMessage(activeChannel.id, message);
-        if (sent) toast.add({ type: 'success', title: 'Message sent', description: `Your message was added to ${activeChannel.title}.` });
+        if (sent) {
+            toast.add({
+                type: 'success',
+                title: 'Message sent',
+                description: `Your message was added to ${activeChannel.title}.`,
+            });
+        }
     };
 
     return (
-        <div ref={sectionRef} className="space-y-6 md:space-y-8">
-            <div style={{ transitionDelay: '0ms' }} className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}>
+        <div ref={sectionRef} className="space-y-4 md:space-y-6">
+            <div
+                style={{ transitionDelay: '0ms' }}
+                className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+                    }`}
+            >
                 <StaffPageHeader
                     eyebrow="Park staff · Group coordination"
                     title="Messages"
-                    description="Keep assigned groups informed about jump-off details and keep park announcements in a shared operational channel."
-                >
-                    <Link to="/staff/schedules" className="inline-flex min-h-11 items-center justify-center rounded-lg border border-outline-variant px-4 text-sm font-semibold text-on-surface hover:bg-surface-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">View schedules</Link>
-                </StaffPageHeader>
+                    description="One shared channel for park announcements about trail conditions, safety, and jump-off logistics."
+                />
             </div>
 
-            <div style={{ transitionDelay: '150ms' }} className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}>
+            <div
+                style={{ transitionDelay: '150ms' }}
+                className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
+                    }`}
+            >
                 {activeChannel ? (
-                <div className="grid gap-6 lg:grid-cols-[minmax(260px,0.62fr)_minmax(0,1.38fr)]">
-                    <ConversationList conversations={channelList} activeId={activeChannel.id} onSelectConversation={handleSelect} />
-                    <div className="min-w-0">
-                        <Conversation
-                            trailName={activeChannel.title}
-                            subtitle={activeChannel.subtitle}
-                            messages={activeChannel.messages}
-                            membersCount={activeChannel.members.length}
-                            onToggleMembers={() => setShowMembers((current) => !current)}
-                            onSendMessage={handleSend}
-                        />
+                    <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr] gap-4 md:gap-6 min-h-125 h-[calc(100vh-220px)] max-h-[800px]">
+
+                        {/* Conversation List Sidebar */}
+                        <div
+                            className={`w-full h-full overflow-y-auto ${showMobileChat ? 'hidden md:block' : 'block'
+                                }`}
+                        >
+                            <ConversationList
+                                conversations={channelList}
+                                activeId={activeChannel.id}
+                                onSelectConversation={handleSelect}
+                            />
+                        </div>
+
+                        {/* Active Conversation Container */}
+                        <div
+                            className={`min-w-0 h-full flex flex-col ${showMobileChat ? 'flex' : 'hidden md:flex'
+                                }`}
+                        >
+                            {/* Mobile Back Button Header */}
+                            <div className="md:hidden pb-3 border-b border-gray-200 dark:border-gray-800 mb-3 flex items-center">
+                                <button
+                                    onClick={() => setShowMobileChat(false)}
+                                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
+                                >
+                                    <ArrowLeft className="w-4 h-4" />
+                                    <span>Back to channels</span>
+                                </button>
+                            </div>
+
+                            {/* Conversation View */}
+                            <div className="flex-1 min-h-0">
+                                <Conversation
+                                    title={activeChannel.title}
+                                    subtitle={activeChannel.subtitle}
+                                    messages={activeChannel.messages}
+                                    onSendMessage={handleSend}
+                                />
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-            ) : (
-                <StaffEmptyState icon={MessageSquare} title="No staff conversations yet" description="Assigned group channels will appear here when a schedule is linked to your duty." />
+                ) : (
+                    <StaffEmptyState
+                        icon={MessageSquare}
+                        title="No announcements yet"
+                        description="Park notices will appear here once the management office posts them."
+                    />
                 )}
             </div>
-
-            {showMembers && activeChannel && (
-                <div className="fixed inset-0 z-50 flex items-end justify-center bg-inverse-surface/50 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:items-center lg:static lg:mt-6 lg:bg-transparent lg:p-0">
-                    <div className="relative w-full max-w-sm">
-                        <button type="button" onClick={() => setShowMembers(false)} aria-label="Close group members" className="absolute right-3 top-3 z-10 flex h-11 w-11 items-center justify-center rounded-lg bg-surface-container-lowest/90 text-on-surface-variant hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                            <X className="h-5 w-5" />
-                        </button>
-                        <GroupMember members={activeChannel.members} onClose={() => setShowMembers(false)} />
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
