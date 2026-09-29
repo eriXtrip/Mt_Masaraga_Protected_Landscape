@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { LogOut, ShieldCheck } from 'lucide-react';
 import { STAFF_NAV_GROUPS } from '../../staff/navConfig';
 import { getStaffUser } from '../../state/staffStore';
+import { signOutCurrentUser } from '@/lib/auth';
 
 const STAFF_USER = getStaffUser();
 
@@ -50,8 +51,7 @@ export default function StaffSidebar({ open, onClose }) {
     }, []);
 
     const handleLogout = () => {
-        window.localStorage.removeItem('currentUser');
-        window.location.assign('/');
+        signOutCurrentUser();
     };
 
     return (

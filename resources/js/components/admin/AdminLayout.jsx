@@ -1,16 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Menu, ExternalLink } from 'lucide-react';
 import AdminSidebar from './AdminSidebar';
 import { ADMIN_SECTIONS } from '../../admin/navConfig';
 import { Button } from '@/components/ui/button';
+import IdleTimeoutDialog from '@/components/common/IdleTimeoutDialog';
+import { useIdleTimeout } from '@/hooks/useIdleTimeout';
+import { signOutCurrentUser } from '@/lib/auth';
 
 export default function AdminLayout() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const menuButtonRef = useRef(null);
     const { pathname } = useLocation();
 
+    const handleSignOut = useCallback(() => {
+        signOutCurrentUser({ redirectTo: '/login' });
+    }, []);
+
+    const { isWarningOpen, secondsLeft, totalSeconds, continueSession } = useIdleTimeout({ onTimeout: handleSignOut });
+
     const section = ADMIN_SECTIONS[pathname];
+    const titleText = section?.title ?? 'Admin';
+
     const todayLabel = new Intl.DateTimeFormat('en-PH', {
         weekday: 'short',
         month: 'short',
@@ -39,6 +50,20 @@ export default function AdminLayout() {
 
     return (
         <div className="min-h-dvh bg-surface font-sans text-on-surface">
+            {/* Inject keyframes directly inline so no external CSS configuration is needed */}
+            <style>{`
+                @keyframes charIn {
+                    0% {
+                        opacity: 0;
+                        transform: translateY(6px) scale(0.95);
+                    }
+                    100% {
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
+                }
+            `}</style>
+
             <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
             <div className="lg:pl-76">
@@ -59,8 +84,19 @@ export default function AdminLayout() {
                             <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
                                 Admin Console
                             </p>
-                            <h1 className="truncate text-base font-bold tracking-tight text-on-surface md:text-lg">
-                                {section?.title ?? 'Admin'}
+                            <h1 className="truncate text-base font-bold tracking-tight text-on-surface md:text-lg inline-flex overflow-hidden">
+                                {Array.from(titleText).map((char, index) => (
+                                    <span
+                                        key={`${titleText}-${index}`}
+                                        className="inline-block opacity-0"
+                                        style={{
+                                            animation: 'charIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                                            animationDelay: `${index * 35}ms`,
+                                        }}
+                                    >
+                                        {char === ' ' ? '\u00A0' : char}
+                                    </span>
+                                ))}
                             </h1>
                         </div>
                     </div>
@@ -72,6 +108,7 @@ export default function AdminLayout() {
                         <a
                             href="/"
                             target="_blank"
+                            rel="noreferrer"
                             className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                         >
                             <ExternalLink className="h-3.5 w-3.5" />
@@ -84,6 +121,15 @@ export default function AdminLayout() {
                     <Outlet />
                 </main>
             </div>
+
+            <IdleTimeoutDialog
+                isOpen={isWarningOpen}
+                secondsLeft={secondsLeft}
+                totalSeconds={totalSeconds}
+                consoleLabel="the admin console"
+                onContinue={continueSession}
+                onSignOut={handleSignOut}
+            />
         </div>
     );
 }

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Check, ClipboardCheck, FileCheck2, ImageUp, ScanLine, Search, Undo2, UsersRound, X } from 'lucide-react';
 import { useInView } from '@/hooks/useInView';
+import { useDrawerTransition } from '@/hooks/useDrawerTransition';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import HikerTicketPass from '../../components/features/HikerTicketPass';
@@ -22,6 +23,8 @@ const formatCheckInTime = (value) => {
     if (!value) return '';
     return new Intl.DateTimeFormat('en-PH', { hour: 'numeric', minute: '2-digit' }).format(new Date(value));
 };
+
+const DEFAULT_PASS_DELAY_MS = 10 * 1000;
 
 const getCameraErrorMessage = (error) => {
     if (error?.name === 'NotAllowedError' || error?.name === 'PermissionDeniedError') {
@@ -161,6 +164,8 @@ export default function StaffVerify() {
     const scannerUploadInputRef = useRef(null);
     const passesRef = useRef(passes);
     passesRef.current = passes;
+    const selectedPassIdRef = useRef(selectedPassId);
+    selectedPassIdRef.current = selectedPassId;
 
     useEffect(() => {
         const bookingId = searchParams.get('booking');
@@ -177,6 +182,9 @@ export default function StaffVerify() {
     const documents = selectedBooking ? getBookingDocuments(selectedBooking, documentStatuses) : [];
     const completeDocuments = documents.filter((document) => document.status === 'Complete').length;
     const selectedCheckIn = selectedPass ? checkIns[selectedPass.id] : null;
+    const scannerStatusMessage = scannerStatus === 'starting'
+        ? 'Starting camera...'
+        : scannerNotice || 'Align the QR code inside the frame.';
 
     const passResults = useMemo(() => {
         const term = searchTerm.trim().toLowerCase();
@@ -217,6 +225,13 @@ export default function StaffVerify() {
         }
     }, [stopCamera]);
 
+    const { closing: isScannerClosing, requestClose: requestScannerClose, handleAnimationEnd: handleScannerAnimationEnd } = useDrawerTransition(closeScanner, 200);
+
+    const dismissScanner = useCallback(() => {
+        stopCamera();
+        requestScannerClose();
+    }, [requestScannerClose, stopCamera]);
+
     const openScanner = useCallback(() => {
         setScannerError('');
         setScannerNotice('');
@@ -238,8 +253,8 @@ export default function StaffVerify() {
 
         selectPass(scannedPass);
         toast.add({ type: 'success', title: 'Pass scanned', description: `${scannedPass.hikerName} is ready for jump-off verification.` });
-        closeScanner();
-    }, [closeScanner, selectPass]);
+        dismissScanner();
+    }, [dismissScanner, selectPass]);
 
     const handleUploadChange = useCallback(async (event) => {
         const file = event.target.files?.[0];
@@ -357,12 +372,33 @@ export default function StaffVerify() {
         if (!isScannerOpen) return undefined;
 
         const handleKeyDown = (event) => {
-            if (event.key === 'Escape') closeScanner();
+            if (event.key === 'Escape') dismissScanner();
         };
         window.addEventListener('keydown', handleKeyDown);
         scannerCloseButtonRef.current?.focus();
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [closeScanner, isScannerOpen]);
+    }, [dismissScanner, isScannerOpen]);
+
+    // A kiosk tablet often has no usable camera, so after 10s with no accepted scan the
+    // first assigned pass is shown, named in a toast, and the scanner closes itself.
+    useEffect(() => {
+        if (!isScannerOpen || isScannerClosing) return undefined;
+
+        const timerId = window.setTimeout(() => {
+            const fallbackPass = passesRef.current[0];
+
+            if (fallbackPass && fallbackPass.id !== selectedPassIdRef.current) {
+                selectPass(fallbackPass);
+                toast.add({ type: 'warning', title: 'No QR code scanned', description: `Closed after 10s. Showing ${fallbackPass.hikerName}, the first pass in your duty.` });
+            } else {
+                toast.add({ type: 'warning', title: 'No QR code scanned', description: 'The scanner closed after 10s. Scan again or look the pass up by ID.' });
+            }
+
+            dismissScanner();
+        }, DEFAULT_PASS_DELAY_MS);
+
+        return () => window.clearTimeout(timerId);
+    }, [dismissScanner, isScannerClosing, isScannerOpen, selectPass]);
 
     const handleLookup = (event) => {
         event.preventDefault();
@@ -395,6 +431,26 @@ export default function StaffVerify() {
 
     return (
         <>
+            {/* Keyframes live inline so the scanner sweep needs no external CSS configuration */}
+            <style>{`
+                @keyframes scanSweep {
+                    0% {
+                        top: 0%;
+                        opacity: 0;
+                    }
+                    12% {
+                        opacity: 1;
+                    }
+                    88% {
+                        opacity: 1;
+                    }
+                    100% {
+                        top: 100%;
+                        opacity: 0;
+                    }
+                }
+            `}</style>
+
             <div ref={sectionRef} className="space-y-6 md:space-y-8">
                 <div style={{ transitionDelay: '0ms' }} className={`transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}`}>
                     <StaffPageHeader
@@ -522,21 +578,30 @@ export default function StaffVerify() {
             </div>
 
             {isScannerOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/60 p-4" onClick={(event) => { if (event.target === event.currentTarget) closeScanner(); }}>
-                    <div role="dialog" aria-modal="true" aria-labelledby="staff-qr-scanner-heading" className="w-full max-w-md overflow-hidden rounded-2xl border border-outline-variant/40 bg-surface-container-lowest shadow-xl">
+                <div
+                    className={`fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/60 p-4 ${isScannerClosing ? 'animate-out fade-out duration-200' : 'animate-in fade-in duration-200'} motion-reduce:animate-none`}
+                    onClick={(event) => { if (event.target === event.currentTarget) dismissScanner(); }}
+                >
+                    <div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="staff-qr-scanner-heading"
+                        onAnimationEnd={isScannerClosing ? handleScannerAnimationEnd : undefined}
+                        className={`w-full max-w-md overflow-hidden rounded-2xl border border-outline-variant/40 bg-surface-container-lowest shadow-xl ${isScannerClosing ? 'animate-out fade-out zoom-out-95 duration-200' : 'animate-in fade-in zoom-in-95 duration-200'} motion-reduce:animate-none`}
+                    >
                         <div className="flex items-start justify-between gap-4 border-b border-outline-variant/20 px-5 py-4">
                             <div>
                                 <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Pass scanner</p>
                                 <h2 id="staff-qr-scanner-heading" className="mt-1 text-lg font-bold text-on-surface">Scan physical pass</h2>
                                 <p className="mt-1 text-xs text-on-surface-variant">Point the camera at the QR code, or upload a photo of the hiker pass.</p>
                             </div>
-                            <button ref={scannerCloseButtonRef} type="button" onClick={closeScanner} aria-label="Close QR scanner" className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                            <button ref={scannerCloseButtonRef} type="button" onClick={dismissScanner} aria-label="Close QR scanner" className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                                 <X className="h-5 w-5" />
                             </button>
                         </div>
                         <div className="p-4">
                             {scannerError ? (
-                                <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+                                <div role="alert" className="animate-in fade-in duration-200 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
                                     <p className="font-semibold">Camera unavailable</p>
                                     <p className="mt-1">{scannerError}</p>
                                     <p className="mt-3 text-xs">You can still upload a photo of the pass or enter the pass ID in the lookup field.</p>
@@ -546,8 +611,13 @@ export default function StaffVerify() {
                                     <div className="relative aspect-square overflow-hidden rounded-xl bg-black">
                                         <video ref={scannerVideoRef} autoPlay muted playsInline className="h-full w-full object-cover" aria-label="Live QR scanner camera feed" />
                                         <div className="pointer-events-none absolute inset-8 rounded-xl border-2 border-white/90" />
+                                        <div className="pointer-events-none absolute inset-8 overflow-hidden rounded-xl">
+                                            {scannerStatus === 'scanning' && !isScannerClosing && (
+                                                <div className="absolute inset-x-0 top-0 h-0.5 bg-white/85 motion-reduce:hidden" style={{ animation: 'scanSweep 2.4s ease-in-out infinite' }} />
+                                            )}
+                                        </div>
                                         <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-black/60 px-3 py-2 text-center text-xs text-white" aria-live="polite">
-                                            {scannerStatus === 'starting' ? 'Starting camera...' : scannerNotice || 'Align the QR code inside the frame.'}
+                                            <span key={scannerStatusMessage} className="inline-block animate-in fade-in duration-200 motion-reduce:animate-none">{scannerStatusMessage}</span>
                                         </div>
                                     </div>
                                     <p className="mt-3 text-xs leading-relaxed text-on-surface-variant">Camera frames are decoded on this device. Close the scanner when you are done.</p>

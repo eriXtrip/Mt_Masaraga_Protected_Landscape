@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { LogOut, ShieldCheck, ExternalLink } from 'lucide-react';
 import { ADMIN_NAV_GROUPS } from '../../admin/navConfig';
 import { MOCK_USERS } from '../../mockData';
+import { signOutCurrentUser } from '@/lib/auth';
 
 const ADMIN_USER = MOCK_USERS.find((user) => user.role === 1) || MOCK_USERS[0];
 
@@ -18,6 +19,10 @@ export default function AdminSidebar({ open, onClose }) {
     const [entered, setEntered] = useState(false);
     const closeTimerRef = useRef(null);
     const prevOpenRef = useRef(open);
+
+    const handleLogout = () => {
+        signOutCurrentUser();
+    };
 
     // Slide the sidebar in once this page is reached (after navigating to admin).
     useEffect(() => {
@@ -147,9 +152,7 @@ export default function AdminSidebar({ open, onClose }) {
                         <button
                             type="button"
                             aria-label="Log out of admin console"
-                            onClick={() => {
-                                window.location.assign('/');
-                            }}
+                            onClick={handleLogout}
                             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-on-secondary/70 transition-colors hover:bg-white/10 hover:text-on-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer"
                         >
                             <LogOut className="h-4 w-4" />

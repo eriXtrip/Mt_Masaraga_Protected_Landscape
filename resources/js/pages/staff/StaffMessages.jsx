@@ -81,7 +81,7 @@ export default function StaffMessages() {
                     }`}
             >
                 {activeChannel ? (
-                    <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr] gap-4 md:gap-6 min-h-125 h-[calc(100vh-220px)] max-h-[800px]">
+                    <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr] gap-4 md:gap-6 min-h-125 h-[calc(100vh-220px)] max-h-200">
 
                         {/* Conversation List Sidebar */}
                         <div

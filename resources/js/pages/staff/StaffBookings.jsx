@@ -24,7 +24,7 @@ export default function StaffBookings() {
     const filteredBookings = useMemo(() => {
         const term = searchTerm.trim().toLowerCase();
         return assignedBookings.filter((booking) => {
-            const matchesSearch = !term || [booking.leadHiker, booking.reference, booking.trail, ...(booking.hikers || []).map((hiker) => hiker.fullName)].some((value) => value?.toLowerCase().includes(term));
+            const matchesSearch = !term || [booking.guideHiker, booking.reference, booking.trail, ...(booking.hikers || []).map((hiker) => hiker.fullName)].some((value) => value?.toLowerCase().includes(term));
             const matchesStatus = statusFilter === 'All' || booking.status === statusFilter;
             return matchesSearch && matchesStatus;
         });
@@ -97,10 +97,10 @@ export default function StaffBookings() {
                                     const completeDocuments = documents.filter((document) => document.status === 'Complete').length;
                                     return (
                                         <button key={booking.id} type="button" onClick={() => selectBooking(booking)} className="flex min-h-11 w-full flex-col gap-4 border-b border-outline-variant/20 p-4 text-left transition-colors last:border-b-0 hover:bg-surface-container-low focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary md:flex-row md:items-center md:px-5">
-                                            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">{booking.leadHiker.split(' ').map((part) => part[0]).slice(0, 2).join('')}</span>
+                                            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">{booking.guideHiker.split(' ').map((part) => part[0]).slice(0, 2).join('')}</span>
                                             <span className="min-w-0 flex-1">
                                                 <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                                                    <span className="truncate text-sm font-bold text-on-surface">{booking.leadHiker}</span>
+                                                    <span className="truncate text-sm font-bold text-on-surface">{booking.guideHiker}</span>
                                                     <span className="text-xs text-on-surface-variant">{booking.reference}</span>
                                                 </span>
                                                 <span className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-on-surface-variant">

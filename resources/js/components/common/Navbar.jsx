@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
     ChevronDown,
     LogOut,
@@ -82,27 +82,35 @@ export default function Navbar() {
     const [open, setOpen] = useState(false);
     const [userDropdownOpen, setUserDropdownOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const { pathname } = useLocation();
 
-    // Authentication State using imported MOCK_USERS
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
-    const [currentUserIndex, setCurrentUserIndex] = useState(0);
+    // Only a stored session logs someone in; there is no default account.
+    const [currentUser, setCurrentUser] = useState(null);
+    const isLoggedIn = Boolean(currentUser);
 
     useEffect(() => {
-        const stored = localStorage.getItem('currentUser');
-        if (stored) {
-            const user = JSON.parse(stored);
-            const index = MOCK_USERS.findIndex((u) => u.id === user.id);
-            if (index !== -1) {
-                setIsLoggedIn(true);
-                setCurrentUserIndex(index);
-            }
-        }
-    }, []);
+        const readStoredUser = () => {
+            try {
+                const stored = window.localStorage.getItem('currentUser');
+                if (!stored) {
+                    setCurrentUser(null);
+                    return;
+                }
 
-    // Current active user from array
-    const currentUser = MOCK_USERS[currentUserIndex] || MOCK_USERS[0];
-    const accountLinks = getAccountLinks(currentUser.role);
-    const accountLabel = getAccountLabel(currentUser.role);
+                const parsedUser = JSON.parse(stored);
+                setCurrentUser(MOCK_USERS.find((user) => user.id === parsedUser?.id) || null);
+            } catch {
+                setCurrentUser(null);
+            }
+        };
+
+        readStoredUser();
+        window.addEventListener('storage', readStoredUser);
+        return () => window.removeEventListener('storage', readStoredUser);
+    }, [pathname]);
+
+    const accountLinks = isLoggedIn ? getAccountLinks(currentUser.role) : [];
+    const accountLabel = isLoggedIn ? getAccountLabel(currentUser.role) : '';
 
     // Helper to extract initials (e.g., "Juan Dela Cruz" -> "JD")
     const getInitials = (name) => {
@@ -139,7 +147,7 @@ export default function Navbar() {
     };
 
     const handleLogout = () => {
-        setIsLoggedIn(false);
+        setCurrentUser(null);
         localStorage.removeItem('currentUser');
         closeAll();
         navigate('/');
