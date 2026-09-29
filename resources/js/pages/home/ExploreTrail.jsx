@@ -8,7 +8,6 @@ export default function ExploreTrail() {
 
     return (
         <section
-            id="trails"
             ref={sectionRef}
             className="bg-surface px-6 py-6 md:px-12 md:py-12 overflow-hidden"
         >
@@ -16,8 +15,8 @@ export default function ExploreTrail() {
                 {/* Header Section */}
                 <div
                     className={`mb-10 text-left transition-all duration-700 ease-out ${isInView
-                            ? 'opacity-100 translate-y-0'
-                            : 'opacity-0 translate-y-8'
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 translate-y-8'
                         }`}
                 >
                     <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-on-surface md:text-4xl">
@@ -35,8 +34,8 @@ export default function ExploreTrail() {
                             key={trail.id}
                             style={{ transitionDelay: `${200 + index * 150}ms` }}
                             className={`transition-all duration-700 ease-out ${isInView
-                                    ? 'opacity-100 translate-y-0'
-                                    : 'opacity-0 translate-y-10'
+                                ? 'opacity-100 translate-y-0'
+                                : 'opacity-0 translate-y-10'
                                 }`}
                         >
                             <TrailCard trail={trail} />

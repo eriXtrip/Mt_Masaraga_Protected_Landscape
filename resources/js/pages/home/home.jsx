@@ -10,7 +10,7 @@ export default function Home() {
         <div className="flex min-h-dvh flex-col bg-surface">
             <main className="-mt-13 flex-1 lg:-mt-14">
                 <Cta />
-                <ExploreTrail />
+                <ExploreTrail id="trails" />
                 <Gallery />
                 <Experience />
                 <Awards />

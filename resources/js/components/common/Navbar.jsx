@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
     ChevronDown,
     LogOut,
+    Menu,
     ShieldCheck,
     ScrollText,
     MessageSquare,
@@ -10,17 +11,16 @@ import {
     CalendarDays,
     ScanLine,
     Ticket,
-    UserRound
+    UserRound,
+    X
 } from 'lucide-react';
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "cn";
 
 import { MOCK_USERS } from '../../mockData';
 
-const ROLE_BADGES = {
-    1: { label: 'Admin', bg: 'bg-amber-600 text-white border-amber-300' },
-    2: { label: 'Park Staff', bg: 'bg-emerald-600 text-white border-emerald-300' },
-    3: { label: 'Hiker', bg: 'bg-primary text-white border-primary-container' },
-};
+const ADMIN_ROLE = 1;
+const HIKER_ROLE = 3;
 
 const NAV_LINKS = [
     { label: 'Home', to: '/' },
@@ -29,47 +29,51 @@ const NAV_LINKS = [
     { label: 'Contact Us', to: '/contact' },
 ];
 
-const HIKER_USER_LINKS = [
-    { label: 'My Dashboard', to: '/hiker/dashboard', icon: LayoutDashboard },
-    { label: 'My Transactions', to: '/hiker/transactions', icon: ScrollText },
-    { label: 'My Digital Passes', to: '/hiker/passes', icon: Ticket },
-    { label: 'My Profile', to: '/hiker/profile', icon: UserRound },
-];
-
-const STAFF_USER_LINKS = [
-    { label: 'Staff dashboard', to: '/staff/dashboard', icon: LayoutDashboard },
-    { label: 'My schedules', to: '/staff/schedules', icon: CalendarDays },
-    { label: 'Pass verification', to: '/staff/verify', icon: ScanLine },
-    { label: 'Staff messages', to: '/staff/messages', icon: MessageSquare },
-];
-
-const ADMIN_USER_LINKS = [
-    { label: 'Admin console', to: '/admin/dashboard', icon: LayoutDashboard },
-];
-
-const getAccountLinks = (role) => {
-    if (role === 2) return STAFF_USER_LINKS;
-    if (role === 1) return ADMIN_USER_LINKS;
-    return HIKER_USER_LINKS;
+const ACCOUNT_NAV = {
+    [ADMIN_ROLE]: {
+        label: 'Admin workspace',
+        links: [
+            { label: 'Admin console', to: '/admin/dashboard', icon: LayoutDashboard },
+        ],
+    },
+    2: {
+        label: 'Staff workspace',
+        links: [
+            { label: 'Staff dashboard', to: '/staff/dashboard', icon: LayoutDashboard },
+            { label: 'My schedules', to: '/staff/schedules', icon: CalendarDays },
+            { label: 'Pass verification', to: '/staff/verify', icon: ScanLine },
+            { label: 'Staff messages', to: '/staff/messages', icon: MessageSquare },
+        ],
+    },
+    [HIKER_ROLE]: {
+        label: 'Hiker account',
+        links: [
+            { label: 'My Dashboard', to: '/hiker/dashboard', icon: LayoutDashboard },
+            { label: 'My Transactions', to: '/hiker/transactions', icon: ScrollText },
+            { label: 'My Digital Passes', to: '/hiker/passes', icon: Ticket },
+            { label: 'My Profile', to: '/hiker/profile', icon: UserRound },
+        ],
+    },
 };
 
-const getAccountLabel = (role) => {
-    if (role === 2) return 'Staff workspace';
-    if (role === 1) return 'Admin workspace';
-    return 'Hiker account';
+const getInitials = (name) => {
+    if (!name) return 'U';
+    const parts = name.trim().split(' ');
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
 
 function AccountNavLink({ item, onClick, mobile = false }) {
     const IconComponent = item.icon;
     const content = (
         <>
-            <IconComponent className="h-4 w-4 shrink-0 text-primary" />
+            <IconComponent className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
             <span>{item.label}</span>
         </>
     );
     const className = mobile
-        ? 'flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-semibold text-on-surface transition-colors hover:bg-surface-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
-        : 'flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-on-surface transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
+        ? 'flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-4 text-sm font-medium text-on-surface transition-colors hover:bg-surface-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
+        : 'flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-on-surface transition-colors hover:bg-surface-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
 
     if (item.to.startsWith('/staff') || item.to.startsWith('/admin')) {
         return <a href={item.to} onClick={onClick} className={className}>{content}</a>;
@@ -87,6 +91,10 @@ export default function Navbar() {
     // Only a stored session logs someone in; there is no default account.
     const [currentUser, setCurrentUser] = useState(null);
     const isLoggedIn = Boolean(currentUser);
+    const account = ACCOUNT_NAV[currentUser?.role] ?? ACCOUNT_NAV[HIKER_ROLE];
+
+    const userDropdownRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const readStoredUser = () => {
@@ -109,20 +117,6 @@ export default function Navbar() {
         return () => window.removeEventListener('storage', readStoredUser);
     }, [pathname]);
 
-    const accountLinks = isLoggedIn ? getAccountLinks(currentUser.role) : [];
-    const accountLabel = isLoggedIn ? getAccountLabel(currentUser.role) : '';
-
-    // Helper to extract initials (e.g., "Juan Dela Cruz" -> "JD")
-    const getInitials = (name) => {
-        if (!name) return 'U';
-        const parts = name.trim().split(' ');
-        if (parts.length === 1) return parts[0][0].toUpperCase();
-        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-    };
-
-    const userDropdownRef = useRef(null);
-    const navigate = useNavigate();
-
     useEffect(() => {
         const onScroll = () => setIsScrolled(window.scrollY > 8);
         onScroll();
@@ -130,7 +124,6 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    // Close user dropdown on outside click
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
@@ -140,6 +133,21 @@ export default function Navbar() {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    useEffect(() => {
+        const handleEscape = (event) => {
+            if (event.key !== 'Escape') return;
+            setUserDropdownOpen(false);
+            setOpen(false);
+        };
+        window.addEventListener('keydown', handleEscape);
+        return () => window.removeEventListener('keydown', handleEscape);
+    }, []);
+
+    useEffect(() => {
+        setOpen(false);
+        setUserDropdownOpen(false);
+    }, [pathname]);
 
     const closeAll = () => {
         setOpen(false);
@@ -154,8 +162,8 @@ export default function Navbar() {
     };
 
     return (
-        <header className="sticky top-0 z-50 w-full bg-on-background">
-            <nav className="mx-auto flex h-14 w-full max-w-380 items-center justify-between gap-6 px-6">
+        <header className={`sticky top-0 z-50 w-full animate-in border-b bg-on-background fade-in slide-in-from-top-2 duration-300 transition-shadow motion-reduce:animate-none ${isScrolled ? 'border-white/15 shadow-lg shadow-black/15' : 'border-white/10'}`}>
+            <nav className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
 
                 {/* Logo / Brand */}
                 <Link
@@ -166,21 +174,21 @@ export default function Navbar() {
                     <img
                         src="/assets/logo/MT. MASARAGA LOGO.svg"
                         alt="Mt. Masaraga Protected Landscape"
-                        className="h-10 w-auto object-contain lg:h-12"
+                        className="h-9 w-auto object-contain lg:h-11"
                     />
                 </Link>
 
                 {/* Desktop Navigation */}
-                <ul className="hidden items-center gap-6 md:flex">
+                <ul className="hidden items-center gap-1 md:flex">
                     {NAV_LINKS.map((link) => (
-                        <li key={link.to} className="relative">
+                        <li key={link.to}>
                             <NavLink
                                 to={link.to}
                                 className={({ isActive }) =>
-                                    `relative py-2 text-sm font-medium transition-colors ${isActive
-                                        ? 'text-on-secondary before:absolute before:bottom-0 before:left-0 before:h-0.5 before:w-full before:bg-on-secondary'
-                                        : 'text-on-primary hover:text-on-secondary'
-                                    }`
+                                    `group relative rounded-lg px-3 py-2 text-sm transition-colors after:absolute after:inset-x-3 after:bottom-1 after:h-px after:origin-left after:bg-current after:transition-transform after:duration-300 after:ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inverse-on-surface/60 motion-reduce:after:transition-none ${isActive
+                                        ? 'text-inverse-on-surface after:scale-x-100'
+                                        : 'text-inverse-on-surface/70 after:scale-x-0 hover:text-inverse-on-surface hover:after:scale-x-100'
+                                        }`
                                 }
                             >
                                 {link.label}
@@ -189,129 +197,126 @@ export default function Navbar() {
                     ))}
                 </ul>
 
-                {/* Auth Actions / User Profile Badge */}
-                <div className="hidden items-center gap-3 md:flex">
+                {/* Auth Actions / User Profile */}
+                <div className="hidden items-center gap-2 md:flex">
                     {isLoggedIn ? (
                         <div className="relative" ref={userDropdownRef}>
                             <button
                                 type="button"
                                 onClick={() => setUserDropdownOpen((prev) => !prev)}
-                                className="flex items-center gap-3 p-1.5 rounded-full hover:bg-surface-container/20 transition-colors cursor-pointer"
+                                aria-haspopup="true"
+                                aria-expanded={userDropdownOpen}
+                                className="flex cursor-pointer items-center gap-2.5 rounded-lg py-1.5 pl-1.5 pr-2.5 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inverse-on-surface/60"
                             >
-                                {/* Role-styled Initials Avatar */}
-                                <div className={`w-9 h-9 rounded-full text-xs text-inverse-on-surface font-bold flex items-center justify-center shrink-0 border ${ROLE_BADGES[currentUser.role]?.bg}`}>
+                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-container text-xs font-semibold text-on-primary-container">
                                     {getInitials(currentUser.name)}
-                                </div>
-                                <div className="text-left leading-tight hidden xl:block">
-                                    <h4 className="text-xs font-bold text-inverse-on-surface truncate flex items-center gap-1">
-                                        {currentUser.name}
-                                        {currentUser.role === 1 && <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />}
-                                    </h4>
-                                    <p className="text-[10px] font-medium text-on-primary/70 truncate">{currentUser.subtitle}</p>
-                                </div>
-                                <ChevronDown className={`h-4 w-4 text-on-primary transition-transform duration-200 ${userDropdownOpen ? 'rotate-180' : ''}`} />
+                                </span>
+                                <span className="hidden max-w-32 truncate text-sm font-medium text-inverse-on-surface lg:block">
+                                    {currentUser.name}
+                                </span>
+                                {currentUser.role === ADMIN_ROLE && (
+                                    <ShieldCheck className="h-4 w-4 shrink-0 text-primary-fixed" aria-hidden="true" />
+                                )}
+                                <ChevronDown
+                                    aria-hidden="true"
+                                    className={`h-4 w-4 shrink-0 text-inverse-on-surface/60 transition-transform duration-200 ${userDropdownOpen ? 'rotate-180' : ''}`}
+                                />
                             </button>
 
-                            {/* User Menu Dropdown */}
                             {userDropdownOpen && (
-                                <div className="absolute right-0 top-full w-60 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
-
-                                    {/* User Header Info */}
-                                    <div className="px-3 py-2 border-b border-outline-variant/20 mb-1">
-                                        <p className="text-xs font-bold text-on-surface">{currentUser.name}</p>
-                                        <p className="text-[10px] text-on-surface-variant font-medium">{currentUser.subtitle}</p>
+                                <div className="absolute right-0 top-full z-50 mt-2 w-64 animate-in rounded-xl border border-outline-variant/40 bg-surface-container-lowest p-1.5 shadow-lg shadow-black/10 fade-in zoom-in-95 duration-150 motion-reduce:animate-none">
+                                    <div className="border-b border-outline-variant/30 px-3 py-2.5">
+                                        <p className="truncate text-sm font-semibold text-on-surface">{currentUser.name}</p>
+                                        <p className="mt-0.5 truncate text-xs text-on-surface-variant">{currentUser.subtitle}</p>
                                     </div>
 
-                                    {/* Hiker Profile Navigation Options (Transactions & Messages) */}
-                                    <div className="space-y-0.5 py-1 border-b border-outline-variant/20 mb-1">
-                                        <span className="text-[9px] font-bold text-outline uppercase tracking-wider block mb-1 px-3">
-                                            {accountLabel}
-                                        </span>
-                                        {accountLinks.map((item) => (
-                                            <AccountNavLink key={item.to} item={item} onClick={closeAll} />
+                                    <p className="px-3 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">
+                                        {account.label}
+                                    </p>
+                                    <ul className="space-y-0.5">
+                                        {account.links.map((item) => (
+                                            <li key={item.to}>
+                                                <AccountNavLink item={item} onClick={closeAll} />
+                                            </li>
                                         ))}
-                                    </div>
+                                    </ul>
 
-                                    {/* Logout Button */}
                                     <button
                                         type="button"
                                         onClick={handleLogout}
-                                        className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                                        className="mt-1 flex w-full cursor-pointer items-center gap-2.5 rounded-lg border-t border-outline-variant/30 px-3 py-2.5 text-sm font-medium text-error transition-colors hover:bg-error/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error/50"
                                     >
-                                        <LogOut className="h-4 w-4 shrink-0" />
-                                        <span>Log Out</span>
+                                        <LogOut className="h-4 w-4 shrink-0" aria-hidden="true" />
+                                        <span>Log out</span>
                                     </button>
                                 </div>
                             )}
                         </div>
                     ) : (
                         <>
-                            <Button
-                                variant="outline"
-                                size="lg"
-                                onClick={() => navigate('/login')}
-                                className="capitalize bg-transparent text-on-primary border-on-primary hover:border-muted"
+                            <Link
+                                to="/login"
+                                onClick={closeAll}
+                                className="rounded-lg px-3 py-2 text-sm font-medium text-inverse-on-surface/80 transition-colors hover:bg-white/10 hover:text-inverse-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inverse-on-surface/60"
                             >
-                                Login
-                            </Button>
-                            <Button
-                                variant="default"
-                                size="lg"
-                                onClick={() => navigate('/signup')}
-                                className="capitalize"
+                                Log in
+                            </Link>
+                            <Link
+                                to="/signup"
+                                onClick={closeAll}
+                                className={cn(
+                                    buttonVariants({ variant: 'default', size: 'lg' }),
+                                    'bg-primary-container text-on-primary-container hover:bg-primary-fixed hover:text-on-primary-fixed'
+                                )}
                             >
-                                Sign Up
-                            </Button>
+                                Sign up
+                            </Link>
                         </>
                     )}
                 </div>
 
-                {/* Mobile Hamburger Toggle */}
-                <Button
+                {/* Mobile Menu Toggle */}
+                <button
                     type="button"
-                    aria-label="Toggle menu"
+                    aria-label={open ? 'Close menu' : 'Open menu'}
                     aria-expanded={open}
+                    aria-controls="mobile-nav"
                     onClick={() => setOpen((v) => !v)}
-                    className="flex h-10 w-10 items-center justify-center rounded-md text-on-secondary transition-colors hover:bg-surface-container md:hidden"
+                    className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg text-inverse-on-surface/80 transition-colors hover:bg-white/10 hover:text-inverse-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inverse-on-surface/60 md:hidden"
                 >
-                    {open ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                        </svg>
-                    ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    )}
-                </Button>
+                    {open ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
+                </button>
             </nav>
 
             {/* Mobile Menu Drawer */}
-            <div className={`overflow-hidden bg-surface transition-[max-height] duration-300 md:hidden ${open ? 'max-h-160' : 'max-h-0'}`}>
+            <div
+                id="mobile-nav"
+                inert={!open}
+                className={`overflow-hidden bg-surface transition-[max-height] duration-300 ease-out motion-reduce:transition-none md:hidden ${open ? 'max-h-[80dvh] overflow-y-auto' : 'max-h-0'}`}
+            >
                 <ul className="flex flex-col gap-1 px-4 py-4">
                     {isLoggedIn && (
-                        <li className="flex items-center gap-3 px-4 py-3 border-b border-outline-variant/30 mb-2">
-                            <div className={`w-10 h-10 rounded-full text-sm font-bold flex items-center justify-center shrink-0 border ${ROLE_BADGES[currentUser.role]?.bg}`}>
+                        <li className="mb-2 flex items-center gap-3 border-b border-outline-variant/30 px-1 pb-4">
+                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container text-sm font-semibold text-on-primary-container">
                                 {getInitials(currentUser.name)}
-                            </div>
-                            <div>
-                                <h4 className="text-sm font-bold text-on-surface">{currentUser.name}</h4>
-                                <p className="text-xs text-on-surface-variant">{currentUser.subtitle}</p>
+                            </span>
+                            <div className="min-w-0">
+                                <p className="truncate text-sm font-semibold text-on-surface">{currentUser.name}</p>
+                                <p className="truncate text-xs text-on-surface-variant">{currentUser.subtitle}</p>
                             </div>
                         </li>
                     )}
 
-                    {/* General Page Links */}
                     {NAV_LINKS.map((link) => (
                         <li key={link.to}>
                             <NavLink
                                 to={link.to}
                                 onClick={closeAll}
                                 className={({ isActive }) =>
-                                    `block rounded-lg px-4 py-3 text-base font-medium ${isActive
+                                    `flex min-h-11 items-center rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isActive
                                         ? 'bg-primary-container text-on-primary-container'
                                         : 'text-on-surface hover:bg-surface-container'
-                                    }`
+                                        }`
                                 }
                             >
                                 {link.label}
@@ -319,54 +324,54 @@ export default function Navbar() {
                         </li>
                     ))}
 
-                    {/* Logged In Hiker Quick Links */}
                     {isLoggedIn && (
-                        <li className="border-t border-outline-variant/30 pt-2">
-                            <span className="px-4 text-xs font-bold text-outline uppercase tracking-wider block mb-1">
-                                {accountLabel}
-                            </span>
-                            {accountLinks.map((item) => (
-                                <AccountNavLink key={item.to} item={item} onClick={closeAll} mobile />
-                            ))}
+                        <li className="border-t border-outline-variant/30 pt-3">
+                            <p className="px-4 pb-1 text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">
+                                {account.label}
+                            </p>
+                            <ul>
+                                {account.links.map((item) => (
+                                    <li key={item.to}>
+                                        <AccountNavLink item={item} onClick={closeAll} mobile />
+                                    </li>
+                                ))}
+                            </ul>
                         </li>
                     )}
 
-                    {/* Auth Action Buttons */}
-                    <li className="flex flex-col gap-3 border-t border-outline-variant pt-4">
+                    <li className="mt-2 border-t border-outline-variant/30 pt-4">
                         {isLoggedIn ? (
                             <Button
                                 variant="outline"
                                 size="lg"
                                 onClick={handleLogout}
-                                className="capitalize bg-transparent text-red-600 border-red-600 hover:bg-red-50"
+                                className="min-h-11 w-full border-outline-variant text-error hover:bg-error/10 hover:text-error"
                             >
-                                Log Out
+                                Log out
                             </Button>
                         ) : (
-                            <>
-                                <Button
-                                    variant="outline"
-                                    size="lg"
-                                    onClick={() => {
-                                        closeAll();
-                                        navigate('/login');
-                                    }}
-                                    className="capitalize bg-transparent text-primary border-primary hover:border-muted"
+                            <div className="flex flex-col gap-3">
+                                <Link
+                                    to="/login"
+                                    onClick={closeAll}
+                                    className={cn(
+                                        buttonVariants({ variant: 'outline', size: 'lg' }),
+                                        'min-h-11 border-outline-variant bg-transparent text-on-surface hover:bg-surface-container'
+                                    )}
                                 >
-                                    Login
-                                </Button>
-                                <Button
-                                    variant="default"
-                                    size="lg"
-                                    onClick={() => {
-                                        closeAll();
-                                        navigate('/signup');
-                                    }}
-                                    className="capitalize"
+                                    Log in
+                                </Link>
+                                <Link
+                                    to="/signup"
+                                    onClick={closeAll}
+                                    className={cn(
+                                        buttonVariants({ variant: 'default', size: 'lg' }),
+                                        'min-h-11 bg-primary text-on-secondary hover:bg-primary-container'
+                                    )}
                                 >
-                                    Sign Up
-                                </Button>
-                            </>
+                                    Sign up
+                                </Link>
+                            </div>
                         )}
                     </li>
                 </ul>

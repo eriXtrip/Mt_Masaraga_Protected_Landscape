@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAdminStore } from '../../state/adminStore';
+import { useInView } from '@/hooks/useInView';
 import Facebook from '../brandlogo/facebook.svg';
 import X from '../brandlogo/x.svg';
 import Instagram from '../brandlogo/instagram.svg';
@@ -29,6 +30,7 @@ const LEGAL_LINKS = [
 
 export default function Footer() {
     const { settings } = useAdminStore();
+    const [footerRef, isFooterInView] = useInView({ threshold: 0.1, triggerOnce: true });
     const contact = settings?.contact || {};
     const visibleLegalLinks = LEGAL_LINKS.filter((link) => {
         const page = settings?.legal?.[link.key];
@@ -40,15 +42,20 @@ export default function Footer() {
         { key: 'x', label: 'X', href: contact.x, logo: X },
     ].filter((link) => link.href);
 
+    const revealClass = isFooterInView
+        ? 'translate-y-0 opacity-100'
+        : 'translate-y-6 opacity-0';
+    const revealTransition = 'transition-all duration-700 ease-out motion-reduce:transition-none';
+
     return (
-        <footer className="relative w-full overflow-hidden bg-surface-dim pt-12 pb-8 text-inverse-surface font-sans">
+        <footer ref={footerRef} className="relative w-full overflow-hidden bg-surface-dim pt-12 pb-8 text-inverse-surface font-sans">
             <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16">
 
                 {/* 5-Column Grid Layout */}
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 mb-12">
 
                     {/* Column 1: Quick Links */}
-                    <div className="space-y-3">
+                    <div style={{ transitionDelay: '0ms' }} className={`space-y-3 ${revealTransition} ${revealClass}`}>
                         <h3 className="text-xs font-bold uppercase tracking-wider opacity-70">
                             Quick Links
                         </h3>
@@ -67,7 +74,7 @@ export default function Footer() {
                     </div>
 
                     {/* Column 2: Social Media */}
-                    <div className="space-y-3">
+                    <div style={{ transitionDelay: '80ms' }} className={`space-y-3 ${revealTransition} ${revealClass}`}>
                         <h3 className="text-xs font-bold uppercase tracking-wider opacity-70">
                             Social Media
                         </h3>
@@ -92,7 +99,7 @@ export default function Footer() {
                     </div>
 
                     {/* Column 3: Contact Information & Permits */}
-                    <div className="space-y-3">
+                    <div style={{ transitionDelay: '160ms' }} className={`space-y-3 ${revealTransition} ${revealClass}`}>
                         <h3 className="text-xs font-bold uppercase tracking-wider opacity-70">
                             Contact Information
                         </h3>
@@ -128,7 +135,7 @@ export default function Footer() {
                     </div>
 
                     {/* Column 4: Legal & Policies */}
-                    <div className="space-y-3">
+                    <div style={{ transitionDelay: '240ms' }} className={`space-y-3 ${revealTransition} ${revealClass}`}>
                         <h3 className="text-xs font-bold uppercase tracking-wider opacity-70">
                             Legal & Policies
                         </h3>
@@ -144,7 +151,7 @@ export default function Footer() {
                     </div>
 
                     {/* Column 5: Supported Payments */}
-                    <div className="space-y-3">
+                    <div style={{ transitionDelay: '320ms' }} className={`space-y-3 ${revealTransition} ${revealClass}`}>
                         <h3 className="text-xs font-bold uppercase tracking-wider opacity-70">
                             Supported Payments
                         </h3>
@@ -170,10 +177,13 @@ export default function Footer() {
                 </div>
 
                 {/* Thin Structural Divider Line */}
-                <div className="w-full border-t border-black/10 mb-6" />
+                <div style={{ transitionDelay: '400ms' }} className={`w-full border-t border-black/10 mb-6 ${revealTransition} ${revealClass}`} />
 
                 {/* Bottom Flexbox Bar */}
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-sm opacity-70">
+                <div
+                    style={{ transitionDelay: '460ms' }}
+                    className={`flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-sm ${revealTransition} ${isFooterInView ? 'translate-y-0 opacity-70' : 'translate-y-6 opacity-0'}`}
+                >
                     <p>&copy; 2024 {settings?.general?.siteName || 'Mt. Masaraga Protected Landscape'}. All rights reserved.</p>
                     <p className="font-bold text-[#5b8c31]">Mandatory Permit Required for Entry.</p>
                 </div>
@@ -182,7 +192,10 @@ export default function Footer() {
 
             {/* Oversized Background Watermark Brand Logo */}
             <div className="mt-8 flex justify-center overflow-hidden opacity-50 select-none pointer-events-none">
-                <div className="flex items-center gap-4 text-5xl sm:text-7xl md:text-8xl font-black uppercase tracking-tighter text-on-surface whitespace-nowrap">
+                <div
+                    style={{ transitionDelay: '540ms' }}
+                    className={`flex items-center gap-4 text-5xl sm:text-7xl md:text-8xl font-black uppercase tracking-tighter text-on-surface whitespace-nowrap ${revealTransition} ${revealClass}`}
+                >
                     <img
                         src="/assets/logo/MT. MASARAGA LOGO.svg"
                         alt="Mt. Masaraga Protected Landscape"
