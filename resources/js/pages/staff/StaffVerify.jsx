@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Check, ClipboardCheck, FileCheck2, ScanLine, Search, Undo2, UsersRound, X } from 'lucide-react';
+import { Check, ClipboardCheck, FileCheck2, ImageUp, ScanLine, Search, Undo2, UsersRound, X } from 'lucide-react';
 import { useInView } from '@/hooks/useInView';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -117,6 +117,29 @@ const createQrDetector = async () => {
     };
 };
 
+const decodeImageFile = async (file) => {
+    const { default: jsQR } = await import('jsqr');
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, 1200 / Math.max(bitmap.width, bitmap.height));
+    const width = Math.max(1, Math.round(bitmap.width * scale));
+    const height = Math.max(1, Math.round(bitmap.height * scale));
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context) {
+        bitmap.close();
+        return null;
+    }
+
+    context.drawImage(bitmap, 0, 0, width, height);
+    bitmap.close();
+
+    const imageData = context.getImageData(0, 0, width, height);
+    return jsQR(imageData.data, width, height, { inversionAttempts: 'attemptBoth' })?.data || null;
+};
+
 export default function StaffVerify() {
     const [sectionRef, isInView] = useInView({ threshold: 0.15, triggerOnce: true });
     const { assignedBookings, checkIns, documentStatuses, passes } = useStaffStore();
@@ -133,6 +156,9 @@ export default function StaffVerify() {
     const [scannerError, setScannerError] = useState('');
     const [scannerNotice, setScannerNotice] = useState('');
     const [scannerStatus, setScannerStatus] = useState('idle');
+    const [isDecodingUpload, setIsDecodingUpload] = useState(false);
+    const [uploadError, setUploadError] = useState('');
+    const scannerUploadInputRef = useRef(null);
     const passesRef = useRef(passes);
     passesRef.current = passes;
 
@@ -184,11 +210,17 @@ export default function StaffVerify() {
         setScannerError('');
         setScannerNotice('');
         setScannerStatus('idle');
+        setUploadError('');
+        setIsDecodingUpload(false);
+        if (scannerUploadInputRef.current) {
+            scannerUploadInputRef.current.value = '';
+        }
     }, [stopCamera]);
 
     const openScanner = useCallback(() => {
         setScannerError('');
         setScannerNotice('');
+        setUploadError('');
         setScannerStatus('starting');
         setIsScannerOpen(true);
     }, []);
@@ -209,17 +241,37 @@ export default function StaffVerify() {
         closeScanner();
     }, [closeScanner, selectPass]);
 
+    const handleUploadChange = useCallback(async (event) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        setUploadError('');
+        setIsDecodingUpload(true);
+        try {
+            const rawValue = await decodeImageFile(file);
+            if (rawValue) {
+                handleScannedValue(rawValue);
+            } else {
+                setUploadError('No QR code was found in that image. Try a closer, sharper photo of the pass.');
+            }
+        } catch {
+            setUploadError('That image could not be read. Try a different photo of the pass.');
+        } finally {
+            setIsDecodingUpload(false);
+        }
+    }, [handleScannedValue]);
+
     useEffect(() => {
         if (!isScannerOpen) return undefined;
 
         let cancelled = false;
         const startCamera = async () => {
             if (typeof window === 'undefined' || window.isSecureContext === false) {
-                setScannerError('Camera access requires HTTPS or localhost. Use the pass ID lookup instead.');
+                setScannerError('This page is not on HTTPS or localhost, so the browser blocks camera access. Upload a photo of the pass instead, or open the app on localhost.');
                 return;
             }
             if (!navigator.mediaDevices?.getUserMedia) {
-                setScannerError('This browser does not provide camera access. Use the pass ID lookup instead.');
+                setScannerError('This browser does not provide camera access. Upload a photo of the pass instead, or use the pass ID lookup.');
                 return;
             }
 
@@ -273,7 +325,7 @@ export default function StaffVerify() {
                             if (error?.name === 'NotSupportedError') {
                                 scannerActiveRef.current = false;
                                 stopCamera();
-                                setScannerError('QR scanning is not supported by this browser. Use the pass ID lookup instead.');
+                                setScannerError('QR scanning is not supported by this browser. Upload a photo of the pass instead.');
                                 return;
                             }
                         }
@@ -474,9 +526,9 @@ export default function StaffVerify() {
                     <div role="dialog" aria-modal="true" aria-labelledby="staff-qr-scanner-heading" className="w-full max-w-md overflow-hidden rounded-2xl border border-outline-variant/40 bg-surface-container-lowest shadow-xl">
                         <div className="flex items-start justify-between gap-4 border-b border-outline-variant/20 px-5 py-4">
                             <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Camera scanner</p>
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Pass scanner</p>
                                 <h2 id="staff-qr-scanner-heading" className="mt-1 text-lg font-bold text-on-surface">Scan physical pass</h2>
-                                <p className="mt-1 text-xs text-on-surface-variant">Point the camera at the QR code on the hiker ID card.</p>
+                                <p className="mt-1 text-xs text-on-surface-variant">Point the camera at the QR code, or upload a photo of the hiker pass.</p>
                             </div>
                             <button ref={scannerCloseButtonRef} type="button" onClick={closeScanner} aria-label="Close QR scanner" className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                                 <X className="h-5 w-5" />
@@ -487,7 +539,7 @@ export default function StaffVerify() {
                                 <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
                                     <p className="font-semibold">Camera unavailable</p>
                                     <p className="mt-1">{scannerError}</p>
-                                    <p className="mt-3 text-xs">You can still enter the pass ID in the lookup field.</p>
+                                    <p className="mt-3 text-xs">You can still upload a photo of the pass or enter the pass ID in the lookup field.</p>
                                 </div>
                             ) : (
                                 <>
@@ -501,6 +553,31 @@ export default function StaffVerify() {
                                     <p className="mt-3 text-xs leading-relaxed text-on-surface-variant">Camera frames are decoded on this device. Close the scanner when you are done.</p>
                                 </>
                             )}
+
+                            <div className="mt-4 border-t border-outline-variant/20 pt-4">
+                                <input
+                                    ref={scannerUploadInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleUploadChange}
+                                    className="sr-only"
+                                    aria-label="Upload a photo of the hiker pass QR code"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => scannerUploadInputRef.current?.click()}
+                                    disabled={isDecodingUpload}
+                                    className="min-h-11 w-full cursor-pointer gap-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    <ImageUp className="h-4 w-4" />
+                                    {isDecodingUpload ? 'Reading QR code...' : 'Upload pass photo'}
+                                </Button>
+                                {uploadError && (
+                                    <p role="alert" className="mt-2 text-xs text-red-700">{uploadError}</p>
+                                )}
+                                <p className="mt-2 text-xs leading-relaxed text-on-surface-variant">Decoding happens in your browser. Nothing is uploaded to the server.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
