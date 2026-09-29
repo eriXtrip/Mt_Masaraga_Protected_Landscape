@@ -64,22 +64,52 @@ const getInitials = (name) => {
 };
 
 function AccountNavLink({ item, onClick, mobile = false }) {
+    const location = useLocation();
     const IconComponent = item.icon;
+
     const content = (
         <>
             <IconComponent className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
             <span>{item.label}</span>
         </>
     );
-    const className = mobile
-        ? 'flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-4 text-sm font-medium text-on-surface transition-colors hover:bg-surface-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
-        : 'flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-on-surface transition-colors hover:bg-surface-container focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
 
+    // Dynamic class generator matching your reference pattern
+    const getClassName = (isActive) => {
+        const baseClasses = mobile
+            ? 'flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
+            : 'flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
+
+        const stateClasses = isActive
+            ? 'bg-on-secondary-container/20 sm:bg-surface-container text-on-primary-container sm:text-on-surface'
+            : mobile
+                ? 'text-white hover:bg-surface-container'
+                : 'text-on-surface hover:bg-surface-container';
+
+        return `${baseClasses} ${stateClasses}`;
+    };
+
+    // External or non-router links (/staff, /admin) using standard <a> tag
     if (item.to.startsWith('/staff') || item.to.startsWith('/admin')) {
-        return <a href={item.to} onClick={onClick} className={className}>{content}</a>;
+        const isActive = location.pathname === item.to || location.pathname.startsWith(`${item.to}/`);
+
+        return (
+            <a href={item.to} onClick={onClick} className={getClassName(isActive)}>
+                {content}
+            </a>
+        );
     }
 
-    return <Link to={item.to} onClick={onClick} className={className}>{content}</Link>;
+    // Router links using NavLink
+    return (
+        <NavLink
+            to={item.to}
+            onClick={onClick}
+            className={({ isActive }) => getClassName(isActive)}
+        >
+            {content}
+        </NavLink>
+    );
 }
 
 export default function Navbar() {
@@ -188,7 +218,7 @@ export default function Navbar() {
                                     `group relative rounded-lg px-3 py-2 text-sm transition-colors after:absolute after:inset-x-3 after:bottom-1 after:h-px after:origin-left after:bg-current after:transition-transform after:duration-300 after:ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inverse-on-surface/60 motion-reduce:after:transition-none ${isActive
                                         ? 'text-inverse-on-surface after:scale-x-100'
                                         : 'text-inverse-on-surface/70 after:scale-x-0 hover:text-inverse-on-surface hover:after:scale-x-100'
-                                        }`
+                                    }`
                                 }
                             >
                                 {link.label}
@@ -292,89 +322,92 @@ export default function Navbar() {
             <div
                 id="mobile-nav"
                 inert={!open}
-                className={`overflow-hidden bg-surface transition-[max-height] duration-300 ease-out motion-reduce:transition-none md:hidden ${open ? 'max-h-[80dvh] overflow-y-auto' : 'max-h-0'}`}
+                className={`grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none md:hidden ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                    }`}
             >
-                <ul className="flex flex-col gap-1 px-4 py-4">
-                    {isLoggedIn && (
-                        <li className="mb-2 flex items-center gap-3 border-b border-outline-variant/30 px-1 pb-4">
-                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container text-sm font-semibold text-on-primary-container">
-                                {getInitials(currentUser.name)}
-                            </span>
-                            <div className="min-w-0">
-                                <p className="truncate text-sm font-semibold text-on-surface">{currentUser.name}</p>
-                                <p className="truncate text-xs text-on-surface-variant">{currentUser.subtitle}</p>
-                            </div>
-                        </li>
-                    )}
-
-                    {NAV_LINKS.map((link) => (
-                        <li key={link.to}>
-                            <NavLink
-                                to={link.to}
-                                onClick={closeAll}
-                                className={({ isActive }) =>
-                                    `flex min-h-11 items-center rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isActive
-                                        ? 'bg-primary-container text-on-primary-container'
-                                        : 'text-on-surface hover:bg-surface-container'
-                                        }`
-                                }
-                            >
-                                {link.label}
-                            </NavLink>
-                        </li>
-                    ))}
-
-                    {isLoggedIn && (
-                        <li className="border-t border-outline-variant/30 pt-3">
-                            <p className="px-4 pb-1 text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">
-                                {account.label}
-                            </p>
-                            <ul>
-                                {account.links.map((item) => (
-                                    <li key={item.to}>
-                                        <AccountNavLink item={item} onClick={closeAll} mobile />
-                                    </li>
-                                ))}
-                            </ul>
-                        </li>
-                    )}
-
-                    <li className="mt-2 border-t border-outline-variant/30 pt-4">
-                        {isLoggedIn ? (
-                            <Button
-                                variant="outline"
-                                size="lg"
-                                onClick={handleLogout}
-                                className="min-h-11 w-full border-outline-variant text-error hover:bg-error/10 hover:text-error"
-                            >
-                                Log out
-                            </Button>
-                        ) : (
-                            <div className="flex flex-col gap-3">
-                                <Link
-                                    to="/login"
-                                    onClick={closeAll}
-                                    className={cn(
-                                        buttonVariants({ variant: 'outline', size: 'lg' }),
-                                        'min-h-11 border-outline-variant bg-transparent text-on-surface hover:bg-surface-container'
-                                    )}
-                                >
-                                    Log in
-                                </Link>
-                                <Link
-                                    to="/signup"
-                                    onClick={closeAll}
-                                    className={cn(
-                                        buttonVariants({ variant: 'default', size: 'lg' }),
-                                        'min-h-11 bg-primary text-on-secondary hover:bg-primary-container'
-                                    )}
-                                >
-                                    Sign up
-                                </Link>
-                            </div>
+                <div className="overflow-hidden">
+                    <ul className="flex flex-col gap-1 px-4 py-4">
+                        {isLoggedIn && (
+                            <li className="mb-2 flex items-center gap-3 border-b border-outline-variant/30 px-1 pb-4">
+                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-container text-sm font-semibold text-on-primary-container">
+                                    {getInitials(currentUser.name)}
+                                </span>
+                                <div className="min-w-0">
+                                    <p className="truncate text-sm font-semibold text-white">{currentUser.name}</p>
+                                    <p className="truncate text-xs text-white">{currentUser.subtitle}</p>
+                                </div>
+                            </li>
                         )}
-                    </li>
-                </ul>
+
+                        {NAV_LINKS.map((link) => (
+                            <li key={link.to}>
+                                <NavLink
+                                    to={link.to}
+                                    onClick={closeAll}
+                                    className={({ isActive }) =>
+                                        `flex min-h-11 items-center rounded-lg px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isActive
+                                            ? 'bg-on-secondary-container/50 text-on-primary-container'
+                                            : 'text-white hover:bg-surface-container'
+                                        }`
+                                    }
+                                >
+                                    {link.label}
+                                </NavLink>
+                            </li>
+                        ))}
+
+                        {isLoggedIn && (
+                            <li className="border-t border-outline-variant/30 pt-3">
+                                <p className="px-4 pb-1 text-[11px] font-semibold uppercase tracking-wider text-white">
+                                    {account.label}
+                                </p>
+                                <ul>
+                                    {account.links.map((item) => (
+                                        <li key={item.to}>
+                                            <AccountNavLink item={item} onClick={closeAll} mobile />
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        )}
+
+                        <li className="mt-2 border-t border-outline-variant/30 pt-4">
+                            {isLoggedIn ? (
+                                <Button
+                                    variant="outline"
+                                    size="lg"
+                                    onClick={handleLogout}
+                                    className="min-h-11 w-full border-outline-variant text-error hover:bg-error/10 hover:text-error"
+                                >
+                                    Log out
+                                </Button>
+                            ) : (
+                                <div className="flex flex-col gap-3">
+                                    <Link
+                                        to="/login"
+                                        onClick={closeAll}
+                                        className={cn(
+                                            buttonVariants({ variant: 'outline', size: 'lg' }),
+                                            'min-h-11 border-outline-variant bg-transparent text-on-surface hover:bg-surface-container'
+                                        )}
+                                    >
+                                        Log in
+                                    </Link>
+                                    <Link
+                                        to="/signup"
+                                        onClick={closeAll}
+                                        className={cn(
+                                            buttonVariants({ variant: 'default', size: 'lg' }),
+                                            'min-h-11 bg-primary text-on-secondary hover:bg-primary-container'
+                                        )}
+                                    >
+                                        Sign up
+                                    </Link>
+                                </div>
+                            )}
+                        </li>
+                    </ul>
+                </div>
             </div>
         </header>
     );
